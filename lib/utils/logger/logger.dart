@@ -51,7 +51,7 @@ class BaseLogger extends GetxService {
   }
 
   LoggerFactory.LogOutput get defaultOutput {
-    List<LogOutput> outputs = [DebugConsoleOutput()];
+    List<LogOutput> outputs = kDebugMode ? [DebugConsoleOutput()] : [];
     if (!kIsWeb) outputs.add(fileOutput);
     return LoggerFactory.MultiOutput(outputs);
   }
