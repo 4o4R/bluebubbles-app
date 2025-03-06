@@ -130,6 +130,7 @@ dependencies:
   mobile_scanner: ^6.0.2 # no desktop support
   msix: ^3.16.8
   multi_value_listenable_builder: ^0.0.2
+  native_dio_adapter: ^1.4.0
   network_info_plus: ^6.0.1
   network_tools: ^5.0.2
   numberpicker: ^2.1.2
