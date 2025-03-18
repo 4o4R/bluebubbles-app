@@ -1,5 +1,4 @@
 import 'package:bluebubbles/database/models.dart' hide Entity;
-import 'package:emojis/emojis.dart';
 import 'package:flutter/foundation.dart';
 
 class ReactionTypes {
@@ -43,21 +42,21 @@ class ReactionTypes {
   };
 
   static final Map<String, String> reactionToEmoji = {
-    LOVE: Emojis.redHeart,
-    LIKE: Emojis.thumbsUp,
-    DISLIKE: Emojis.thumbsDown,
-    LAUGH: Emojis.faceWithTearsOfJoy,
-    EMPHASIZE: Emojis.redExclamationMark,
-    QUESTION: Emojis.redQuestionMark,
+    LOVE: "❤️",
+    LIKE: "👍",
+    DISLIKE: "👎",
+    LAUGH: "😂",
+    EMPHASIZE: "❗",
+    QUESTION: "❓",
   };
 
   static final Map<String, String> emojiToReaction = {
-    Emojis.redHeart: LOVE,
-    Emojis.thumbsUp: LIKE,
-    Emojis.thumbsDown: DISLIKE,
-    Emojis.faceWithTearsOfJoy: LAUGH,
-    Emojis.redExclamationMark: EMPHASIZE,
-    Emojis.redQuestionMark: QUESTION,
+    "❤️": LOVE,
+    "👍": LIKE,
+    "👎": DISLIKE,
+    "😂": LAUGH,
+    "❗": EMPHASIZE,
+    "❓": QUESTION,
   };
 }
 

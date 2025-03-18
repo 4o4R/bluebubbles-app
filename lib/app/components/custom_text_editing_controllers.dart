@@ -6,7 +6,6 @@ import "package:bluebubbles/services/services.dart";
 import 'package:bluebubbles/utils/emoji.dart';
 import "package:bluebubbles/utils/emoticons.dart";
 import "package:collection/collection.dart";
-import "package:emojis/emoji.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:get/get.dart";
@@ -95,11 +94,11 @@ class SpellCheckTextEditingController extends TextEditingController {
       RegExpMatch match = matches.lastWhere((m) => m.start < newOffset);
       // Full emoji text (do not search for partial matches)
       String emojiName = newText.substring(match.start + 1, match.end - 1).toLowerCase();
-      if (emojiNames.keys.contains(emojiName)) {
+      if (shortNameToEmoji.keys.contains(emojiName) || shortNameToSkinToneEmoji.keys.contains(emojiName)) {
         // We can replace the :emoji: with the actual emoji here
-        final emoji = Emoji.byShortName(emojiName)!;
-        newText = newText.substring(0, match.start) + emoji.char + newText.substring(match.end);
-        newOffset = match.start + emoji.char.length;
+        final emoji = shortNameToEmoji[emojiName] ?? shortNameToSkinToneEmoji[emojiName]!;
+        newText = newText.substring(0, match.start) + emoji.emoji + newText.substring(match.end);
+        newOffset = match.start + emoji.emoji.length;
       }
     }
 
@@ -435,7 +434,7 @@ class MentionTextEditingController extends SpellCheckTextEditingController {
 
   void _processMentions(String text) {
     final matches = escapingRegex.allMatches(text);
-    Iterable<int> mentionedIndices = matches.map((m) => int.tryParse(text.substring(m.start + 1, m.end - 1))).whereNotNull();
+    Iterable<int> mentionedIndices = matches.map((m) => int.tryParse(text.substring(m.start + 1, m.end - 1))).nonNulls;
     mentionables.forEachIndexed((i, m) {
       if (!mentionedIndices.contains(i)) {
         m.customDisplayName = null;

@@ -20,7 +20,6 @@ import 'package:bluebubbles/utils/logger/logger.dart';
 import 'package:bluebubbles/utils/share.dart';
 import 'package:chunked_stream/chunked_stream.dart';
 import 'package:collection/collection.dart';
-import 'package:emojis/emoji.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart' hide Emoji;
 import 'package:file_picker/file_picker.dart' as pf;
 import 'package:file_picker/file_picker.dart' hide PlatformFile;
@@ -37,6 +36,7 @@ import 'package:path/path.dart' hide context;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:supercharged/supercharged.dart';
 import 'package:tuple/tuple.dart';
+import 'package:unicode_emojis/unicode_emojis.dart';
 import 'package:universal_io/io.dart';
 
 class ConversationTextField extends CustomStateful<ConversationViewController> {
@@ -245,7 +245,8 @@ class ConversationTextFieldState extends CustomState<ConversationTextField, void
       _debounceTyping?.cancel();
       oldText = newText;
       // don't send a bunch of duplicate events for every typing change
-      if (ss.settings.enablePrivateAPI.value && (chat.autoSendTypingIndicators ?? ss.settings.privateSendTypingIndicators.value)) {
+      if (ss.settings.enablePrivateAPI.value &&
+          (chat.autoSendTypingIndicators ?? ss.settings.privateSendTypingIndicators.value)) {
         if (_debounceTyping == null) {
           socket.sendMessage("started-typing", {"chatGuid": chatGuid});
         }
@@ -254,101 +255,93 @@ class ConversationTextFieldState extends CustomState<ConversationTextField, void
           _debounceTyping = null;
         });
       }
-    }
-    // emoji picker
-    final _controller = subject ? controller.subjectTextController : controller.textController;
-    final newEmojiText = _controller.text;
-    if (newEmojiText.contains(":")) {
-      final regExp = RegExp(r"(?<=^|[^a-zA-Z\d]):[^: \n]{2,}(?:(?=[ \n]|$)|:)", multiLine: true);
-      final matches = regExp.allMatches(newEmojiText);
-      List<Emoji> allMatches = [];
-      String emojiName = "";
-      if (matches.isNotEmpty && matches.first.start < _controller.selection.start) {
-        RegExpMatch match = matches.lastWhere((m) => m.start < _controller.selection.start);
-        if (newEmojiText[match.end - 1] == ":") {
-          // This will get handled by the text field controller
-        } else if (match.end >= _controller.selection.start) {
-          emojiName = newEmojiText.substring(match.start + 1, match.end).toLowerCase();
-          Iterable<Emoji> emojiExactlyMatches = emojiNames.containsKey(emojiName) ? [emojiNames[emojiName]!] : [];
-          Iterable<String> emojiNameMatches = emojiNames.keys.where((name) => name.startsWith(emojiName));
-          Iterable<String> emojiNameAnywhereMatches = emojiNames.keys
-              .where((name) => name.substring(1).contains(emojiName))
-              .followedBy(emojiFullNames.keys.where((name) => name.contains(emojiName))); // Substring 1 to avoid dupes
-          Iterable<Emoji> emojiMatches = emojiNameMatches.followedBy(emojiNameAnywhereMatches).map((n) => emojiNames[n] ?? emojiFullNames[n]!);
-          Iterable<Emoji> keywordMatches = Emoji.byKeyword(emojiName);
-          allMatches = emojiExactlyMatches.followedBy(emojiMatches.followedBy(keywordMatches)).toSet().toList();
-          // Remove tone variations
-          List<Emoji> withoutTones = allMatches.toList();
-          withoutTones.removeWhere((e) => e.shortName.contains("_tone"));
-          if (withoutTones.isNotEmpty) {
-            allMatches = withoutTones;
+
+      // emoji picker
+      final _controller = subject ? controller.subjectTextController : controller.textController;
+      final newEmojiText = _controller.text;
+      if (newEmojiText.contains(":")) {
+        final regExp = RegExp(r"(?<=^|[^a-zA-Z\d]):[^: \n]{2,}(?:(?=[ \n]|$)|:)", multiLine: true);
+        final matches = regExp.allMatches(newEmojiText);
+        List<Emoji> allMatches = [];
+        String emojiName = "";
+        if (matches.isNotEmpty && matches.first.start < _controller.selection.start) {
+          RegExpMatch match = matches.lastWhere((m) => m.start < _controller.selection.start);
+          if (newEmojiText[match.end - 1] == ":") {
+            // This will get handled by the text field controller
+          } else if (match.end >= _controller.selection.start) {
+            emojiName = newEmojiText.substring(match.start + 1, match.end).toLowerCase();
+            allMatches = limitGenerator(emojiQuery(emojiName), limit: 50).toSet().toList(); // Maybe make this configurable?
           }
+          Logger.info("${allMatches.length} matches found for: $emojiName");
         }
-        Logger.info("${allMatches.length} matches found for: $emojiName");
-      }
-      if (allMatches.isNotEmpty) {
-        controller.mentionMatches.value = [];
-        controller.mentionSelectedIndex.value = 0;
-        controller.emojiMatches.value = allMatches;
-        controller.emojiSelectedIndex.value = 0;
-        return;
-      } else {
-        controller.emojiMatches.value = [];
-        controller.emojiSelectedIndex.value = 0;
-      }
-    }
-
-    if (ss.settings.enablePrivateAPI.value && !subject && newEmojiText.contains("@")) {
-      final regExp = RegExp(r"(?<=^|[^a-zA-Z\d])@(?:[^@ \n]+|$)(?=[ \n]|$)", multiLine: true);
-      final matches = regExp.allMatches(newEmojiText);
-      List<Mentionable> allMatches = [];
-      String mentionName = "";
-      if (matches.isNotEmpty && matches.first.start < _controller.selection.start) {
-        RegExpMatch match = matches.lastWhere((m) => m.start < _controller.selection.start);
-        final text = newEmojiText.substring(match.start, match.end);
-        if (text.endsWith("@")) {
-          allMatches = controller.mentionables;
-        } else if (newEmojiText[match.end - 1] == "@") {
-          mentionName = newEmojiText.substring(match.start + 1, match.end - 1).toLowerCase();
-          allMatches = controller.mentionables
-              .where((e) =>
-                  e.address.toLowerCase().startsWith(mentionName.toLowerCase()) || e.displayName.toLowerCase().startsWith(mentionName.toLowerCase()))
-              .toList();
-          allMatches.addAll(controller.mentionables
-              .where((e) =>
-                  !allMatches.contains(e) &&
-                  (e.address.isCaseInsensitiveContains(mentionName) || e.displayName.isCaseInsensitiveContains(mentionName)))
-              .toList());
-        } else if (match.end >= _controller.selection.start) {
-          mentionName = newEmojiText.substring(match.start + 1, match.end).toLowerCase();
-          allMatches = controller.mentionables
-              .where((e) =>
-                  e.address.toLowerCase().startsWith(mentionName.toLowerCase()) || e.displayName.toLowerCase().startsWith(mentionName.toLowerCase()))
-              .toList();
-          allMatches.addAll(controller.mentionables
-              .where((e) =>
-                  !allMatches.contains(e) &&
-                  (e.address.isCaseInsensitiveContains(mentionName) || e.displayName.isCaseInsensitiveContains(mentionName)))
-              .toList());
+        if (allMatches.isNotEmpty) {
+          controller.mentionMatches.value = [];
+          controller.mentionSelectedIndex.value = 0;
+          controller.emojiMatches.value = allMatches;
+          controller.emojiSelectedIndex.value = 0;
+          return;
+        } else {
+          controller.emojiMatches.value = [];
+          controller.emojiSelectedIndex.value = 0;
         }
-        Logger.info("${allMatches.length} matches found for: $mentionName");
       }
-      if (allMatches.isNotEmpty) {
-        controller.emojiMatches.value = [];
-        controller.emojiSelectedIndex.value = 0;
-        controller.mentionMatches.value = allMatches;
-        controller.mentionSelectedIndex.value = 0;
-        return;
-      } else {
-        controller.mentionMatches.value = [];
-        controller.mentionSelectedIndex.value = 0;
-      }
-    }
 
-    controller.emojiMatches.value = [];
-    controller.emojiSelectedIndex.value = 0;
-    controller.mentionMatches.value = [];
-    controller.mentionSelectedIndex.value = 0;
+      if (ss.settings.enablePrivateAPI.value && !subject && newEmojiText.contains("@")) {
+        final regExp = RegExp(r"(?<=^|[^a-zA-Z\d])@(?:[^@ \n]+|$)(?=[ \n]|$)", multiLine: true);
+        final matches = regExp.allMatches(newEmojiText);
+        List<Mentionable> allMatches = [];
+        String mentionName = "";
+        if (matches.isNotEmpty && matches.first.start < _controller.selection.start) {
+          RegExpMatch match = matches.lastWhere((m) => m.start < _controller.selection.start);
+          final text = newEmojiText.substring(match.start, match.end);
+          if (text.endsWith("@")) {
+            allMatches = controller.mentionables;
+          } else if (newEmojiText[match.end - 1] == "@") {
+            mentionName = newEmojiText.substring(match.start + 1, match.end - 1).toLowerCase();
+            allMatches = controller.mentionables
+                .where((e) =>
+            e.address.toLowerCase().startsWith(mentionName.toLowerCase()) ||
+                e.displayName.toLowerCase().startsWith(mentionName.toLowerCase()))
+                .toList();
+            allMatches.addAll(controller.mentionables
+                .where((e) =>
+            !allMatches.contains(e) &&
+                (e.address.isCaseInsensitiveContains(mentionName) ||
+                    e.displayName.isCaseInsensitiveContains(mentionName)))
+                .toList());
+          } else if (match.end >= _controller.selection.start) {
+            mentionName = newEmojiText.substring(match.start + 1, match.end).toLowerCase();
+            allMatches = controller.mentionables
+                .where((e) =>
+            e.address.toLowerCase().startsWith(mentionName.toLowerCase()) ||
+                e.displayName.toLowerCase().startsWith(mentionName.toLowerCase()))
+                .toList();
+            allMatches.addAll(controller.mentionables
+                .where((e) =>
+            !allMatches.contains(e) &&
+                (e.address.isCaseInsensitiveContains(mentionName) ||
+                    e.displayName.isCaseInsensitiveContains(mentionName)))
+                .toList());
+          }
+          Logger.info("${allMatches.length} matches found for: $mentionName");
+        }
+        if (allMatches.isNotEmpty) {
+          controller.emojiMatches.value = [];
+          controller.emojiSelectedIndex.value = 0;
+          controller.mentionMatches.value = allMatches;
+          controller.mentionSelectedIndex.value = 0;
+          return;
+        } else {
+          controller.mentionMatches.value = [];
+          controller.mentionSelectedIndex.value = 0;
+        }
+      }
+
+      controller.emojiMatches.value = [];
+      controller.emojiSelectedIndex.value = 0;
+      controller.mentionMatches.value = [];
+      controller.mentionSelectedIndex.value = 0;
+    }
   }
 
   @override
@@ -757,6 +750,7 @@ class ConversationTextFieldState extends CustomState<ConversationTextField, void
                           scrollController: ScrollController(),
                           config: Config(
                             height: emojiPickerHeight,
+                            emojiSet: (_) => emojiSetEnglish,
                             checkPlatformCompatibility: true,
                             emojiViewConfig: EmojiViewConfig(
                               emojiSizeMax: 28,
@@ -765,9 +759,9 @@ class ConversationTextFieldState extends CustomState<ConversationTextField, void
                               noRecents: Text("No Recents", style: context.textTheme.headlineMedium!.copyWith(color: context.theme.colorScheme.outline)),
                             ),
                             viewOrderConfig: const ViewOrderConfig(
-                              top: EmojiPickerItem.searchBar,
+                              top: EmojiPickerItem.categoryBar,
                               middle: EmojiPickerItem.emojiView,
-                              bottom: EmojiPickerItem.categoryBar,
+                              bottom: EmojiPickerItem.searchBar,
                             ),
                             skinToneConfig: const SkinToneConfig(enabled: false),
                             categoryViewConfig: const CategoryViewConfig(
@@ -1293,9 +1287,9 @@ class TextFieldComponentState extends State<TextFieldComponent> {
         Iterable<RegExpMatch> matches = regExp.allMatches(text);
         if (matches.isNotEmpty && matches.any((m) => m.start < textField.selection.start)) {
           RegExpMatch match = matches.lastWhere((m) => m.start < textField.selection.start);
-          String char = controller!.emojiMatches[index].char;
-          String _text = "${text.substring(0, match.start)}$char ${text.substring(match.end)}";
-          textField.value = TextEditingValue(text: _text, selection: TextSelection.collapsed(offset: match.start + char.length + 1));
+          String emoji = controller!.emojiMatches[index].emoji;
+          String _text = "${text.substring(0, match.start)}$emoji ${text.substring(match.end)}";
+          textField.value = TextEditingValue(text: _text, selection: TextSelection.collapsed(offset: match.start + emoji.length + 1));
         } else {
           // If the user moved the cursor before trying to insert an emoji, reset the picker
           controller!.emojiScrollController.jumpTo(0);

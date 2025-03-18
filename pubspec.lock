@@ -612,10 +612,10 @@ packages:
     dependency: "direct main"
     description:
       name: emoji_picker_flutter
-      sha256: "63dee6be976c51c8b971eccbc73fc637f021b6b679eed1b2ec3b503947304734"
+      sha256: "9a44c102079891ea5877f78c70f2e3c6e9df7b7fe0a01757d31f1046eeaa016d"
       url: "https://pub.dev"
     source: hosted
-    version: "4.2.0"
+    version: "4.3.0"
   encrypt:
     dependency: "direct main"
     description:
@@ -3067,6 +3067,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.1"
+  unicode_emojis:
+    dependency: "direct main"
+    description:
+      name: unicode_emojis
+      sha256: "2f86d695420086dcf6f41c35bd81c33ef75c8e5fc0431fd9ca54066060086d19"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.0"
   unifiedpush:
     dependency: "direct main"
     description:

@@ -122,9 +122,9 @@ class _PickedAttachmentsHolderState extends OptimizedState<PickedAttachmentsHold
                         controller: widget.controller!.emojiScrollController,
                         physics: ThemeSwitcher.getScrollPhysics(),
                         shrinkWrap: true,
-                        findChildIndexCallback: (key) => findChildIndexByKey(widget.controller!.emojiMatches, key, (item) => item.shortName),
+                        findChildIndexCallback: (key) => findChildIndexByKey(widget.controller!.emojiMatches, key, (item) => item.unified),
                         itemBuilder: (BuildContext context, int index) => Material(
-                          key: ValueKey(widget.controller!.emojiMatches[index].shortName),
+                          key: ValueKey(widget.controller!.emojiMatches[index].unified),
                           color: Colors.transparent,
                           child: InkWell(
                             onTapDown: (details) {
@@ -137,9 +137,9 @@ class _PickedAttachmentsHolderState extends OptimizedState<PickedAttachmentsHold
                               final matches = regExp.allMatches(text);
                               if (matches.isNotEmpty && matches.any((m) => m.start < _controller.selection.start)) {
                                 final match = matches.lastWhere((m) => m.start < _controller.selection.start);
-                                final char = widget.controller!.emojiMatches[index].char;
-                                _controller.text = "${text.substring(0, match.start)}$char ${text.substring(match.end)}";
-                                _controller.selection = TextSelection.fromPosition(TextPosition(offset: match.start + char.length + 1));
+                                final emoji = widget.controller!.emojiMatches[index].emoji;
+                                _controller.text = "${text.substring(0, match.start)}$emoji ${text.substring(match.end)}";
+                                _controller.selection = TextSelection.fromPosition(TextPosition(offset: match.start + emoji.length + 1));
                               }
                               widget.controller!.emojiSelectedIndex.value = 0;
                               widget.controller!.emojiMatches.clear();
@@ -153,7 +153,7 @@ class _PickedAttachmentsHolderState extends OptimizedState<PickedAttachmentsHold
                                 title: Row(
                                   children: <Widget>[
                                     Text(
-                                      widget.controller!.emojiMatches[index].char,
+                                      widget.controller!.emojiMatches[index].emoji,
                                       style:
                                       context.textTheme.labelLarge!.apply(fontFamily: "Apple Color Emoji"),
                                     ),

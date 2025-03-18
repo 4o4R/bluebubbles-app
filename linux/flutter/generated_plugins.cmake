@@ -9,6 +9,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   emoji_picker_flutter
   file_selector_linux
   flutter_acrylic
+  flutter_timezone
   gtk
   irondash_engine_context
   local_notifier
