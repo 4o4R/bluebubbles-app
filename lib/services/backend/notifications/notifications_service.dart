@@ -166,7 +166,6 @@ class NotificationsService extends GetxService {
       ),
       payload: "${time.millisecondsSinceEpoch}",
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
     );
   }
 
