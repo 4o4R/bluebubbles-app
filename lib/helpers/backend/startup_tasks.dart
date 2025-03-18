@@ -189,10 +189,10 @@ Future<void> reviewFlow() async {
     final DateTime now = DateTime.now();
     final int days = now.difference(sinceDate).inDays;
 
-    // If the app has been installed for 7 days, request a review
+    // If the app has been installed for 30 days, request a review
     // And if the user has not been asked for a review ever.
-    // If the user has already been asked, ask again after 30 days
-    if ((lastReviewRequest == 0 && days >= 7) || (lastReviewRequest > 0 && days >= 30)) {
+    // If the user has already been asked, ask again after 90 days
+    if ((lastReviewRequest == 0 && days >= 30) || (lastReviewRequest > 0 && days >= 90)) {
       ss.settings.lastReviewRequestTimestamp.value = now.millisecondsSinceEpoch;
       await ss.settings.saveOne("lastReviewRequestTimestamp");
       await requestReview();

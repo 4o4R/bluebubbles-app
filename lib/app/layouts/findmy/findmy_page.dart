@@ -352,8 +352,8 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
 
   @override
   Widget build(BuildContext context) {
-    final allItems = devices.where((item) => !item.isConsideredAccessory).toList();
-    final allDevices = devices.where((item) => item.isConsideredAccessory).toList();
+    final allItems = devices.where((item) => item.isConsideredAccessory).toList();
+    final allDevices = devices.where((item) => !item.isConsideredAccessory).toList();
 
     final devicesWithLocation = allDevices
         .where(
