@@ -543,7 +543,7 @@ class MessagesViewState extends OptimizedState<MessagesView> {
                                     key: ValueKey("${message.guid!}-scrolling"),
                                     index: index,
                                     controller: scrollController,
-                                    highlightColor: context.theme.colorScheme.surface.withOpacity(0.7),
+                                    highlightColor: context.theme.colorScheme.surface.withValues(alpha: 0.7),
                                     child: MessageHolder(
                                       cvController: controller,
                                       message: message,
@@ -602,7 +602,7 @@ class MessagesViewState extends OptimizedState<MessagesView> {
               Obx(
                 () => AnimatedContainer(
                   duration: const Duration(milliseconds: 150),
-                  color: context.theme.colorScheme.surface.withOpacity(dragging.value ? 0.4 : 0),
+                  color: context.theme.colorScheme.surface.withValues(alpha: dragging.value ? 0.4 : 0),
                   child: dragging.value
                       ? Center(
                           child: Row(

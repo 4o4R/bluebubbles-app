@@ -104,7 +104,7 @@ class _FirebasePanelState extends OptimizedState<FirebasePanel> {
                           children: [
                             Text(
                               _enabled ? "Configured" : "Not Configured",
-                              style: context.theme.textTheme.bodyMedium!.apply(color: context.theme.colorScheme.outline.withOpacity(0.85)),
+                              style: context.theme.textTheme.bodyMedium!.apply(color: context.theme.colorScheme.outline.withValues(alpha: 0.85)),
                             )
                           ]
                         ),
@@ -135,7 +135,7 @@ class _FirebasePanelState extends OptimizedState<FirebasePanel> {
                             ss.settings.skin.value != Skins.Material
                                 ? CupertinoIcons.refresh
                                 : Icons.refresh,
-                            color: context.theme.colorScheme.outline.withOpacity(0.5),
+                            color: context.theme.colorScheme.outline.withValues(alpha: 0.5),
                             size: 18,
                           ) : const SizedBox.shrink()),
                         leading: const SettingsLeadingIcon(
@@ -221,7 +221,7 @@ class _FirebasePanelState extends OptimizedState<FirebasePanel> {
                           Obx(() => Material(
                               shape: ss.settings.skin.value == Skins.Samsung
                                   ? SquircleBorder(
-                                      side: BorderSide(color: context.theme.colorScheme.outline.withOpacity(0.5), width: 1.0),
+                                      side: BorderSide(color: context.theme.colorScheme.outline.withValues(alpha: 0.5), width: 1.0),
                                     )
                                   : null,
                               color: Colors.transparent,
@@ -236,7 +236,7 @@ class _FirebasePanelState extends OptimizedState<FirebasePanel> {
                                           color: Colors.white,
                                           boxShadow: [
                                             BoxShadow(
-                                              color: Colors.grey.withOpacity(0.5),
+                                              color: Colors.grey.withValues(alpha: 0.5),
                                               blurRadius: 0,
                                               spreadRadius: 0.5,
                                               offset: const Offset(0, 0),
@@ -273,7 +273,7 @@ class _FirebasePanelState extends OptimizedState<FirebasePanel> {
                             ss.settings.skin.value != Skins.Material
                                 ? CupertinoIcons.refresh
                                 : Icons.refresh_outlined,
-                            color: context.theme.colorScheme.outline.withOpacity(0.5),
+                            color: context.theme.colorScheme.outline.withValues(alpha: 0.5),
                             size: 18,
                           ) : const SizedBox.shrink()),
                         leading: const SettingsLeadingIcon(
@@ -353,7 +353,7 @@ class _FirebasePanelState extends OptimizedState<FirebasePanel> {
                           children: [
                             Text(
                               "Tap to Clear",
-                              style: context.theme.textTheme.bodyMedium!.apply(color: context.theme.colorScheme.outline.withOpacity(0.85)),
+                              style: context.theme.textTheme.bodyMedium!.apply(color: context.theme.colorScheme.outline.withValues(alpha: 0.85)),
                             )
                           ]
                         ),

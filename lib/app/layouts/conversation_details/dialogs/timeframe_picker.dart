@@ -72,7 +72,7 @@ Future<DateTime?> showTimeframePicker(String title, BuildContext context,
         child: Container(
             padding: const EdgeInsets.symmetric(vertical: 10.0),
             decoration:
-                BoxDecoration(border: Border(bottom: BorderSide(color: context.theme.dividerColor.withOpacity(0.2)))),
+                BoxDecoration(border: Border(bottom: BorderSide(color: context.theme.dividerColor.withValues(alpha: 0.2)))),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

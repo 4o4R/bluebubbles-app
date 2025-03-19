@@ -257,7 +257,7 @@ class _FullscreenImageState extends OptimizedState<FullscreenImage> with Automat
                 child: Container(
                   height: kIsDesktop ? 80 : 100.0,
                   width: ns.width(context),
-                  color: context.theme.colorScheme.shadow.withOpacity(samsung ? 1 : 0.65),
+                  color: context.theme.colorScheme.shadow.withValues(alpha: samsung ? 1 : 0.65),
                   child: SafeArea(
                     left: false,
                     right: false,

@@ -105,7 +105,7 @@ class SettingsOptions<T extends Object> extends StatelessWidget {
                       child: DropdownButton<T>(
                         padding: const EdgeInsets.symmetric(horizontal: 9),
                         borderRadius: BorderRadius.circular(8),
-                        dropdownColor: secondaryColor?.withOpacity(1) ?? surfaceColor,
+                        dropdownColor: secondaryColor?.withValues(alpha: 1) ?? surfaceColor,
                         icon: Icon(
                           Icons.arrow_drop_down,
                           color: context.theme.textTheme.bodyLarge!.color,

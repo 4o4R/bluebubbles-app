@@ -390,11 +390,11 @@ class ChatCreatorState extends OptimizedState<ChatCreator> {
                                           child: Obx(() => Material(
                                                 key: ValueKey(e.address),
                                                 color: e.iMessage.value == true
-                                                    ? context.theme.colorScheme.bubble(context, true).withOpacity(0.2)
+                                                    ? context.theme.colorScheme.bubble(context, true).withValues(alpha: 0.2)
                                                     : e.iMessage.value == false
                                                         ? context.theme.colorScheme
                                                             .bubble(context, false)
-                                                            .withOpacity(0.2)
+                                                            .withValues(alpha: 0.2)
                                                         : context.theme.colorScheme.properSurface,
                                                 borderRadius: BorderRadius.circular(5),
                                                 clipBehavior: Clip.antiAlias,
@@ -488,8 +488,8 @@ class ChatCreatorState extends OptimizedState<ChatCreator> {
                 padding: const EdgeInsets.symmetric(horizontal: 15.0).add(const EdgeInsets.only(bottom: 5.0)),
                 child: ToggleButtons(
                   constraints: BoxConstraints(minWidth: (ns.width(context) - 35) / 2),
-                  fillColor: context.theme.colorScheme.bubble(context, iMessage).withOpacity(0.2),
-                  splashColor: context.theme.colorScheme.bubble(context, iMessage).withOpacity(0.2),
+                  fillColor: context.theme.colorScheme.bubble(context, iMessage).withValues(alpha: 0.2),
+                  splashColor: context.theme.colorScheme.bubble(context, iMessage).withValues(alpha: 0.2),
                   children: [
                     const Row(
                       children: [

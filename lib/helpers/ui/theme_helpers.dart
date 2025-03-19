@@ -229,12 +229,12 @@ extension ColorHelpers on Color {
   }
 
   Color themeOpacity(BuildContext context) {
-    if (ss.settings.windowEffect.value == WindowEffect.disabled) return withOpacity(1.0.obs.value);
-    if (!WindowEffects.dependsOnColor()) return withOpacity(0.0.obs.value);
+    if (ss.settings.windowEffect.value == WindowEffect.disabled) return withValues(alpha: 1.0.obs.value);
+    if (!WindowEffects.dependsOnColor()) return withValues(alpha: 0.0.obs.value);
     if (!ts.inDarkMode(context)) {
-      return withOpacity(ss.settings.windowEffectCustomOpacityLight.value);
+      return withValues(alpha: ss.settings.windowEffectCustomOpacityLight.value);
     } else {
-      return withOpacity(ss.settings.windowEffectCustomOpacityDark.value);
+      return withValues(alpha: ss.settings.windowEffectCustomOpacityDark.value);
     }
   }
 

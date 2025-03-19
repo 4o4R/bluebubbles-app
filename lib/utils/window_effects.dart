@@ -70,15 +70,6 @@ class WindowEffects {
     return Map.fromEntries(effects.map((effect) => MapEntry(effect, _descriptions[effect] ?? "")));
   }
 
-  static double getOpacity({required Color color}) {
-    bool dark = isDark(color: color);
-
-    if (dark) {
-      return ss.settings.windowEffectCustomOpacityDark.value;
-    }
-    return ss.settings.windowEffectCustomOpacityLight.value;
-  }
-
   static double defaultOpacity({required bool dark}) {
     WindowEffect effect = ss.settings.windowEffect.value;
     return dark ? _opacities[effect]!.item1 : _opacities[effect]!.item2;
@@ -87,10 +78,6 @@ class WindowEffects {
   static bool dependsOnColor() {
     WindowEffect effect = ss.settings.windowEffect.value;
     return _dependencies[effect]!.contains(EffectDependencies.color);
-  }
-
-  static Color withOpacity({required Color color}) {
-    return color.withOpacity(getOpacity(color: color));
   }
 
   static bool isDark({required Color color}) {
@@ -114,7 +101,7 @@ class WindowEffects {
     if (_dependencies[effect]?.contains(EffectDependencies.brightness) ?? false) {
       _dark = isDark(color: color);
     }
-    await Window.setEffect(effect: effect, color: color.withOpacity(addOpacity ? _extra : 0), dark: _dark);
+    await Window.setEffect(effect: effect, color: color.withValues(alpha: addOpacity ? _extra : 0), dark: _dark);
   }
 }
 

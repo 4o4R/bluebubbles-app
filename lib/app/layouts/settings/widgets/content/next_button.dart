@@ -13,7 +13,7 @@ class NextButton extends StatelessWidget {
         ss.settings.skin.value != Skins.Material
             ? CupertinoIcons.chevron_right
             : Icons.arrow_forward,
-        color: context.theme.colorScheme.outline.withOpacity(0.5),
+        color: context.theme.colorScheme.outline.withValues(alpha: 0.5),
         size: 18,
       ) : const SizedBox.shrink());
   }

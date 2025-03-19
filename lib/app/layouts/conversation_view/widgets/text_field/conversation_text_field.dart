@@ -608,7 +608,7 @@ class ConversationTextFieldState extends CustomState<ConversationTextField, void
                               borderRadius: BorderRadius.circular(8),
                             ),
                             labelColor: context.theme.colorScheme.onSurface,
-                            unselectedLabelColor: context.theme.colorScheme.onSurface.withOpacity(0.5),
+                            unselectedLabelColor: context.theme.colorScheme.onSurface.withValues(alpha: 0.5),
                           ),
                           searchFieldStyle: TenorSearchFieldStyle(
                             fillColor: context.theme.colorScheme.properSurface,
@@ -924,7 +924,7 @@ class TextFieldComponentState extends State<TextFieldComponent> {
           decoration: iOS
               ? BoxDecoration(
                   border: Border.fromBorderSide(BorderSide(
-                    color: (isRecording & iOS) ? context.theme.colorScheme.primary.withOpacity(1.0) : context.theme.colorScheme.properSurface,
+                    color: (isRecording & iOS) ? context.theme.colorScheme.primary.withValues(alpha: 1.0) : context.theme.colorScheme.properSurface,
                     width: 1.5,
                   )),
                   borderRadius: BorderRadius.circular(20),
@@ -1035,7 +1035,7 @@ class TextFieldComponentState extends State<TextFieldComponent> {
                     border: InputBorder.none,
                     focusedBorder: InputBorder.none,
                     filled: (isRecording & iOS),
-                    fillColor: (isRecording & iOS) ? context.theme.colorScheme.primary.withOpacity(0.3) : Colors.transparent,
+                    fillColor: (isRecording & iOS) ? context.theme.colorScheme.primary.withValues(alpha: 0.3) : Colors.transparent,
                     hintStyle: context.theme.extension<BubbleText>()!.bubbleText.copyWith(color: context.theme.colorScheme.outline),
                     suffixIconConstraints: const BoxConstraints(minHeight: 0),
                     suffixIcon: samsung && !isChatCreator

@@ -74,7 +74,7 @@ class _TextFieldSuffixState extends OptimizedState<TextFieldSuffix> {
                       ? null
                       : !isChatCreator && !showRecording
                       ? context.theme.colorScheme.outline
-                      : context.theme.colorScheme.primary.withOpacity(0.4),
+                      : context.theme.colorScheme.primary.withValues(alpha: 0.4),
                   shape: const CircleBorder(),
                   padding: const EdgeInsets.all(0),
                   maximumSize: kIsDesktop ? const Size(40, 40) : const Size(32, 32),

@@ -281,16 +281,16 @@ class _DesktopPanelState extends OptimizedState<DesktopPanel> {
                                                     decoration: BoxDecoration(
                                                       borderRadius: BorderRadius.circular(8),
                                                       border: Border.all(
-                                                          color: color.withOpacity(selected ? 1 : 0.5),
+                                                          color: color.withValues(alpha: selected ? 1 : 0.5),
                                                           width: selected ? 1.5 : 1),
-                                                      color: color.withOpacity(disabled
+                                                      color: color.withValues(alpha: disabled
                                                           ? 0.2
                                                           : selected
                                                               ? 0.8
                                                               : 0.7),
                                                     ),
                                                     foregroundDecoration: BoxDecoration(
-                                                      color: color.withOpacity(hardDisabled || disabled ? 0.7 : 0),
+                                                      color: color.withValues(alpha: hardDisabled || disabled ? 0.7 : 0),
                                                       borderRadius: BorderRadius.circular(8),
                                                     ),
                                                     curve: Curves.linear,
@@ -362,7 +362,7 @@ class _DesktopPanelState extends OptimizedState<DesktopPanel> {
                                       width: size,
                                       margin: EdgeInsets.symmetric(vertical: margin / 2, horizontal: margin),
                                       decoration: BoxDecoration(
-                                        color: context.theme.colorScheme.primaryContainer.withOpacity(0.4),
+                                        color: context.theme.colorScheme.primaryContainer.withValues(alpha: 0.4),
                                         borderRadius: BorderRadius.circular(8),
                                         border: Border.all(color: context.theme.colorScheme.primaryContainer),
                                       ),
@@ -461,8 +461,8 @@ class _DesktopPanelState extends OptimizedState<DesktopPanel> {
                                                             borderRadius: BorderRadius.circular(5),
                                                             border: Border.all(
                                                                 color:
-                                                                    context.theme.colorScheme.outline.withOpacity(0.2)),
-                                                            color: context.theme.colorScheme.primary.withOpacity(0.6),
+                                                                    context.theme.colorScheme.outline.withValues(alpha: 0.2)),
+                                                            color: context.theme.colorScheme.primary.withValues(alpha: 0.6),
                                                           ),
                                                           child: Center(
                                                             child: Text(
@@ -506,7 +506,7 @@ class _DesktopPanelState extends OptimizedState<DesktopPanel> {
                                       height: size / 3 * (!showMarkRead ? 0.9 : 1.28),
                                       margin: EdgeInsets.symmetric(vertical: margin / 2, horizontal: margin),
                                       decoration: BoxDecoration(
-                                        color: context.theme.colorScheme.primaryContainer.withOpacity(0.4),
+                                        color: context.theme.colorScheme.primaryContainer.withValues(alpha: 0.4),
                                         borderRadius: BorderRadius.circular(8),
                                         border: Border.all(color: context.theme.colorScheme.primaryContainer),
                                       ),
@@ -582,8 +582,8 @@ class _DesktopPanelState extends OptimizedState<DesktopPanel> {
                                                 decoration: BoxDecoration(
                                                   borderRadius: BorderRadius.circular(5),
                                                   border: Border.all(
-                                                      color: context.theme.colorScheme.outline.withOpacity(0.2)),
-                                                  color: context.theme.colorScheme.primary.withOpacity(0.6),
+                                                      color: context.theme.colorScheme.outline.withValues(alpha: 0.2)),
+                                                  color: context.theme.colorScheme.primary.withValues(alpha: 0.6),
                                                 ),
                                                 child: Center(
                                                   child: Text(

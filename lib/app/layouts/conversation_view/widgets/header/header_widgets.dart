@@ -139,7 +139,7 @@ class ConnectionIndicator extends StatelessWidget {
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: getIndicatorColor(socket.state.value).withOpacity(0.4),
+              color: getIndicatorColor(socket.state.value).withValues(alpha: 0.4),
               spreadRadius: socket.state.value != SocketState.connected && (ls.isAlive || kIsDesktop)
                   ? max(MediaQuery.of(context).viewPadding.top, 40).clamp(0, noniOS ? 30 : double.infinity).toDouble()
                   : 0,

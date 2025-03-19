@@ -384,8 +384,8 @@ class SearchViewState extends OptimizedState<SearchView> {
                       padding: const EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 10),
                       child: ToggleButtons(
                         constraints: BoxConstraints(minWidth: (ns.width(context) * 0.9) / 2),
-                        fillColor: context.theme.colorScheme.primary.withOpacity(0.2),
-                        splashColor: context.theme.colorScheme.primary.withOpacity(0.2),
+                        fillColor: context.theme.colorScheme.primary.withValues(alpha: 0.2),
+                        splashColor: context.theme.colorScheme.primary.withValues(alpha: 0.2),
                         children: [
                           const Row(
                             children: [
@@ -409,7 +409,7 @@ class SearchViewState extends OptimizedState<SearchView> {
                         borderRadius: BorderRadius.circular(20),
                         selectedBorderColor: context.theme.colorScheme.primary,
                         selectedColor: context.theme.colorScheme.primary,
-                        borderColor: context.theme.colorScheme.primary.withOpacity(0.5),
+                        borderColor: context.theme.colorScheme.primary.withValues(alpha: 0.5),
                         isSelected: [local, network],
                         onPressed: (index) {
                           if (index == 0) {
@@ -431,7 +431,7 @@ class SearchViewState extends OptimizedState<SearchView> {
                         },
                       ),
                     ),
-                  Divider(color: context.theme.colorScheme.outline.withOpacity(0.75)),
+                  Divider(color: context.theme.colorScheme.outline.withValues(alpha: 0.75)),
                   if (!isSearching && noResults)
                     Padding(
                         padding: const EdgeInsets.only(top: 25.0),
@@ -585,7 +585,7 @@ class SearchViewState extends OptimizedState<SearchView> {
                               RawChip(
                                 tapEnabled: true,
                                 deleteIcon: const Icon(Icons.close, size: 16),
-                                side: BorderSide(color: context.theme.colorScheme.outline.withOpacity(0.1)),
+                                side: BorderSide(color: context.theme.colorScheme.outline.withValues(alpha: 0.1)),
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                                 avatar: CircleAvatar(
                                   backgroundColor: context.theme.colorScheme.primaryContainer,
@@ -640,7 +640,7 @@ class SearchViewState extends OptimizedState<SearchView> {
                               RawChip(
                                 tapEnabled: true,
                                 deleteIcon: const Icon(Icons.close, size: 16),
-                                side: BorderSide(color: context.theme.colorScheme.outline.withOpacity(0.1)),
+                                side: BorderSide(color: context.theme.colorScheme.outline.withValues(alpha: 0.1)),
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                                 avatar: CircleAvatar(
                                   backgroundColor: context.theme.colorScheme.primaryContainer,
@@ -692,7 +692,7 @@ class SearchViewState extends OptimizedState<SearchView> {
                                 RawChip(
                                   tapEnabled: true,
                                   deleteIcon: const Icon(Icons.close, size: 16),
-                                  side: BorderSide(color: context.theme.colorScheme.outline.withOpacity(0.1)),
+                                  side: BorderSide(color: context.theme.colorScheme.outline.withValues(alpha: 0.1)),
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                                   avatar: CircleAvatar(
                                     backgroundColor: context.theme.colorScheme.primaryContainer,
@@ -747,7 +747,7 @@ class SearchViewState extends OptimizedState<SearchView> {
                                   showCheckmark: true,
                                   selected: isFromMe,
                                   checkmarkColor: context.theme.colorScheme.primary,
-                                  side: BorderSide(color: context.theme.colorScheme.outline.withOpacity(0.1)),
+                                  side: BorderSide(color: context.theme.colorScheme.outline.withValues(alpha: 0.1)),
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                                   label: Text('From You',
                                       style: TextStyle(
@@ -769,7 +769,7 @@ class SearchViewState extends OptimizedState<SearchView> {
                                   showCheckmark: true,
                                   selected: isNotFromMe,
                                   checkmarkColor: context.theme.colorScheme.primary,
-                                  side: BorderSide(color: context.theme.colorScheme.outline.withOpacity(0.1)),
+                                  side: BorderSide(color: context.theme.colorScheme.outline.withValues(alpha: 0.1)),
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                                   label: Text('Not From You',
                                       style: TextStyle(

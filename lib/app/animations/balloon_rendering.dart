@@ -162,8 +162,8 @@ class RenderBalloons extends RenderBox {
         ..style = PaintingStyle.fill
         ..shader = RadialGradient(
             colors: [
-              balloon.color.darkenAmount(0.2).withOpacity(0.7),
-              balloon.color.lightenAmount(0.1).withOpacity(0.7)
+              balloon.color.darkenAmount(0.2).withValues(alpha: 0.7),
+              balloon.color.lightenAmount(0.1).withValues(alpha: 0.7)
             ],
             stops: [0, 0.7]
         ).createShader(Rect.fromCircle(center: Offset(centerX + gradientOffset, centerY - gradientOffset), radius: radius * 8))
@@ -188,8 +188,8 @@ class RenderBalloons extends RenderBox {
         ..style = PaintingStyle.fill
         ..shader = RadialGradient(
             colors: [
-              balloon.color.darkenAmount(0.2).withOpacity(0.7),
-              balloon.color.lightenAmount(0.1).withOpacity(0.7)
+              balloon.color.darkenAmount(0.2).withValues(alpha: 0.7),
+              balloon.color.lightenAmount(0.1).withValues(alpha: 0.7)
             ],
             stops: [0, 0.7]
         ).createShader(Rect.fromCircle(center: Offset(centerX + gradientOffset, centerY - gradientOffset), radius: radius * 8))

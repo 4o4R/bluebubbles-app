@@ -99,13 +99,13 @@ class _MaterialConversationTileState extends CustomState<MaterialConversationTil
             bottomLeft: Radius.circular(20),
           ),
           color: controller.isSelected
-              ? context.theme.colorScheme.primaryContainer.withOpacity(0.5)
+              ? context.theme.colorScheme.primaryContainer.withValues(alpha: 0.5)
               : shouldPartialHighlight
                   ? context.theme.colorScheme.properSurface
                   : shouldHighlight
                       ? context.theme.colorScheme.primaryContainer
                       : hoverHighlight
-                          ? context.theme.colorScheme.properSurface.withOpacity(0.5)
+                          ? context.theme.colorScheme.properSurface.withValues(alpha: 0.5)
                           : null,
         ),
         duration: const Duration(milliseconds: 100),

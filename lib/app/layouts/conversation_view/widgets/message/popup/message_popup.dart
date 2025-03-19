@@ -192,7 +192,7 @@ class _MessagePopupState extends OptimizedState<MessagePopup> with SingleTickerP
             child: Scaffold(
                 extendBodyBehindAppBar: true,
                 backgroundColor: kIsDesktop && iOS && ss.settings.windowEffect.value != WindowEffect.disabled
-                    ? context.theme.colorScheme.properSurface.withOpacity(0.6)
+                    ? context.theme.colorScheme.properSurface.withValues(alpha: 0.6)
                     : Colors.transparent,
                 appBar: iOS
                     ? null
@@ -222,13 +222,13 @@ class _MessagePopupState extends OptimizedState<MessagePopup> with SingleTickerP
                       onTap: popDetails,
                       child: iOS
                           ? (ss.settings.highPerfMode.value
-                              ? Container(color: context.theme.colorScheme.background.withOpacity(0.8))
+                              ? Container(color: context.theme.colorScheme.background.withValues(alpha: 0.8))
                               : BackdropFilter(
                                   filter: ImageFilter.blur(
                                       sigmaX: kIsDesktop && ss.settings.windowEffect.value != WindowEffect.disabled ? 10 : 30,
                                       sigmaY: kIsDesktop && ss.settings.windowEffect.value != WindowEffect.disabled ? 10 : 30),
                                   child: Container(
-                                    color: context.theme.colorScheme.properSurface.withOpacity(0.3),
+                                    color: context.theme.colorScheme.properSurface.withValues(alpha: 0.3),
                                   ),
                                 ))
                           : null,
@@ -1037,7 +1037,7 @@ class _MessagePopupState extends OptimizedState<MessagePopup> with SingleTickerP
           isDisabled = !((message.dateCreated?.toUtc().isWithin(DateTime.now().toUtc(), minutes: 15) ?? false));
         }
   
-        Color color = isDisabled ? context.theme.colorScheme.properOnSurface.withOpacity(0.5) : context.theme.colorScheme.properOnSurface;
+        Color color = isDisabled ? context.theme.colorScheme.properOnSurface.withValues(alpha: 0.5) : context.theme.colorScheme.properOnSurface;
         return Padding(
           padding: EdgeInsets.only(top: kIsDesktop ? 20 : 0),
           child: IconButton(

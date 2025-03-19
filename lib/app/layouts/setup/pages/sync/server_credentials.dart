@@ -66,7 +66,7 @@ class _ServerCredentialsState extends OptimizedState<ServerCredentials> {
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    color: context.theme.colorScheme.primaryContainer.withOpacity(0.3),
+                    color: context.theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
                   child: Row(
@@ -131,7 +131,7 @@ class _ServerCredentialsState extends OptimizedState<ServerCredentials> {
                                         clipBehavior: Clip.antiAlias,
                                         borderRadius: BorderRadius.circular(20),
                                         child: ListTile(
-                                          tileColor: context.theme.colorScheme.primaryContainer.withOpacity(0.3),
+                                          tileColor: context.theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
                                           enabled: triedConnecting[index].value && reachable[index].value,
                                           title: Text.rich(TextSpan(children: [
                                             TextSpan(text: usableProjects[index]['displayName']),

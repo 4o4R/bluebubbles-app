@@ -88,7 +88,7 @@ class _NotificationProvidersState extends OptimizedState<NotificationProvidersPa
                         Obx(() => Material(
                             shape: ss.settings.skin.value == Skins.Samsung
                                 ? SquircleBorder(
-                                    side: BorderSide(color: context.theme.colorScheme.outline.withOpacity(0.5), width: 1.0),
+                                    side: BorderSide(color: context.theme.colorScheme.outline.withValues(alpha: 0.5), width: 1.0),
                                   )
                                 : null,
                             color: Colors.transparent,
@@ -103,7 +103,7 @@ class _NotificationProvidersState extends OptimizedState<NotificationProvidersPa
                                         color: Colors.white,
                                         boxShadow: [
                                           BoxShadow(
-                                            color: Colors.grey.withOpacity(0.5),
+                                            color: Colors.grey.withValues(alpha: 0.5),
                                             blurRadius: 0,
                                             spreadRadius: 0.5,
                                             offset: const Offset(0, 0),

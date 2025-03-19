@@ -345,7 +345,7 @@ class _BackupRestorePanelState extends OptimizedState<BackupRestorePanel> {
                           width: 40 * ss.settings.avatarScale.value,
                           height: 40 * ss.settings.avatarScale.value,
                           decoration: BoxDecoration(
-                            color: !iOS ? null : context.theme.colorScheme.primaryContainer.withOpacity(0.3),
+                            color: !iOS ? null : context.theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
                             shape: BoxShape.circle,
                             border: iOS ? null : Border.all(color: context.theme.colorScheme.primary, width: 3)
                           ),
@@ -559,7 +559,7 @@ class _BackupRestorePanelState extends OptimizedState<BackupRestorePanel> {
                           width: 40 * ss.settings.avatarScale.value,
                           height: 40 * ss.settings.avatarScale.value,
                           decoration: BoxDecoration(
-                              color: !iOS ? null : context.theme.colorScheme.primaryContainer.withOpacity(0.3),
+                              color: !iOS ? null : context.theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
                               shape: BoxShape.circle,
                               border: iOS ? null : Border.all(color: context.theme.colorScheme.primary, width: 3)
                           ),
@@ -780,7 +780,7 @@ class _BackupRestorePanelState extends OptimizedState<BackupRestorePanel> {
                           width: 40 * ss.settings.avatarScale.value,
                           height: 40 * ss.settings.avatarScale.value,
                           decoration: BoxDecoration(
-                            color: !iOS ? null : context.theme.colorScheme.primaryContainer.withOpacity(0.3),
+                            color: !iOS ? null : context.theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
                             shape: BoxShape.circle,
                             border: iOS ? null : Border.all(color: context.theme.colorScheme.primary, width: 3)
                           ),
@@ -891,7 +891,7 @@ class _BackupRestorePanelState extends OptimizedState<BackupRestorePanel> {
                           width: 40 * ss.settings.avatarScale.value,
                           height: 40 * ss.settings.avatarScale.value,
                           decoration: BoxDecoration(
-                              color: !iOS ? null : context.theme.colorScheme.primaryContainer.withOpacity(0.3),
+                              color: !iOS ? null : context.theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
                               shape: BoxShape.circle,
                               border: iOS ? null : Border.all(color: context.theme.colorScheme.primary, width: 3)
                           ),

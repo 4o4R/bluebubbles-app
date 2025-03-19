@@ -318,7 +318,7 @@ class SpellCheckTextEditingController extends TextEditingController {
                           final replacement = mistake.replacements[index];
                           return InkWell(
                             borderRadius: BorderRadius.circular(8.0),
-                            hoverColor: color.withOpacity(0.2),
+                            hoverColor: color.withValues(alpha: 0.2),
                             onTapDown: (_) {
                               replaceMistake(mistake, replacement);
                             },
@@ -370,7 +370,7 @@ class SpellCheckTextEditingController extends TextEditingController {
           final mistakeEnd = mistake.endOffset - offset;
           final mistakeText = chunk.substring(mistakeStart, mistakeEnd);
           final mistakeStyle = (style ?? const TextStyle()).copyWith(
-            backgroundColor: _getMistakeColor(mistake.type).withOpacity(highlightStyle.backgroundOpacity),
+            backgroundColor: _getMistakeColor(mistake.type).withValues(alpha: highlightStyle.backgroundOpacity),
             decoration: highlightStyle.decoration,
             decorationColor: _getMistakeColor(mistake.type),
             decorationThickness: highlightStyle.mistakeLineThickness,

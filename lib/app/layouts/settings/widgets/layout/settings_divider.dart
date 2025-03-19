@@ -20,7 +20,7 @@ class SettingsDivider extends StatelessWidget {
       return Padding(
         padding: padding,
         child: Divider(
-          color: color ?? context.theme.colorScheme.outline.withOpacity(0.5),
+          color: color ?? context.theme.colorScheme.outline.withValues(alpha: 0.5),
           thickness: 0.5,
           height: 0.5,
         )

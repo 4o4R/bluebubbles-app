@@ -465,7 +465,7 @@ Future<void> paintGroupAvatar({
     if (index == maxAvatars - 1 && participants.length > maxAvatars) {
       Paint paint = Paint();
       paint.isAntiAlias = true;
-      paint.color = theme.colorScheme.properSurface.withOpacity(0.8);
+      paint.color = theme.colorScheme.properSurface.withValues(alpha: 0.8);
       Offset _offset = Offset(left + realSize * 0.5, top + realSize * 0.5);
       double radius = realSize * 0.5;
       canvas.drawCircle(_offset, radius, paint);
@@ -477,7 +477,7 @@ Future<void> paintGroupAvatar({
         ..textAlign = TextAlign.center
         ..text = TextSpan(
             text: String.fromCharCode(icon.codePoint),
-            style: TextStyle(fontSize: adjustedWidth * 0.3, fontFamily: icon.fontFamily, color: theme.colorScheme.properOnSurface.withOpacity(0.8)))
+            style: TextStyle(fontSize: adjustedWidth * 0.3, fontFamily: icon.fontFamily, color: theme.colorScheme.properOnSurface.withValues(alpha: 0.8)))
         ..layout()
         ..paint(canvas, Offset(left + realSize * 0.25, top + realSize * 0.25));
     } else {

@@ -51,7 +51,7 @@ class CupertinoHeader extends StatelessWidget implements PreferredSizeWidget {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: context.theme.colorScheme.properSurface.withOpacity(0.7),
+                  color: context.theme.colorScheme.properSurface.withValues(alpha: 0.7),
                   border: Border(
                     bottom: BorderSide(color: context.theme.colorScheme.properSurface.darkenAmount(0.25), width: 0.5),
                   ),

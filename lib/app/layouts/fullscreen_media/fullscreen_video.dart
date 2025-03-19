@@ -258,7 +258,7 @@ class _FullscreenVideoState extends OptimizedState<FullscreenVideo> with Automat
                                     height: 75,
                                     width: 75,
                                     decoration: BoxDecoration(
-                                      color: context.theme.colorScheme.background.withOpacity(0.5),
+                                      color: context.theme.colorScheme.background.withValues(alpha: 0.5),
                                       borderRadius: BorderRadius.circular(40),
                                     ),
                                     clipBehavior: Clip.antiAlias,

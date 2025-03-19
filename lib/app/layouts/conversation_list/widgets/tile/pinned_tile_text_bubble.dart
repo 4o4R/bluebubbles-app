@@ -136,7 +136,7 @@ class PinnedTileTextBubbleState extends CustomState<PinnedTileTextBubble, void, 
         return const SizedBox.shrink();
       }
 
-      final background = getBubbleColors().first.withOpacity(0.7);
+      final background = getBubbleColors().first.withValues(alpha: 0.7);
       return Align(
         alignment: showTail
             ? leftSide
@@ -194,7 +194,7 @@ class PinnedTileTextBubbleState extends CustomState<PinnedTileTextBubble, void, 
                             fontSize: (size / 10).clamp(context.theme.textTheme.bodySmall!.fontSize!, double.infinity),
                             color: context.theme.colorScheme
                                 .onBubble(context, chat.isIMessage)
-                                .withOpacity(ss.settings.colorfulBubbles.value ? 1 : 0.85)),
+                                .withValues(alpha: ss.settings.colorfulBubbles.value ? 1 : 0.85)),
                       ),
                     ),
                   ),
