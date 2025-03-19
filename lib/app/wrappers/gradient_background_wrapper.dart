@@ -54,7 +54,7 @@ class _GradientBackgroundState extends CustomState<GradientBackground, void, Con
               ], colors: [
                 context.theme.colorScheme
                   .bubble(context, controller.chat.isIMessage)
-                  .withValues(alpha: 0.5),
+                  .withOpacity(0.5),
                 context.theme.colorScheme.background,
               ]
             )
