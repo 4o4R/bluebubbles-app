@@ -334,7 +334,7 @@ class NotificationsService extends GetxService {
             : !isReaction && !message.isGroupEvent && papi
                 ? ReactionTypes.reactionToEmoji[action]!
                 : null)
-        .nonNulls
+        .whereNotNull()
         .toList();
 
     bool showMarkRead = actions.contains("Mark Read");

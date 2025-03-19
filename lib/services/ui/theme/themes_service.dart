@@ -406,7 +406,7 @@ class ThemesService extends GetxService {
       return Tuple2(light, dark);
     }
 
-    CorePalette palette = CorePalette.of(desktopAccentColor!.toARGB32());
+    CorePalette palette = CorePalette.of(desktopAccentColor!.value);
 
     light = light.copyWith(
       colorScheme: light.colorScheme.copyWith(
