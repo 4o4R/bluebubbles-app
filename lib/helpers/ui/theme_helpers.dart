@@ -23,11 +23,11 @@ class HexColor extends Color {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    return other is HexColor && other.value == value;
+    return other is HexColor && other.toARGB32() == toARGB32();
   }
 
   @override
-  int get hashCode => value.hashCode;
+  int get hashCode => toARGB32().hashCode;
 }
 
 @immutable
@@ -301,7 +301,7 @@ MaterialColor createMaterialColor(Color color) {
       1,
     );
   }
-  return MaterialColor(color.value, swatch);
+  return MaterialColor(color.toARGB32(), swatch);
 }
 
 List<Color> toColorGradient(String? str) {

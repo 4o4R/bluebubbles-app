@@ -707,7 +707,7 @@ List<DetailsMenuAction> _processDetailsMenuActions(dynamic rawJson, List<Details
     List<DetailsMenuAction> actions = (rawJson is List ? rawJson : jsonDecode(rawJson) as List)
         .cast<String>()
         .map((s) => DetailsMenuAction.values.firstWhereOrNull((action) => action.name == s))
-        .whereNotNull()
+        .nonNulls
         .toList();
     return _filterDetailsMenuActions(actions, allActions);
   } catch (e) {

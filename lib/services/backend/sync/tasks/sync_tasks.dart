@@ -100,7 +100,7 @@ class BulkSyncChats extends AsyncTask<List<dynamic>, List<Chat>> {
       for (final item in chatHandles.entries) {
         final chat = chatMap[item.key];
         if (chat == null) continue;
-        final participants = item.value.map((e) => handleMap[e]).whereNotNull().toList();
+        final participants = item.value.map((e) => handleMap[e]).nonNulls.toList();
         if (participants.isNotEmpty) {
           chat.handles.clear();
           chat.handles.addAll(participants);

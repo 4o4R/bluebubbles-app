@@ -111,21 +111,21 @@ class BulkSaveNewMessages extends AsyncTask<List<dynamic>, List<Message>> {
       // 1. Check for existing attachments and save new ones
       Map<String, Attachment> attachmentMap = {};
       if (attachmentsToSave.isNotEmpty) {
-        List<String> inputAttachmentGuids = attachmentsToSave.values.map((e) => e.guid).whereNotNull().toList();
+        List<String> inputAttachmentGuids = attachmentsToSave.values.map((e) => e.guid).nonNulls.toList();
         QueryBuilder<Attachment> attachmentQuery = Database.attachments.query(Attachment_.guid.oneOf(inputAttachmentGuids));
         List<String> existingAttachmentGuids =
-            attachmentQuery.build().find().map((e) => e.guid).whereNotNull().toList();
+            attachmentQuery.build().find().map((e) => e.guid).nonNulls.toList();
 
         // Insert the attachments that don't yet exist
         List<Attachment> attachmentsToInsert = attachmentsToSave.values
             .where((element) => !existingAttachmentGuids.contains(element.guid))
-            .whereNotNull()
+            .nonNulls
             .toList();
         Database.attachments.putMany(attachmentsToInsert);
 
         // 2. Fetch all inserted/existing attachments based on input
         QueryBuilder<Attachment> attachmentQuery2 = Database.attachments.query(Attachment_.guid.oneOf(inputAttachmentGuids));
-        List<Attachment> attachments = attachmentQuery2.build().find().whereNotNull().toList();
+        List<Attachment> attachments = attachmentQuery2.build().find().nonNulls.toList();
 
         // 3. Create map of inserted/existing attachments
         for (final a in attachments) {
@@ -149,7 +149,7 @@ class BulkSaveNewMessages extends AsyncTask<List<dynamic>, List<Message>> {
       // 6. Relate the attachments to the messages
       for (final msg in inputMessages) {
         final relatedAttachments =
-            messageAttachments[msg.guid]?.map((e) => attachmentMap[e]).whereNotNull().toList() ?? [];
+            messageAttachments[msg.guid]?.map((e) => attachmentMap[e]).nonNulls.toList() ?? [];
         msg.attachments = relatedAttachments;
         msg.dbAttachments.addAll(relatedAttachments);
       }

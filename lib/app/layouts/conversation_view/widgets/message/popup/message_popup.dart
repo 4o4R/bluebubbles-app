@@ -746,7 +746,6 @@ class _MessagePopupState extends OptimizedState<MessagePopup> with SingleTickerP
   Future<void> remindLater() async {
     if (Platform.isAndroid) {
       bool denied = await Permission.scheduleExactAlarm.isDenied;
-      ;
       bool permanentlyDenied = await Permission.scheduleExactAlarm.isPermanentlyDenied;
       if (denied && !permanentlyDenied) {
         await Permission.scheduleExactAlarm.request();

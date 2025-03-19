@@ -294,7 +294,7 @@ class MonetPalette extends material.ColorSwatch<int> {
   /// as working and ready instances are already provided by [MonetColors].
   MonetPalette(this.colors)
       : assert(colors.length == 13),
-        super(colors[500]!.value, colors);
+        super(colors[500]!.toARGB32(), colors);
 
   /// Lightest shade of the palette, equals to white.
   material.Color get shade0 => this[0]!;
