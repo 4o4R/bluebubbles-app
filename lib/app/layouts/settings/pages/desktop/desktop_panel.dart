@@ -209,71 +209,72 @@ class _DesktopPanelState extends OptimizedState<DesktopPanel> {
                         ),
                       )),
                   Obx(() => AnimatedSizeAndFade.showHide(
-                      show: ss.settings.desktopNotifications.value,
-                      child: SettingsTile(
-                        leading: const SettingsLeadingIcon(
-                          iosIcon: CupertinoIcons.folder,
-                          materialIcon: Icons.folder_outlined,
-                          containerColor: Colors.green,
+                        show: ss.settings.desktopNotifications.value,
+                        child: SettingsTile(
+                          leading: const SettingsLeadingIcon(
+                            iosIcon: CupertinoIcons.folder,
+                            materialIcon: Icons.folder_outlined,
+                            containerColor: Colors.green,
+                          ),
+                          title:
+                              "${ss.settings.desktopNotificationSoundPath.value == null ? "Add" : "Change"} Notification Sound",
+                          subtitle: ss.settings.desktopNotificationSoundPath.value != null
+                              ? basename(ss.settings.desktopNotificationSoundPath.value!)
+                                  .substring("notification-".length)
+                              : "Adds a sound to be played with notifications. This is separate from the system notification settings. This will not silence the system notification sound.",
+                          onTap: () async {
+                            FilePickerResult? result =
+                                await FilePicker.platform.pickFiles(type: FileType.audio, withData: true);
+                            if (result != null) {
+                              PlatformFile platformFile = result.files.first;
+                              String path = "${fs.appDocDir.path}/sounds/${"notification-"}${platformFile.name}";
+                              await File(path).create(recursive: true);
+                              await File(path).writeAsBytes(platformFile.bytes!);
+                              ss.settings.desktopNotificationSoundPath.value = path;
+                              ss.saveSettings();
+                            }
+                          },
+                          trailing: ss.settings.desktopNotificationSoundPath.value != null
+                              ? Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    IconButton(
+                                        icon: playingNotificationSound.value
+                                            ? Icon(ss.settings.skin.value == Skins.iOS
+                                                ? CupertinoIcons.stop
+                                                : Icons.stop_outlined)
+                                            : Icon(ss.settings.skin.value == Skins.iOS
+                                                ? CupertinoIcons.play
+                                                : Icons.play_arrow_outlined),
+                                        onPressed: () async {
+                                          final Player _notificationPlayer = notificationPlayer;
+                                          if (playingNotificationSound.value) {
+                                            await _notificationPlayer.stop();
+                                          } else {
+                                            await _notificationPlayer
+                                                .setVolume(ss.settings.desktopNotificationSoundVolume.value.toDouble());
+                                            await _notificationPlayer
+                                                .open(Media(ss.settings.desktopNotificationSoundPath.value!));
+                                          }
+                                        }),
+                                    IconButton(
+                                      icon: Icon(ss.settings.skin.value == Skins.iOS
+                                          ? CupertinoIcons.trash
+                                          : Icons.delete_outline),
+                                      onPressed: () async {
+                                        File file = File(ss.settings.desktopNotificationSoundPath.value!);
+                                        if (await file.exists()) {
+                                          await file.delete();
+                                        }
+                                        ss.settings.desktopNotificationSoundPath.value = null;
+                                        ss.saveSettings();
+                                      },
+                                    ),
+                                  ],
+                                )
+                              : const SizedBox.shrink(),
                         ),
-                        title:
-                            "${ss.settings.desktopNotificationSoundPath.value == null ? "Add" : "Change"} Notification Sound",
-                        subtitle: ss.settings.desktopNotificationSoundPath.value != null
-                            ? basename(ss.settings.desktopNotificationSoundPath.value!)
-                                .substring("notification-".length)
-                            : "Adds a sound to be played with notifications. This is separate from the system notification settings. This will not silence the system notification sound.",
-                        onTap: () async {
-                          FilePickerResult? result =
-                              await FilePicker.platform.pickFiles(type: FileType.audio, withData: true);
-                          if (result != null) {
-                            PlatformFile platformFile = result.files.first;
-                            String path = "${fs.appDocDir.path}/sounds/${"notification-"}${platformFile.name}";
-                            await File(path).create(recursive: true);
-                            await File(path).writeAsBytes(platformFile.bytes!);
-                            ss.settings.desktopNotificationSoundPath.value = path;
-                            ss.saveSettings();
-                          }
-                        },
-                        trailing: Obx(() => AnimatedSizeAndFade.showHide(
-                            show: ss.settings.desktopNotificationSoundPath.value != null,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                IconButton(
-                                    icon: playingNotificationSound.value
-                                        ? Icon(ss.settings.skin.value == Skins.iOS
-                                            ? CupertinoIcons.stop
-                                            : Icons.stop_outlined)
-                                        : Icon(ss.settings.skin.value == Skins.iOS
-                                            ? CupertinoIcons.play
-                                            : Icons.play_arrow_outlined),
-                                    onPressed: () async {
-                                      final Player _notificationPlayer = notificationPlayer;
-                                      if (playingNotificationSound.value) {
-                                        await _notificationPlayer.stop();
-                                      } else {
-                                        await _notificationPlayer
-                                            .setVolume(ss.settings.desktopNotificationSoundVolume.value.toDouble());
-                                        await _notificationPlayer
-                                            .open(Media(ss.settings.desktopNotificationSoundPath.value!));
-                                      }
-                                    }),
-                                IconButton(
-                                  icon: Icon(ss.settings.skin.value == Skins.iOS
-                                      ? CupertinoIcons.trash
-                                      : Icons.delete_outline),
-                                  onPressed: () async {
-                                    File file = File(ss.settings.desktopNotificationSoundPath.value!);
-                                    if (await file.exists()) {
-                                      await file.delete();
-                                    }
-                                    ss.settings.desktopNotificationSoundPath.value = null;
-                                    ss.saveSettings();
-                                  },
-                                ),
-                              ],
-                            ))),
-                      ))),
+                      )),
                   Obx(() => AnimatedSizeAndFade.showHide(
                       show: ss.settings.desktopNotifications.value &&
                           ss.settings.desktopNotificationSoundPath.value != null,
@@ -299,9 +300,9 @@ class _DesktopPanelState extends OptimizedState<DesktopPanel> {
                         ),
                       )),
                   Obx(() => AnimatedSizeAndFade.showHide(
-                      show: ss.settings.desktopNotifications.value,
-                      child: const SettingsDivider(padding: EdgeInsets.only(left: 16.0)),
-                  )),
+                        show: ss.settings.desktopNotifications.value,
+                        child: const SettingsDivider(padding: EdgeInsets.only(left: 16.0)),
+                      )),
                   Obx(() => AnimatedSizeAndFade.showHide(
                         show: ss.settings.desktopNotifications.value,
                         child: SettingsTile(
