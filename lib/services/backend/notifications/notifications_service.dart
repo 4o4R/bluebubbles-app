@@ -50,6 +50,7 @@ class NotificationsService extends GetxService {
   static Map<String, LocalNotification> facetimeNotifications = {};
   static Map<String, int> notificationCounts = {};
   static final Lock _lock = Lock();
+  static final Player desktopNotificationPlayer = Player();
 
   /// If more than [maxChatCount] chats have notifications, all notifications will be grouped into one
   static const maxChatCount = 2;
@@ -323,6 +324,7 @@ class NotificationsService extends GetxService {
   }
 
   Future<void> showDesktopNotif(Message message, String text, Chat chat, String guid, String title, String contactName, bool isGroup, bool isReaction) async {
+    if (kIsDesktop && !ss.settings.desktopNotifications.value) return;
     List<int> selectedIndices = ss.settings.selectedActionIndices;
     List<String> _actions = ss.settings.actionList;
     final papi = ss.settings.enablePrivateAPI.value;
@@ -563,6 +565,13 @@ class NotificationsService extends GetxService {
     }
 
     await toast.show();
+    if (kIsDesktop && ss.settings.desktopNotificationSoundPath.value != null && !(cm.getChatController(chat.guid)?.isActive ?? false)) {
+      if (desktopNotificationPlayer.state.playing) {
+        await desktopNotificationPlayer.stop();
+      }
+      await desktopNotificationPlayer.setVolume(ss.settings.desktopNotificationSoundVolume.value.toDouble());
+      await desktopNotificationPlayer.open(Media(ss.settings.desktopNotificationSoundPath.value!));
+    }
   }
 
   Future<void> showSummaryNotifDesktop(int count, Iterable<String> _chats, bool showMarkRead) async {

@@ -59,7 +59,6 @@ class Settings {
   final RxBool alwaysShowAvatars = false.obs;
   final RxBool notifyOnChatList = false.obs;
   final RxBool notifyReactions = true.obs;
-  final RxString notificationSound = "default".obs;
   final RxBool colorsFromMedia = false.obs;
   final Rx<Monet> monetTheming = Monet.none.obs;
   final RxString globalTextDetection = "".obs;
@@ -151,6 +150,9 @@ class Settings {
   final Rx<WindowEffect> windowEffect = WindowEffect.disabled.obs;
   final RxDouble windowEffectCustomOpacityLight = 0.5.obs;
   final RxDouble windowEffectCustomOpacityDark = 0.5.obs;
+  final RxBool desktopNotifications = true.obs;
+  final RxInt desktopNotificationSoundVolume = 100.obs;
+  final RxnString desktopNotificationSoundPath = RxnString();
 
   // Troubleshooting settings
   final Rx<Level> logLevel = Level.info.obs;
@@ -295,7 +297,6 @@ class Settings {
       'alwaysShowAvatars': alwaysShowAvatars.value,
       'notifyOnChatList': notifyOnChatList.value,
       'notifyReactions': notifyReactions.value,
-      'notificationSound': notificationSound.value,
       'globalTextDetection': globalTextDetection.value,
       'filterUnknownSenders': filterUnknownSenders.value,
       'tabletMode': tabletMode.value,
@@ -363,6 +364,8 @@ class Settings {
       'windowEffect': windowEffect.value.name,
       'windowEffectCustomOpacityLight': windowEffectCustomOpacityLight.value,
       'windowEffectCustomOpacityDark': windowEffectCustomOpacityDark.value,
+      'desktopNotifications': desktopNotifications.value,
+      'desktopNotificationSoundVolume': desktopNotificationSoundVolume.value,
       'useDesktopAccent': useDesktopAccent.value,
       'logLevel': logLevel.value.index,
       'hideNamesForReactions': hideNamesForReactions.value,
@@ -383,6 +386,7 @@ class Settings {
         'firstFcmRegisterDate': firstFcmRegisterDate.value,
         'sendSoundPath': sendSoundPath.value,
         'receiveSoundPath': receiveSoundPath.value,
+        'desktopNotificationSoundPath': desktopNotificationSoundPath.value,
       });
     }
     return map;
@@ -426,7 +430,6 @@ class Settings {
     ss.settings.alwaysShowAvatars.value = map['alwaysShowAvatars'] ?? false;
     ss.settings.notifyOnChatList.value = map['notifyOnChatList'] ?? false;
     ss.settings.notifyReactions.value = map['notifyReactions'] ?? true;
-    ss.settings.notificationSound.value = map['notificationSound'] ?? "default";
     ss.settings.globalTextDetection.value = map['globalTextDetection'] ?? "";
     ss.settings.filterUnknownSenders.value = map['filterUnknownSenders'] ?? false;
     ss.settings.tabletMode.value = kIsDesktop || (map['tabletMode'] ?? true);
@@ -506,6 +509,9 @@ class Settings {
         : WindowEffect.disabled;
     ss.settings.windowEffectCustomOpacityLight.value = map['windowEffectCustomOpacityLight']?.toDouble() ?? 0.5;
     ss.settings.windowEffectCustomOpacityDark.value = map['windowEffectCustomOpacityDark']?.toDouble() ?? 0.5;
+    ss.settings.desktopNotifications.value = map['desktopNotifications'] ?? true;
+    ss.settings.desktopNotificationSoundVolume.value = map['desktopNotificationSoundVolume'] ?? 100;
+    ss.settings.desktopNotificationSoundPath.value = map['desktopNotificationSoundPath'];
     ss.settings.useDesktopAccent.value = map['useDesktopAccent'] ?? map['useWindowsAccent'] ?? false;
     ss.settings.firstFcmRegisterDate.value = map['firstFcmRegisterDate'] ?? 0;
     ss.settings.logLevel.value = map['logLevel'] != null ? Level.values[map['logLevel']] : Level.info;
@@ -562,7 +568,6 @@ class Settings {
     s.alwaysShowAvatars.value = map['alwaysShowAvatars'] ?? false;
     s.notifyOnChatList.value = map['notifyOnChatList'] ?? false;
     s.notifyReactions.value = map['notifyReactions'] ?? true;
-    s.notificationSound.value = map['notificationSound'] ?? "default";
     s.colorsFromMedia.value = map['colorsFromMedia'] ?? false;
     s.monetTheming.value = map['monetTheming'] != null ? Monet.values[map['monetTheming']] : Monet.none;
     s.globalTextDetection.value = map['globalTextDetection'] ?? "";
@@ -646,6 +651,9 @@ class Settings {
         : WindowEffect.disabled;
     s.windowEffectCustomOpacityLight.value = map['windowEffectCustomOpacityLight']?.toDouble() ?? 0.5;
     s.windowEffectCustomOpacityDark.value = map['windowEffectCustomOpacityDark']?.toDouble() ?? 0.5;
+    s.desktopNotifications.value = map['desktopNotifications'] ?? true;
+    s.desktopNotificationSoundVolume.value = map['desktopNotificationSound'] ?? 100;
+    s.desktopNotificationSoundPath.value = map['desktopNotificationSoundPath'];
     s.useDesktopAccent.value = map['useDesktopAccent'] ?? map['useWindowsAccent'] ?? false;
     s.firstFcmRegisterDate.value = map['firstFcmRegisterDate'] ?? 0;
     s.logLevel.value = map['logLevel'] != null ? Level.values[map['logLevel']] : Level.info;

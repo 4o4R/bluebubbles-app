@@ -354,7 +354,7 @@ class ActionHandler extends GetxService {
       Logger.info("Not notifying for already handled new message with GUID ${m.guid}...", tag: "ActionHandler");
     }
 
-    if ((!ls.isAlive || ss.settings.endpointUnifiedPush.value != "") && shouldNotify) {
+    if ((!ls.isAlive || ss.settings.endpointUnifiedPush.value != "" || (cm.activeChat == null && Get.rawRoute?.settings.name != "/")) && shouldNotify) {
       await MessageHelper.handleNotification(m, c);
     }
     await c.addMessage(m);
