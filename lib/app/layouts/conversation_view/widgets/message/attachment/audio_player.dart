@@ -201,7 +201,6 @@ class _DesktopAudioPlayerState extends OptimizedState<AudioPlayer>
         ..stream.position.listen((position) => setState(() {}))
         ..stream.completed.listen((bool completed) async {
           if (completed) {
-            await controller!.pause();
             await controller!.seek(Duration.zero);
             animController.reverse();
           }

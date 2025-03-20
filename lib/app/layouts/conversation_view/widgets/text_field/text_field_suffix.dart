@@ -42,6 +42,7 @@ class TextFieldSuffix extends StatefulWidget {
 }
 
 class _TextFieldSuffixState extends OptimizedState<TextFieldSuffix> {
+  final AudioRecorder audioRecorder = AudioRecorder();
 
   bool get isChatCreator => widget.isChatCreator;
 
@@ -97,7 +98,8 @@ class _TextFieldSuffixState extends OptimizedState<TextFieldSuffix> {
                   if (widget.controller!.showRecording.value) {
                     if (kIsDesktop) {
                       File temp = File(join(fs.appDocDir.path, "temp", "recorder", "${widget.controller!.chat.guid.characters.where((c) => c.isAlphabetOnly || c.isNumericOnly).join()}.m4a"));
-                      await RecordPlatform.instance.start(widget.controller!.chat.guid, const RecordConfig(bitRate: 320000), path: temp.path);
+                      temp.createSync(recursive: true);
+                      audioRecorder.start(const RecordConfig(bitRate: 320000), path: temp.path);
                       return;
                     }
                     await widget.recorderController!.record(
@@ -108,7 +110,7 @@ class _TextFieldSuffixState extends OptimizedState<TextFieldSuffix> {
                     late final String? path;
                     late final PlatformFile file;
                     if (kIsDesktop) {
-                      path = await RecordPlatform.instance.stop(widget.controller!.chat.guid);
+                      path = await audioRecorder.stop();
                       if (path == null) return;
                       final _file = File(path);
                       file = PlatformFile(
@@ -204,5 +206,12 @@ class _TextFieldSuffixState extends OptimizedState<TextFieldSuffix> {
         });
       },
     );
+  }
+
+  @override
+  void dispose() {
+    audioRecorder.dispose();
+
+    super.dispose();
   }
 }
