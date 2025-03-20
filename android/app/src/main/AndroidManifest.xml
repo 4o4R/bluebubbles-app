@@ -267,4 +267,8 @@
 
     </application>
 
+    <queries>
+        <package android:name="com.google.android.apps.tachyon" />
+    </queries>
+
 </manifest>
