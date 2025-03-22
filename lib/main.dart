@@ -162,6 +162,8 @@ Future<Null> initApp(bool bubble, List<String> arguments) async {
             await windowManager.setTitle('BlueBubbles');
             if (arguments.firstOrNull != "minimized") {
               await windowManager.show();
+            } else {
+              await windowManager.hide();
             }
             if (!(ss.canAuthenticate && ss.settings.shouldSecure.value)) {
               chats.init();
