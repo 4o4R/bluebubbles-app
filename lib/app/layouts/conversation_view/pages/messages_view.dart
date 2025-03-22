@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:audio_waveforms/audio_waveforms.dart';
@@ -20,6 +21,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_ml_kit/google_ml_kit.dart' hide Message;
+import 'package:path/path.dart' hide context;
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:super_drag_and_drop/super_drag_and_drop.dart';
 
@@ -340,7 +342,7 @@ class MessagesViewState extends OptimizedState<MessagesView> {
     const moonIcon = CupertinoIcons.moon_fill;
     return DropRegion(
       hitTestBehavior: HitTestBehavior.translucent,
-      formats: Formats.standardFormats,
+      formats: Formats.standardFormats.whereType<FileFormat>().toList(),
       onDropOver: (DropOverEvent event) {
         if (!event.session.allowedOperations.contains(DropOperation.copy)) {
           dragging.value = false;
@@ -367,10 +369,24 @@ class MessagesViewState extends OptimizedState<MessagesView> {
 
           reader.getFile(format, (file) async {
             Uint8List bytes = await file.readAll();
+            String filePath = file.fileName ?? "";
+            String fileName = file.fileName ?? "";
+            if (Platform.isLinux) {
+              filePath = String.fromCharCodes(bytes);
+              File _file = File(filePath);
+              bytes = await _file.readAsBytes();
+              fileName = basename(filePath);
+            }
+            if (filePath.isEmpty) {
+              filePath = "Dragged_File_${randomString(8)}";
+            }
+            if (fileName.isEmpty) {
+              fileName = "Dragged_File_${randomString(8)}";
+            }
             controller.pickedAttachments.add(PlatformFile(
-              path: file.fileName!,
-              name: file.fileName!,
-              size: file.fileSize!,
+              path: filePath,
+              name: fileName,
+              size: bytes.length,
               bytes: bytes,
             ));
           });
