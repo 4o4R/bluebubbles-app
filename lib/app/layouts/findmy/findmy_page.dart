@@ -983,7 +983,7 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
                             height: 48,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: Theme.of(context).colorScheme.properSurface.withOpacity(0.9),
+                              color: Theme.of(context).colorScheme.properSurface.withValues(alpha: 0.9),
                             ),
                             child: Container(
                               width: 48,
@@ -1016,7 +1016,7 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
                                   child: Container(
                                       height: appWindow.titleBarHeight,
                                       width: appWindow.titleBarButtonSize.width * 3,
-                                      color: context.theme.colorScheme.properSurface.withOpacity(0.5)),
+                                      color: context.theme.colorScheme.properSurface.withValues(alpha: 0.5)),
                                 ),
                               ),
                             ]),
@@ -1144,7 +1144,7 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
   Widget buildDesktopTabBar() {
     return TabBar(
       controller: tabController,
-      dividerColor: context.theme.dividerColor.withOpacity(0.2),
+      dividerColor: context.theme.dividerColor.withValues(alpha: 0.2),
       tabs: [
         Container(
           padding: const EdgeInsets.only(top: 8),
@@ -1368,7 +1368,7 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
                     child: buildBackButton(context, padding: const EdgeInsets.only(right: 2)),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Theme.of(context).colorScheme.properSurface.withOpacity(0.9),
+                      color: Theme.of(context).colorScheme.properSurface.withValues(alpha: 0.9),
                     ),
                   )),
             if (!samsung && canRefresh)
@@ -1380,7 +1380,7 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
                   height: 48,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Theme.of(context).colorScheme.properSurface.withOpacity(0.9),
+                    color: Theme.of(context).colorScheme.properSurface.withValues(alpha: 0.9),
                   ),
                   child: Container(
                     width: 48,
@@ -1413,7 +1413,7 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
                         child: Container(
                             height: appWindow.titleBarHeight,
                             width: appWindow.titleBarButtonSize.width * 3,
-                            color: context.theme.colorScheme.properSurface.withOpacity(0.5)),
+                            color: context.theme.colorScheme.properSurface.withValues(alpha: 0.5)),
                       ),
                     ),
                   ]),
@@ -1609,7 +1609,7 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: context.theme.colorScheme.properSurface.withOpacity(0.8),
+                        color: context.theme.colorScheme.properSurface.withValues(alpha: 0.8),
                       ),
                       padding: const EdgeInsets.all(10),
                       child: Column(
@@ -1631,7 +1631,7 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: context.theme.colorScheme.properSurface.withOpacity(0.8),
+                        color: context.theme.colorScheme.properSurface.withValues(alpha: 0.8),
                       ),
                       padding: const EdgeInsets.all(10),
                       child: Column(

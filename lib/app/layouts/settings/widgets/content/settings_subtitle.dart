@@ -21,7 +21,7 @@ class SettingsSubtitle extends StatelessWidget {
       child: ListTile(
         title: subtitle != null ? Text(
           subtitle!,
-          style: context.theme.textTheme.bodySmall!.copyWith(color: context.theme.colorScheme.properOnSurface.withOpacity(0.75)),
+          style: context.theme.textTheme.bodySmall!.copyWith(color: context.theme.colorScheme.properOnSurface.withValues(alpha: 0.75)),
           maxLines: unlimitedSpace ? 100 : 2,
           overflow: TextOverflow.ellipsis,
         ) : null,

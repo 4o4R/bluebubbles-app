@@ -59,7 +59,6 @@ class Settings {
   final RxBool alwaysShowAvatars = false.obs;
   final RxBool notifyOnChatList = false.obs;
   final RxBool notifyReactions = true.obs;
-  final RxString notificationSound = "default".obs;
   final RxBool colorsFromMedia = false.obs;
   final Rx<Monet> monetTheming = Monet.none.obs;
   final RxString globalTextDetection = "".obs;
@@ -151,12 +150,16 @@ class Settings {
   final Rx<WindowEffect> windowEffect = WindowEffect.disabled.obs;
   final RxDouble windowEffectCustomOpacityLight = 0.5.obs;
   final RxDouble windowEffectCustomOpacityDark = 0.5.obs;
+  final RxBool desktopNotifications = true.obs;
+  final RxInt desktopNotificationSoundVolume = 100.obs;
+  final RxnString desktopNotificationSoundPath = RxnString();
 
   // Troubleshooting settings
   final Rx<Level> logLevel = Level.info.obs;
 
   // Notification actions
-  final RxList<int> selectedActionIndices = Platform.isWindows ? [0, 1, 2, 3, 4].obs : [0, 1, 2].obs;
+  final RxBool showReplyField = true.obs;
+  final RxList<int> selectedActionIndices = Platform.isWindows ? [0, 1, 2, 3].obs : [0, 1, 2].obs;
   final RxList<String> actionList = RxList.from([
     "Mark Read",
     ReactionTypes.LOVE,
@@ -176,8 +179,8 @@ class Settings {
   // Linux settings
   final RxBool useCustomTitleBar = RxBool(true);
 
-  // Windows settings
-  final RxBool useWindowsAccent = RxBool(false);
+  // Desktop settings
+  final RxBool useDesktopAccent = RxBool(false);
 
   Future<DisplayMode> getDisplayMode() async {
     List<DisplayMode> modes = await FlutterDisplayMode.supported;
@@ -295,7 +298,6 @@ class Settings {
       'alwaysShowAvatars': alwaysShowAvatars.value,
       'notifyOnChatList': notifyOnChatList.value,
       'notifyReactions': notifyReactions.value,
-      'notificationSound': notificationSound.value,
       'globalTextDetection': globalTextDetection.value,
       'filterUnknownSenders': filterUnknownSenders.value,
       'tabletMode': tabletMode.value,
@@ -307,6 +309,7 @@ class Settings {
       'spellcheck': spellcheck.value,
       'spellcheckLanguage': spellcheckLanguage.value,
       'minimizeToTray': minimizeToTray.value,
+      'showReplyField': showReplyField.value,
       'selectedActionIndices': selectedActionIndices,
       'actionList': actionList,
       'detailsMenuActions': detailsMenuActions.map((action) => action.name).toList(),
@@ -363,7 +366,9 @@ class Settings {
       'windowEffect': windowEffect.value.name,
       'windowEffectCustomOpacityLight': windowEffectCustomOpacityLight.value,
       'windowEffectCustomOpacityDark': windowEffectCustomOpacityDark.value,
-      'useWindowsAccent': useWindowsAccent.value,
+      'desktopNotifications': desktopNotifications.value,
+      'desktopNotificationSoundVolume': desktopNotificationSoundVolume.value,
+      'useDesktopAccent': useDesktopAccent.value,
       'logLevel': logLevel.value.index,
       'hideNamesForReactions': hideNamesForReactions.value,
       'replaceEmoticonsWithEmoji': replaceEmoticonsWithEmoji.value,
@@ -383,6 +388,7 @@ class Settings {
         'firstFcmRegisterDate': firstFcmRegisterDate.value,
         'sendSoundPath': sendSoundPath.value,
         'receiveSoundPath': receiveSoundPath.value,
+        'desktopNotificationSoundPath': desktopNotificationSoundPath.value,
       });
     }
     return map;
@@ -426,7 +432,6 @@ class Settings {
     ss.settings.alwaysShowAvatars.value = map['alwaysShowAvatars'] ?? false;
     ss.settings.notifyOnChatList.value = map['notifyOnChatList'] ?? false;
     ss.settings.notifyReactions.value = map['notifyReactions'] ?? true;
-    ss.settings.notificationSound.value = map['notificationSound'] ?? "default";
     ss.settings.globalTextDetection.value = map['globalTextDetection'] ?? "";
     ss.settings.filterUnknownSenders.value = map['filterUnknownSenders'] ?? false;
     ss.settings.tabletMode.value = kIsDesktop || (map['tabletMode'] ?? true);
@@ -497,7 +502,8 @@ class Settings {
     ss.settings.maxAvatarsInGroupWidget.value = map['maxAvatarsInGroupWidget'] ?? 4;
     ss.settings.useCustomTitleBar.value = map['useCustomTitleBar'] ?? true;
 
-    ss.settings.selectedActionIndices.value = _processSelectedActionIndices(map['selectedActionIndices']);
+    ss.settings.showReplyField.value = map['showReplyField'] ?? true;
+    ss.settings.selectedActionIndices.value = _processSelectedActionIndices(map['selectedActionIndices'], ss.settings.showReplyField.value);
     ss.settings.actionList.value = _processActionList(map['actionList']);
     ss.settings._detailsMenuActions.value = _processDetailsMenuActions(map['detailsMenuActions'], ss.settings.detailsMenuActions);
 
@@ -506,7 +512,10 @@ class Settings {
         : WindowEffect.disabled;
     ss.settings.windowEffectCustomOpacityLight.value = map['windowEffectCustomOpacityLight']?.toDouble() ?? 0.5;
     ss.settings.windowEffectCustomOpacityDark.value = map['windowEffectCustomOpacityDark']?.toDouble() ?? 0.5;
-    ss.settings.useWindowsAccent.value = map['useWindowsAccent'] ?? false;
+    ss.settings.desktopNotifications.value = map['desktopNotifications'] ?? true;
+    ss.settings.desktopNotificationSoundVolume.value = map['desktopNotificationSoundVolume'] ?? 100;
+    ss.settings.desktopNotificationSoundPath.value = map['desktopNotificationSoundPath'];
+    ss.settings.useDesktopAccent.value = map['useDesktopAccent'] ?? map['useWindowsAccent'] ?? false;
     ss.settings.firstFcmRegisterDate.value = map['firstFcmRegisterDate'] ?? 0;
     ss.settings.logLevel.value = map['logLevel'] != null ? Level.values[map['logLevel']] : Level.info;
     ss.settings.hideNamesForReactions.value = map['hideNamesForReactions'] ?? false;
@@ -562,7 +571,6 @@ class Settings {
     s.alwaysShowAvatars.value = map['alwaysShowAvatars'] ?? false;
     s.notifyOnChatList.value = map['notifyOnChatList'] ?? false;
     s.notifyReactions.value = map['notifyReactions'] ?? true;
-    s.notificationSound.value = map['notificationSound'] ?? "default";
     s.colorsFromMedia.value = map['colorsFromMedia'] ?? false;
     s.monetTheming.value = map['monetTheming'] != null ? Monet.values[map['monetTheming']] : Monet.none;
     s.globalTextDetection.value = map['globalTextDetection'] ?? "";
@@ -637,7 +645,8 @@ class Settings {
     s.maxAvatarsInGroupWidget.value = map['maxAvatarsInGroupWidget'] ?? 4;
     s.useCustomTitleBar.value = map['useCustomTitleBar'] ?? true;
 
-    s.selectedActionIndices.value = _processSelectedActionIndices(map['selectedActionIndices']);
+    s.showReplyField.value = map['showReplyField'] ?? true;
+    s.selectedActionIndices.value = _processSelectedActionIndices(map['selectedActionIndices'], s.showReplyField.value);
     s.actionList.value = _processActionList(map['actionList']);
     s._detailsMenuActions.value = _processDetailsMenuActions(map['detailsMenuActions'], DetailsMenuAction.values);
 
@@ -646,7 +655,10 @@ class Settings {
         : WindowEffect.disabled;
     s.windowEffectCustomOpacityLight.value = map['windowEffectCustomOpacityLight']?.toDouble() ?? 0.5;
     s.windowEffectCustomOpacityDark.value = map['windowEffectCustomOpacityDark']?.toDouble() ?? 0.5;
-    s.useWindowsAccent.value = map['useWindowsAccent'] ?? false;
+    s.desktopNotifications.value = map['desktopNotifications'] ?? true;
+    s.desktopNotificationSoundVolume.value = map['desktopNotificationSound'] ?? 100;
+    s.desktopNotificationSoundPath.value = map['desktopNotificationSoundPath'];
+    s.useDesktopAccent.value = map['useDesktopAccent'] ?? map['useWindowsAccent'] ?? false;
     s.firstFcmRegisterDate.value = map['firstFcmRegisterDate'] ?? 0;
     s.logLevel.value = map['logLevel'] != null ? Level.values[map['logLevel']] : Level.info;
     s.hideNamesForReactions.value = map['hideNamesForReactions'] ?? false;
@@ -676,12 +688,12 @@ Map<String, String> _processCustomHeaders(dynamic rawJson) {
   }
 }
 
-List<int> _processSelectedActionIndices(dynamic rawJson) {
+List<int> _processSelectedActionIndices(dynamic rawJson, bool showReplyField) {
   try {
-    return (rawJson is List ? rawJson : jsonDecode(rawJson) as List).cast<int>().take(Platform.isWindows ? 5 : 3).toList();
+    return (rawJson is List ? rawJson : jsonDecode(rawJson) as List).cast<int>().take(Platform.isWindows ? (showReplyField ? 4 : 5) : 3).sorted(Comparable.compare);
   } catch (e) {
     debugPrint("Using default selectedActionIndices");
-    return [0, 1, 2, 3, 4].take(Platform.isWindows ? 5 : 3).toList();
+    return [0, 1, 2, 3, 4].take(Platform.isWindows ? (showReplyField ? 4 : 5) : 3).sorted(Comparable.compare);
   }
 }
 
@@ -707,7 +719,7 @@ List<DetailsMenuAction> _processDetailsMenuActions(dynamic rawJson, List<Details
     List<DetailsMenuAction> actions = (rawJson is List ? rawJson : jsonDecode(rawJson) as List)
         .cast<String>()
         .map((s) => DetailsMenuAction.values.firstWhereOrNull((action) => action.name == s))
-        .whereNotNull()
+        .nonNulls
         .toList();
     return _filterDetailsMenuActions(actions, allActions);
   } catch (e) {

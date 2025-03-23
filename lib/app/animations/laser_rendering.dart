@@ -104,7 +104,7 @@ class RenderLaser extends RenderBox {
         ..style = PaintingStyle.fill
         ..shader = RadialGradient(
             colors: [
-              color.withOpacity(0.8),
+              color.withValues(alpha: 0.8),
               Colors.transparent,
             ],
             stops: [0, 0.9]

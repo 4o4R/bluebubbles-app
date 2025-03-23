@@ -55,9 +55,9 @@ Future<void> showFaceTimeOverlay(String callUuid, String caller, Uint8List? chat
             MaterialButton(
               elevation: 0,
               hoverElevation: 0,
-              color: Colors.green.withOpacity(0.2),
+              color: Colors.green.withValues(alpha: 0.2),
               splashColor: Colors.green,
-              highlightColor: Colors.green.withOpacity(0.5),
+              highlightColor: Colors.green.withValues(alpha: 0.5),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
               padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 36.0),
               child: Column(
@@ -79,9 +79,9 @@ Future<void> showFaceTimeOverlay(String callUuid, String caller, Uint8List? chat
             MaterialButton(
               elevation: 0,
               hoverElevation: 0,
-              color: Colors.red.withOpacity(0.2),
+              color: Colors.red.withValues(alpha: 0.2),
               splashColor: Colors.red,
-              highlightColor: Colors.red.withOpacity(0.5),
+              highlightColor: Colors.red.withValues(alpha: 0.5),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
               padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 36.0),
               child: Column(

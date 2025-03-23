@@ -50,6 +50,7 @@ class NotificationsService extends GetxService {
   static Map<String, LocalNotification> facetimeNotifications = {};
   static Map<String, int> notificationCounts = {};
   static final Lock _lock = Lock();
+  static final Player desktopNotificationPlayer = Player();
 
   /// If more than [maxChatCount] chats have notifications, all notifications will be grouped into one
   static const maxChatCount = 2;
@@ -166,7 +167,6 @@ class NotificationsService extends GetxService {
       ),
       payload: "${time.millisecondsSinceEpoch}",
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
     );
   }
 
@@ -280,11 +280,14 @@ class NotificationsService extends GetxService {
     }
 
     toast = LocalNotification(
+      type: LocalNotificationType.imageAndText02,
       imagePath: path,
       title: caller,
       body: "Incoming FaceTime ${isAudio ? 'Audio' : 'Video'} Call",
       duration: LocalNotificationDuration.long,
       actions: callUuid == null ? null : nActions,
+      systemSound: LocalNotificationSound.call,
+      soundOption: LocalNotificationSoundOption.loop,
     );
 
     toast.onClick = () async {
@@ -324,6 +327,7 @@ class NotificationsService extends GetxService {
   }
 
   Future<void> showDesktopNotif(Message message, String text, Chat chat, String guid, String title, String contactName, bool isGroup, bool isReaction) async {
+    if (kIsDesktop && !ss.settings.desktopNotifications.value) return;
     List<int> selectedIndices = ss.settings.selectedActionIndices;
     List<String> _actions = ss.settings.actionList;
     final papi = ss.settings.enablePrivateAPI.value;
@@ -335,7 +339,7 @@ class NotificationsService extends GetxService {
             : !isReaction && !message.isGroupEvent && papi
                 ? ReactionTypes.reactionToEmoji[action]!
                 : null)
-        .whereNotNull()
+        .nonNulls
         .toList();
 
     bool showMarkRead = actions.contains("Mark Read");
@@ -404,6 +408,7 @@ class NotificationsService extends GetxService {
       }
       if (toasted) return;
       toast = LocalNotification(
+        type: LocalNotificationType.imageAndText03,
         imagePath: path,
         title: isGroup && count == 1 && !isReaction && !message.isGroupEvent ? "$title: $contactName" : title,
         subtitle: "$count",
@@ -414,6 +419,11 @@ class NotificationsService extends GetxService {
                 ? [LocalNotificationAction(text: "Mark ${notificationCounts[guid]!} Messages Read")]
                 : []
             : nActions,
+        hasInput: ss.settings.showReplyField.value,
+        inputPlaceholder: "Type a reply...",
+        inputButtonText: "Reply",
+        systemSound: LocalNotificationSound.sms,
+        soundOption: ss.settings.desktopNotificationSoundPath.value != null ? LocalNotificationSoundOption.silent : LocalNotificationSoundOption.defaultOption,
       );
       notifications[guid]!.add(toast);
 
@@ -449,19 +459,19 @@ class NotificationsService extends GetxService {
           EventDispatcher().emit('refresh', null);
         } else if (ss.settings.enablePrivateAPI.value) {
           String reaction = ReactionTypes.emojiToReaction[actions[index]]!;
+          Message _message = Message(
+            associatedMessageGuid: message.guid,
+            associatedMessageType: reaction,
+            associatedMessagePart: 0,
+            dateCreated: DateTime.now(),
+            handleId: 0,
+          );
+          _message.generateTempGuid();
           outq.queue(
             OutgoingItem(
               type: QueueType.sendMessage,
               chat: chat,
-              message: Message(
-                associatedMessageGuid: message.guid,
-                associatedMessageType: reaction,
-                associatedMessagePart: 0,
-                dateCreated: DateTime.now(),
-                hasAttachments: false,
-                isFromMe: true,
-                handleId: 0,
-              ),
+              message: _message,
               selected: message,
               reaction: reaction,
             ),
@@ -471,6 +481,31 @@ class NotificationsService extends GetxService {
         if (await File(path).exists()) {
           await File(path).delete();
         }
+      };
+
+      toast.onInput = (text) async {
+        notifications[guid]?.remove(toast);
+        notificationCounts[guid] = 0;
+
+        Chat? chat = Chat.findOne(guid: guid);
+        if (chat == null) return;
+
+        Message _message = Message(
+          dateCreated: DateTime.now(),
+          handleId: 0,
+          text: text,
+          hasDdResults: true,
+        );
+
+        _message.generateTempGuid();
+
+        outq.queue(
+          OutgoingItem(
+            type: QueueType.sendMessage,
+            chat: chat,
+            message: _message,
+          ),
+        );
       };
 
       toast.onClose = (reason) async {
@@ -497,11 +532,14 @@ class NotificationsService extends GetxService {
 
       notifications[guid] = [];
       toast = LocalNotification(
+        type: LocalNotificationType.imageAndText02,
         imagePath: path,
         title: title,
-        body: "${notificationCounts[guid]!} messages",
+        body: body,
         duration: LocalNotificationDuration.short,
         actions: showMarkRead ? [LocalNotificationAction(text: "Mark Read")] : [],
+        systemSound: LocalNotificationSound.sms,
+        soundOption: ss.settings.desktopNotificationSoundPath.value != null ? LocalNotificationSoundOption.silent : LocalNotificationSoundOption.defaultOption,
       );
       notifications[guid]!.add(toast);
 
@@ -537,14 +575,11 @@ class NotificationsService extends GetxService {
 
         Chat? chat = Chat.findOne(guid: guid);
         if (chat == null) {
-          await windowManager.show();
           return;
         }
 
         chat.toggleHasUnread(false);
         EventDispatcher().emit('refresh', null);
-
-        await windowManager.show();
 
         if (await File(path).exists()) {
           await File(path).delete();
@@ -563,7 +598,18 @@ class NotificationsService extends GetxService {
       };
     }
 
+    await playDesktopNotificationSound();
     await toast.show();
+  }
+
+  Future<void> playDesktopNotificationSound() async {
+    if (ss.settings.desktopNotificationSoundPath.value != null) {
+      if (desktopNotificationPlayer.state.playing) {
+        await desktopNotificationPlayer.stop();
+      }
+      await desktopNotificationPlayer.setVolume(ss.settings.desktopNotificationSoundVolume.value.toDouble());
+      await desktopNotificationPlayer.open(Media(ss.settings.desktopNotificationSoundPath.value!));
+    }
   }
 
   Future<void> showSummaryNotifDesktop(int count, Iterable<String> _chats, bool showMarkRead) async {
@@ -583,10 +629,13 @@ class NotificationsService extends GetxService {
     if (allToast?.title == title && allToast?.body == body) return;
 
     allToast = LocalNotification(
+      type: LocalNotificationType.text02,
       title: title,
       body: body,
       duration: LocalNotificationDuration.short,
       actions: showMarkRead ? [LocalNotificationAction(text: "Mark All Read")] : [],
+      systemSound: LocalNotificationSound.sms,
+      soundOption: ss.settings.desktopNotificationSoundPath.value != null ? LocalNotificationSoundOption.silent : LocalNotificationSoundOption.defaultOption,
     );
 
     allToast!.onClick = () async {
@@ -595,7 +644,7 @@ class NotificationsService extends GetxService {
       await windowManager.show();
     };
 
-    allToast!.onClickAction = (index) async {
+    allToast!.onClickAction = (_) async {
       notifications = {};
       notificationCounts = {};
 
@@ -609,6 +658,7 @@ class NotificationsService extends GetxService {
       }
     };
 
+    await playDesktopNotificationSound();
     await allToast!.show();
   }
 
@@ -618,6 +668,7 @@ class NotificationsService extends GetxService {
     if (kIsDesktop) {
       if (socketToast != null) return;
       socketToast = LocalNotification(
+        type: LocalNotificationType.text02,
         title: title,
         body: subtitle,
         actions: [],
@@ -673,6 +724,7 @@ class NotificationsService extends GetxService {
       }
 
       aliasesToast = LocalNotification(
+        type: LocalNotificationType.text02,
         title: title,
         body: text,
         actions: [],
@@ -718,6 +770,7 @@ class NotificationsService extends GetxService {
     final subtitle = scheduled ? 'Tap to open scheduled messages list' : 'Tap to see more details or retry';
     if (kIsDesktop) {
       failedToast = LocalNotification(
+        type: LocalNotificationType.text02,
         title: title,
         body: subtitle,
         actions: [],

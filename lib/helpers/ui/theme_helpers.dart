@@ -23,11 +23,11 @@ class HexColor extends Color {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    return other is HexColor && other.value == value;
+    return other is HexColor && other.toARGB32() == toARGB32();
   }
 
   @override
-  int get hashCode => value.hashCode;
+  int get hashCode => toARGB32().hashCode;
 }
 
 @immutable
@@ -229,12 +229,12 @@ extension ColorHelpers on Color {
   }
 
   Color themeOpacity(BuildContext context) {
-    if (ss.settings.windowEffect.value == WindowEffect.disabled) return withOpacity(1.0.obs.value);
-    if (!WindowEffects.dependsOnColor()) return withOpacity(0.0.obs.value);
+    if (ss.settings.windowEffect.value == WindowEffect.disabled) return withValues(alpha: 1.0.obs.value);
+    if (!WindowEffects.dependsOnColor()) return withValues(alpha: 0.0.obs.value);
     if (!ts.inDarkMode(context)) {
-      return withOpacity(ss.settings.windowEffectCustomOpacityLight.value);
+      return withValues(alpha: ss.settings.windowEffectCustomOpacityLight.value);
     } else {
-      return withOpacity(ss.settings.windowEffectCustomOpacityDark.value);
+      return withValues(alpha: ss.settings.windowEffectCustomOpacityDark.value);
     }
   }
 
@@ -301,7 +301,7 @@ MaterialColor createMaterialColor(Color color) {
       1,
     );
   }
-  return MaterialColor(color.value, swatch);
+  return MaterialColor(color.toARGB32(), swatch);
 }
 
 List<Color> toColorGradient(String? str) {

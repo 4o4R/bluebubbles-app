@@ -79,7 +79,7 @@ class _CupertinoConversationTileState extends CustomState<CupertinoConversationT
                     parentController: controller,
                     style: context.theme.textTheme.bodyMedium!.copyWith(
                       color: controller.shouldHighlight.value
-                          ? context.theme.colorScheme.onBubble(context, controller.chat.isIMessage).withOpacity(0.85)
+                          ? context.theme.colorScheme.onBubble(context, controller.chat.isIMessage).withValues(alpha: 0.85)
                           : context.theme.colorScheme.outline,
                       height: 1.5,
                     ),
@@ -99,7 +99,7 @@ class _CupertinoConversationTileState extends CustomState<CupertinoConversationT
               : controller.shouldHighlight.value
                   ? context.theme.colorScheme.bubble(context, controller.chat.isIMessage)
                   : controller.hoverHighlight.value
-                      ? context.theme.colorScheme.properSurface.withOpacity(0.5)
+                      ? context.theme.colorScheme.properSurface.withValues(alpha: 0.5)
                       : null,
           borderRadius: BorderRadius.circular(
               controller.shouldHighlight.value || controller.shouldPartialHighlight.value || controller.hoverHighlight.value ? 8 : 0),

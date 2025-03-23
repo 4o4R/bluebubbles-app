@@ -16,7 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:get/get.dart';
-import 'package:sliding_up_panel2/sliding_up_panel2.dart';
+import 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
 import 'package:tuple/tuple.dart';
 import 'package:objectbox/src/native/query/query.dart' as obx;
 
@@ -45,7 +45,7 @@ class SearchView extends StatefulWidget {
 
 class SearchViewState extends OptimizedState<SearchView> {
   final TextEditingController textEditingController = TextEditingController();
-  final PanelController panelController = PanelController();
+  final SlidingUpPanelController panelController = SlidingUpPanelController();
   final FocusNode focusNode = FocusNode();
   final List<SearchResult> pastSearches = [];
 
@@ -231,8 +231,8 @@ class SearchViewState extends OptimizedState<SearchView> {
         canPop: false,
         onPopInvoked: (bool didPop) {
           if (didPop) return;
-          if (panelController.isPanelOpen) {
-            panelController.close();
+          if (panelController.status != SlidingUpPanelStatus.collapsed) {
+            panelController.collapse();
           } else {
             final NavigatorState navigator = Navigator.of(context);
             navigator.pop();
@@ -365,10 +365,8 @@ class SearchViewState extends OptimizedState<SearchView> {
                                           focusNode.unfocus();
                                         }
 
-                                        if (panelController.isPanelOpen) {
-                                          panelController.close();
-                                        } else {
-                                          panelController.open();
+                                        if (panelController.status != SlidingUpPanelStatus.expanded) {
+                                          panelController.expand();
                                         }
                                       },
                                       child: Icon(
@@ -380,58 +378,61 @@ class SearchViewState extends OptimizedState<SearchView> {
                     ]),
                   ),
                   if (!kIsWeb)
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 10),
-                      child: ToggleButtons(
-                        constraints: BoxConstraints(minWidth: (ns.width(context) * 0.9) / 2),
-                        fillColor: context.theme.colorScheme.primary.withOpacity(0.2),
-                        splashColor: context.theme.colorScheme.primary.withOpacity(0.2),
-                        children: [
-                          const Row(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text("Search Device"),
-                              ),
-                              Icon(Icons.storage_outlined, size: 16),
-                            ],
-                          ),
-                          const Row(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text("Search Mac"),
-                              ),
-                              Icon(Icons.cloud_outlined, size: 16),
-                            ],
-                          ),
-                        ],
-                        borderRadius: BorderRadius.circular(20),
-                        selectedBorderColor: context.theme.colorScheme.primary,
-                        selectedColor: context.theme.colorScheme.primary,
-                        borderColor: context.theme.colorScheme.primary.withOpacity(0.5),
-                        isSelected: [local, network],
-                        onPressed: (index) {
-                          if (index == 0) {
+                    Obx(() {
+                      ns.listener.value;
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 10),
+                        child: ToggleButtons(
+                          constraints: BoxConstraints(minWidth: (ns.width(context) * 0.9) / 2),
+                          fillColor: context.theme.colorScheme.primary.withValues(alpha: 0.2),
+                          splashColor: context.theme.colorScheme.primary.withValues(alpha: 0.2),
+                          children: [
+                            const Row(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text("Search Device"),
+                                ),
+                                Icon(Icons.storage_outlined, size: 16),
+                              ],
+                            ),
+                            const Row(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text("Search Mac"),
+                                ),
+                                Icon(Icons.cloud_outlined, size: 16),
+                              ],
+                            ),
+                          ],
+                          borderRadius: BorderRadius.circular(20),
+                          selectedBorderColor: context.theme.colorScheme.primary,
+                          selectedColor: context.theme.colorScheme.primary,
+                          borderColor: context.theme.colorScheme.primary.withValues(alpha: 0.5),
+                          isSelected: [local, network],
+                          onPressed: (index) {
+                            if (index == 0) {
+                              setState(() {
+                                local = true;
+                                network = false;
+                              });
+                            } else {
+                              setState(() {
+                                local = false;
+                                network = true;
+                              });
+                            }
                             setState(() {
-                              local = true;
-                              network = false;
+                              isSearching = false;
+                              noResults = false;
+                              currentSearch = null;
                             });
-                          } else {
-                            setState(() {
-                              local = false;
-                              network = true;
-                            });
-                          }
-                          setState(() {
-                            isSearching = false;
-                            noResults = false;
-                            currentSearch = null;
-                          });
-                        },
-                      ),
-                    ),
-                  Divider(color: context.theme.colorScheme.outline.withOpacity(0.75)),
+                          },
+                        ),
+                      );
+                    }),
+                  Divider(color: context.theme.colorScheme.outline.withValues(alpha: 0.75)),
                   if (!isSearching && noResults)
                     Padding(
                         padding: const EdgeInsets.only(top: 25.0),
@@ -550,23 +551,28 @@ class SearchViewState extends OptimizedState<SearchView> {
                 )
             ],
           ),
-          SlidingUpPanel(
-            controller: panelController,
-            defaultPanelState: PanelState.CLOSED,
-            backdropEnabled: true,
-            backdropTapClosesPanel: true,
-            backdropColor: context.theme.colorScheme.properSurface,
-            color: backgroundColor,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-            ),
-            isDraggable: false,
-            parallaxEnabled: true,
-            minHeight: 0,
-            maxHeight: 225,
-            panelBuilder: () {
-              return Container(
+          SlidingUpPanelWidget(
+            panelController: panelController,
+            anchor: 1,
+            controlHeight: 0,
+            enableOnTap: false,
+            child: Column(children: [
+              Expanded(
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTapUp: (a_) {
+                    if (panelController.status != SlidingUpPanelStatus.collapsed) {
+                      panelController.collapse();
+                    }
+                  },
+                ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                  color: tileColor,
+                ),
+                height: 255,
                 padding: const EdgeInsets.only(left: 10, right: 10, bottom: 20, top: 20),
                 child: Column(children: [
                   Center(
@@ -575,17 +581,19 @@ class SearchViewState extends OptimizedState<SearchView> {
                     style: context.theme.textTheme.headlineSmall,
                   )),
                   Material(
+                      color: Colors.transparent,
                       child: Padding(
                           padding: const EdgeInsets.only(top: 10),
                           child: Wrap(
                             direction: Axis.horizontal,
                             alignment: WrapAlignment.start,
                             spacing: 10,
+                            runSpacing: 10,
                             children: [
                               RawChip(
                                 tapEnabled: true,
                                 deleteIcon: const Icon(Icons.close, size: 16),
-                                side: BorderSide(color: context.theme.colorScheme.outline.withOpacity(0.1)),
+                                side: BorderSide(color: context.theme.colorScheme.outline.withValues(alpha: 0.1)),
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                                 avatar: CircleAvatar(
                                   backgroundColor: context.theme.colorScheme.primaryContainer,
@@ -640,7 +648,7 @@ class SearchViewState extends OptimizedState<SearchView> {
                               RawChip(
                                 tapEnabled: true,
                                 deleteIcon: const Icon(Icons.close, size: 16),
-                                side: BorderSide(color: context.theme.colorScheme.outline.withOpacity(0.1)),
+                                side: BorderSide(color: context.theme.colorScheme.outline.withValues(alpha: 0.1)),
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                                 avatar: CircleAvatar(
                                   backgroundColor: context.theme.colorScheme.primaryContainer,
@@ -692,7 +700,7 @@ class SearchViewState extends OptimizedState<SearchView> {
                                 RawChip(
                                   tapEnabled: true,
                                   deleteIcon: const Icon(Icons.close, size: 16),
-                                  side: BorderSide(color: context.theme.colorScheme.outline.withOpacity(0.1)),
+                                  side: BorderSide(color: context.theme.colorScheme.outline.withValues(alpha: 0.1)),
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                                   avatar: CircleAvatar(
                                     backgroundColor: context.theme.colorScheme.primaryContainer,
@@ -747,7 +755,7 @@ class SearchViewState extends OptimizedState<SearchView> {
                                   showCheckmark: true,
                                   selected: isFromMe,
                                   checkmarkColor: context.theme.colorScheme.primary,
-                                  side: BorderSide(color: context.theme.colorScheme.outline.withOpacity(0.1)),
+                                  side: BorderSide(color: context.theme.colorScheme.outline.withValues(alpha: 0.1)),
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                                   label: Text('From You',
                                       style: TextStyle(
@@ -769,7 +777,7 @@ class SearchViewState extends OptimizedState<SearchView> {
                                   showCheckmark: true,
                                   selected: isNotFromMe,
                                   checkmarkColor: context.theme.colorScheme.primary,
-                                  side: BorderSide(color: context.theme.colorScheme.outline.withOpacity(0.1)),
+                                  side: BorderSide(color: context.theme.colorScheme.outline.withValues(alpha: 0.1)),
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                                   label: Text('Not From You',
                                       style: TextStyle(
@@ -788,8 +796,8 @@ class SearchViewState extends OptimizedState<SearchView> {
                             ],
                           ))),
                 ]),
-              );
-            },
+              )
+            ]),
           )
         ]));
   }

@@ -100,7 +100,7 @@ class _ContactAvatarWidgetState extends OptimizedState<ContactAvatarWidget> {
     if (!isNullOrEmpty(gradient) && gradient[0] == color) {
       widget.handle!.color = null;
     } else {
-      widget.handle!.color = color.value.toRadixString(16);
+      widget.handle!.color = color.toARGB32().toRadixString(16);
     }
 
     widget.handle!.save(updateColor: true);

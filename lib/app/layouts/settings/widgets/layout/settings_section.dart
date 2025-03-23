@@ -29,7 +29,7 @@ class SettingsSection extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             boxShadow: [
               BoxShadow(
-                color: backgroundColor.darkenAmount(0.1).withOpacity(0.25),
+                color: backgroundColor.darkenAmount(0.1).withValues(alpha: 0.25),
                 spreadRadius: 5,
                 blurRadius: 7,
                 offset: const Offset(0, 3), // changes position of shadow

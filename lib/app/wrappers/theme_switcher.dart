@@ -23,11 +23,6 @@ class ThemeSwitcher extends StatefulWidget {
         return MaterialPageRoute<T>(builder: builder);
       case Skins.Samsung:
         return MaterialPageRoute<T>(builder: builder);
-      default:
-        return PageRouteBuilder<T>(pageBuilder: (context, animation, secondaryAnimation) => builder.call(context),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return CustomCupertinoPageTransition(primaryRouteAnimation: animation, child: child, linearTransition: false);
-          });
     }
   }
 
@@ -44,10 +39,6 @@ class ThemeSwitcher extends StatefulWidget {
       case Skins.Samsung:
         return const AlwaysScrollableScrollPhysics(
           parent: ClampingScrollPhysics(),
-        );
-      default:
-        return const AlwaysScrollableScrollPhysics(
-          parent: CustomBouncingScrollPhysics(),
         );
     }
   }
@@ -68,8 +59,6 @@ class _ThemeSwitcherState extends OptimizedState<ThemeSwitcher> {
           return widget.materialSkin;
         case Skins.Samsung:
           return widget.samsungSkin ?? widget.materialSkin;
-        default:
-          return widget.iOSSkin;
       }
     });
   }

@@ -9,7 +9,6 @@ import 'package:bluebubbles/app/wrappers/stateful_boilerplate.dart';
 import 'package:bluebubbles/helpers/helpers.dart';
 import 'package:bluebubbles/database/models.dart';
 import 'package:bluebubbles/services/services.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +42,7 @@ class TextFieldSuffix extends StatefulWidget {
 }
 
 class _TextFieldSuffixState extends OptimizedState<TextFieldSuffix> {
+  final AudioRecorder audioRecorder = AudioRecorder();
 
   bool get isChatCreator => widget.isChatCreator;
 
@@ -53,7 +53,7 @@ class _TextFieldSuffixState extends OptimizedState<TextFieldSuffix> {
   @override
   Widget build(BuildContext context) {
     return MultiValueListenableBuilder(
-      valueListenables: [widget.textController, widget.subjectTextController].whereNotNull().toList(),
+      valueListenables: [widget.textController, widget.subjectTextController].nonNulls.toList(),
       builder: (context, values, _) {
         return Obx(() {
           bool canSend = widget.textController.text.isNotEmpty ||
@@ -74,7 +74,7 @@ class _TextFieldSuffixState extends OptimizedState<TextFieldSuffix> {
                       ? null
                       : !isChatCreator && !showRecording
                       ? context.theme.colorScheme.outline
-                      : context.theme.colorScheme.primary.withOpacity(0.4),
+                      : context.theme.colorScheme.primary.withValues(alpha: 0.4),
                   shape: const CircleBorder(),
                   padding: const EdgeInsets.all(0),
                   maximumSize: kIsDesktop ? const Size(40, 40) : const Size(32, 32),
@@ -98,7 +98,8 @@ class _TextFieldSuffixState extends OptimizedState<TextFieldSuffix> {
                   if (widget.controller!.showRecording.value) {
                     if (kIsDesktop) {
                       File temp = File(join(fs.appDocDir.path, "temp", "recorder", "${widget.controller!.chat.guid.characters.where((c) => c.isAlphabetOnly || c.isNumericOnly).join()}.m4a"));
-                      await RecordPlatform.instance.start(widget.controller!.chat.guid, const RecordConfig(bitRate: 320000), path: temp.path);
+                      temp.createSync(recursive: true);
+                      audioRecorder.start(const RecordConfig(bitRate: 320000), path: temp.path);
                       return;
                     }
                     await widget.recorderController!.record(
@@ -109,7 +110,7 @@ class _TextFieldSuffixState extends OptimizedState<TextFieldSuffix> {
                     late final String? path;
                     late final PlatformFile file;
                     if (kIsDesktop) {
-                      path = await RecordPlatform.instance.stop(widget.controller!.chat.guid);
+                      path = await audioRecorder.stop();
                       if (path == null) return;
                       final _file = File(path);
                       file = PlatformFile(
@@ -205,5 +206,12 @@ class _TextFieldSuffixState extends OptimizedState<TextFieldSuffix> {
         });
       },
     );
+  }
+
+  @override
+  void dispose() {
+    audioRecorder.dispose();
+
+    super.dispose();
   }
 }

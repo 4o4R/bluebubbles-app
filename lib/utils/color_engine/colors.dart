@@ -90,8 +90,7 @@ class Srgb extends Color {
   );
 
   int quantize8() {
-    return ui.Color.fromRGBO(_quantize8(r), _quantize8(g), _quantize8(b), 1)
-        .value;
+    return ui.Color.fromRGBO(_quantize8(r), _quantize8(g), _quantize8(b), 1).toARGB32();
   }
 
   static int _quantize8(double n) => (n * 255.0).toInt().clamp(0, 255);

@@ -94,7 +94,7 @@ class MaterialOverflowMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopupMenuButton<int>(
       color: context.theme.colorScheme.properSurface.lightenOrDarken(ss.settings.skin.value == Skins.Samsung ? 20 : 0)
-          .withOpacity(ss.settings.windowEffect.value != WindowEffect.disabled ? 0.9 : 1),
+          .withValues(alpha: ss.settings.windowEffect.value != WindowEffect.disabled ? 0.9 : 1),
       shape: ss.settings.skin.value != Skins.Material ? const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
           Radius.circular(20.0),
@@ -230,7 +230,7 @@ class CupertinoOverflowMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return PullDownButton(
       routeTheme: PullDownMenuRouteTheme(
-        backgroundColor: context.theme.colorScheme.properSurface.withOpacity(0.9)
+        backgroundColor: context.theme.colorScheme.properSurface.withValues(alpha: 0.9)
       ),
       itemBuilder: (context) => [
         PullDownMenuHeader(
@@ -254,7 +254,7 @@ class CupertinoOverflowMenu extends StatelessWidget {
           subtitle: "Tap to open profile",
           onTap: () => goToProfile(context),
         ),
-        PullDownMenuDivider.large(color: context.theme.colorScheme.background.withOpacity(0.5)),
+        PullDownMenuDivider.large(color: context.theme.colorScheme.background.withValues(alpha: 0.5)),
         PullDownMenuItem(
           title: 'Mark All As Read',
           icon: CupertinoIcons.check_mark_circled,

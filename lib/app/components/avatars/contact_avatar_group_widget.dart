@@ -119,13 +119,13 @@ class _ContactAvatarGroupWidgetState extends OptimizedState<ContactAvatarGroupWi
                                     height: size,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: context.theme.colorScheme.properSurface.withOpacity(0.8),
+                                      color: context.theme.colorScheme.properSurface.withValues(alpha: 0.8),
                                       border: Border.all(color: context.theme.colorScheme.background, width: avatarSize * 0.01)
                                     ),
                                     child: Icon(
                                       ss.settings.skin.value == Skins.iOS ? CupertinoIcons.group_solid : Icons.people,
                                       size: size * 0.65,
-                                      color: context.theme.colorScheme.properOnSurface.withOpacity(0.8),
+                                      color: context.theme.colorScheme.properOnSurface.withValues(alpha: 0.8),
                                     ),
                                   ),
                                 ),

@@ -19,9 +19,9 @@ import com.google.gson.reflect.TypeToken
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.dart.DartExecutor
 import io.flutter.embedding.engine.loader.ApplicationInfoLoader
+import io.flutter.embedding.engine.loader.FlutterLoader
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.view.FlutterCallbackInformation
-import io.flutter.view.FlutterMain
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
@@ -117,9 +117,9 @@ class DartWorker(context: Context, workerParams: WorkerParameters): ListenableWo
     /// Code idea taken from https://github.com/flutter/flutter/wiki/Experimental:-Reuse-FlutterEngine-across-screens
     private suspend fun initNewEngine() {
         Log.d(Constants.logTag, "Ensuring Flutter is initialized before creating engine")
-        // We use the deprecated class here anyways, the new one doesn't work correctly using the same code
-        FlutterMain.startInitialization(applicationContext)
-        FlutterMain.ensureInitializationComplete(applicationContext, null)
+        val flutterLoader = FlutterLoader();
+        flutterLoader.startInitialization(applicationContext)
+        flutterLoader.ensureInitializationComplete(applicationContext, null)
 
         Log.d(Constants.logTag, "Loading callback info")
         val info = ApplicationInfoLoader.load(applicationContext)

@@ -127,7 +127,7 @@ class _ConversationPeekViewState extends OptimizedState<ConversationPeekView> wi
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
                     child: Container(
-                      color: context.theme.colorScheme.properSurface.darkenPercent(30).withOpacity(0.2),
+                      color: context.theme.colorScheme.properSurface.darkenPercent(30).withValues(alpha: 0.2),
                     ),
                   ),
                 ),

@@ -296,7 +296,7 @@ class _AdvancedThemingContentState extends OptimizedState<AdvancedThemingContent
                   subtitle: "Tap to edit the base color\nLong press to edit the color for elements displayed on top of the base color\nDouble tap to learn how the colors are used",
                   unlimitedSpace: true,
                 ),
-                if (ss.settings.monetTheming.value != Monet.none || ss.settings.useWindowsAccent.value)
+                if (ss.settings.monetTheming.value != Monet.none || ss.settings.useDesktopAccent.value)
                   Padding(
                     padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 15.0),
                     child: Row(

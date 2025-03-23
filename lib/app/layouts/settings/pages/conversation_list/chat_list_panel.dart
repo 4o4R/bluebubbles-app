@@ -403,19 +403,15 @@ class _ChatListPanelState extends OptimizedState<ChatListPanel> {
                                                             padding: const EdgeInsets.only(top: 2),
                                                             physics: const NeverScrollableScrollPhysics(),
                                                             shrinkWrap: true,
-                                                            findChildIndexCallback: (key) {
-                                                              final index = 8 - ss.settings.pinRowsPortrait.value;
-                                                              return index == -1 ? null : index;
-                                                            },
                                                             itemBuilder: (context, index) => Container(
-                                                                key: ValueKey(index),
                                                                 height: 12,
                                                                 margin: const EdgeInsets.symmetric(vertical: 1),
                                                                 decoration: BoxDecoration(
                                                                     color: context.theme.colorScheme.secondary
                                                                         .lightenOrDarken(10),
                                                                     borderRadius: BorderRadius.circular(3))),
-                                                            itemCount: 8),
+                                                            itemCount: 8,
+                                                        ),
                                                       ),
                                                   ],
                                                 ),

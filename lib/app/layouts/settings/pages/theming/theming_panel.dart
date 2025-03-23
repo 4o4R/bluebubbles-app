@@ -295,19 +295,19 @@ class _ThemingPanelState extends CustomState<ThemingPanel, void, ThemingPanelCon
                 SettingsSection(
                   backgroundColor: tileColor,
                   children: [
-                    if (kIsDesktop && Platform.isWindows)
+                    if (kIsDesktop)
                       Obx(() => SettingsSwitch(
-                        initialVal: ss.settings.useWindowsAccent.value,
+                        initialVal: ss.settings.useDesktopAccent.value,
                         backgroundColor: tileColor,
-                        title: "Use Windows Accent Color",
-                        subtitle: "Apply the Windows accent color to your theme",
+                        title: "Use ${Platform.isWindows ? "Windows" : Platform.isLinux ? "Linux" : "MacOS"} Accent Color",
+                        subtitle: "Apply the ${Platform.isWindows ? "Windows" : Platform.isLinux ? "Linux" : "MacOS"} accent color to your theme",
                         onChanged: (value) async {
-                          ss.settings.useWindowsAccent.value = value;
+                          ss.settings.useDesktopAccent.value = value;
                           saveSettings();
-                          await ts.refreshWindowsAccent(context);
+                          await ts.refreshDesktopAccent(context);
                         },
                       )),
-                    if (kIsDesktop && Platform.isWindows)
+                    if (kIsDesktop)
                       const SettingsDivider(padding: EdgeInsets.only(left: 16.0)),
                     if (!kIsWeb && !kIsDesktop && ts.monetPalette != null)
                       Obx(() {

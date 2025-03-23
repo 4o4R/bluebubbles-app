@@ -1,4 +1,5 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:bluebubbles/helpers/helpers.dart';
 import 'package:bluebubbles/helpers/types/constants.dart';
 import 'package:bluebubbles/helpers/ui/theme_helpers.dart';
 import 'package:bluebubbles/app/components/custom/custom_bouncing_scroll_physics.dart';
@@ -19,7 +20,7 @@ ThemesService ts = Get.isRegistered<ThemesService>() ? Get.find<ThemesService>()
 
 class ThemesService extends GetxService {
   mui_utils.CorePalette? monetPalette;
-  Color? windowsAccentColor;
+  Color? desktopAccentColor;
 
   final Rx<MovieTween> gradientTween = Rx<MovieTween>(MovieTween()
     ..scene(begin: Duration.zero, duration: const Duration(seconds: 3))
@@ -29,8 +30,8 @@ class ThemesService extends GetxService {
 
   Future<void> init() async {
     monetPalette = await DynamicColorPlugin.getCorePalette();
-    if (Platform.isWindows) {
-      windowsAccentColor = await DynamicColorPlugin.getAccentColor();
+    if (kIsDesktop) {
+      desktopAccentColor = await DynamicColorPlugin.getAccentColor();
     }
   }
 
@@ -188,8 +189,8 @@ class ThemesService extends GetxService {
     _loadTheme(context);
   }
 
-  Future<void> refreshWindowsAccent(BuildContext context) async {
-    windowsAccentColor = await DynamicColorPlugin.getAccentColor();
+  Future<void> refreshDesktopAccent(BuildContext context) async {
+    desktopAccentColor = await DynamicColorPlugin.getAccentColor();
     _loadTheme(context);
   }
 
@@ -401,11 +402,11 @@ class ThemesService extends GetxService {
   }
 
   Tuple2<ThemeData, ThemeData> _applyWindowsAccent(ThemeData light, ThemeData dark) {
-    if (windowsAccentColor == null || !ss.settings.useWindowsAccent.value) {
+    if (desktopAccentColor == null || !ss.settings.useDesktopAccent.value) {
       return Tuple2(light, dark);
     }
 
-    CorePalette palette = CorePalette.of(windowsAccentColor!.value);
+    CorePalette palette = CorePalette.of(desktopAccentColor!.toARGB32());
 
     light = light.copyWith(
       colorScheme: light.colorScheme.copyWith(

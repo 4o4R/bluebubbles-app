@@ -25,7 +25,7 @@ class MaterialHeader extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Rx<Color> _backgroundColor = context.theme.colorScheme.background.withOpacity((kIsDesktop && ss.settings.windowEffect.value != WindowEffect.disabled) ? 0.4 : 1).obs;
+    final Rx<Color> _backgroundColor = context.theme.colorScheme.background.withValues(alpha: (kIsDesktop && ss.settings.windowEffect.value != WindowEffect.disabled) ? 0.4 : 1).obs;
 
     return Stack(
           children: [Obx(() => AppBar(

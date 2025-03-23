@@ -68,7 +68,7 @@ class _ChatInfoState extends OptimizedState<ChatInfo> {
 
   void updatePhoto() async {
     bool? papi = false;
-    if (ss.settings.enablePrivateAPI.value && chat.isIMessage) {
+    if (ss.settings.enablePrivateAPI.value && chat.isIMessage && chat.isGroup) {
       papi = await showMethodDialog("Group Icon Update Method");
     }
     if (papi == null) return;
@@ -118,7 +118,7 @@ class _ChatInfoState extends OptimizedState<ChatInfo> {
 
   void deletePhoto() async {
     bool? papi = false;
-    if (ss.settings.enablePrivateAPI.value && chat.isIMessage) {
+    if (ss.settings.enablePrivateAPI.value && chat.isIMessage && chat.isGroup) {
       papi = await showMethodDialog("Group Icon Deletion Method");
     }
     if (papi == null) return;

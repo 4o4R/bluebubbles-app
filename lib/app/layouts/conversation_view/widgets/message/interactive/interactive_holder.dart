@@ -59,7 +59,7 @@ class _InteractiveHolderState extends CustomState<InteractiveHolder, void, Messa
   Widget build(BuildContext context) {
     super.build(context);
     return ColorFiltered(
-      colorFilter: ColorFilter.mode(!selected ? Colors.transparent : context.theme.colorScheme.tertiaryContainer.withOpacity(0.5), BlendMode.srcOver),
+      colorFilter: ColorFilter.mode(!selected ? Colors.transparent : context.theme.colorScheme.tertiaryContainer.withValues(alpha: 0.5), BlendMode.srcOver),
       child: Material(
         color: Colors.transparent,
         child: InkWell(

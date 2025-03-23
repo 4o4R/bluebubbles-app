@@ -5,7 +5,6 @@ import 'package:bluebubbles/app/layouts/conversation_list/pages/search/search_vi
 import 'package:bluebubbles/app/wrappers/stateful_boilerplate.dart';
 import 'package:bluebubbles/database/models.dart';
 import 'package:bluebubbles/services/services.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -41,7 +40,7 @@ class _MaterialHeaderState extends CustomState<MaterialHeader, void, Conversatio
                       return Container(
                         decoration: BoxDecoration(
                           color: !ns.isAvatarOnly(context) && !showArchived && !showUnknown ? context.theme.colorScheme.properSurface
-                              .withOpacity(ss.settings.windowEffect.value == WindowEffect.disabled ? 1 : 0.7) : Colors.transparent,
+                              .withValues(alpha: ss.settings.windowEffect.value == WindowEffect.disabled ? 1 : 0.7) : Colors.transparent,
                         ),
                         child: Padding(
                               padding: const EdgeInsets.only(left: 5.0, top: 5.0, bottom: 5.0),

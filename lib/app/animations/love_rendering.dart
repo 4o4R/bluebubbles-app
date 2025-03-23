@@ -106,8 +106,8 @@ class RenderLove extends RenderBox {
         ..style = PaintingStyle.fill
         ..shader = RadialGradient(
             colors: [
-              Colors.red.darkenAmount(0.2).withOpacity(0.7),
-              Colors.red.lightenAmount(0.1).withOpacity(0.7)
+              Colors.red.darkenAmount(0.2).withValues(alpha: 0.7),
+              Colors.red.lightenAmount(0.1).withValues(alpha: 0.7)
             ],
             stops: [0, 0.7]
         ).createShader(Rect.fromCircle(center: Offset(x + d * 3/4, y + d / 4), radius: d * 1.5))

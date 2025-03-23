@@ -77,7 +77,7 @@ void _buildThreadView(List<Message> _messages, int? originatorPart, Conversation
                     ),
                     child: Scaffold(
                       backgroundColor: kIsDesktop && ss.settings.windowEffect.value != WindowEffect.disabled
-                          ? context.theme.colorScheme.properSurface.withOpacity(0.9)
+                          ? context.theme.colorScheme.properSurface.withValues(alpha: 0.9)
                           : Colors.transparent,
                       body: Stack(
                         fit: StackFit.expand,
@@ -87,7 +87,7 @@ void _buildThreadView(List<Message> _messages, int? originatorPart, Conversation
                                 sigmaX: kIsDesktop && ss.settings.windowEffect.value != WindowEffect.disabled ? 0 : 30,
                                 sigmaY: kIsDesktop && ss.settings.windowEffect.value != WindowEffect.disabled ? 0 : 30),
                             child: Container(
-                              color: context.theme.colorScheme.properSurface.withOpacity(0.3),
+                              color: context.theme.colorScheme.properSurface.withValues(alpha: 0.3),
                             ),
                           ),
                           Container(

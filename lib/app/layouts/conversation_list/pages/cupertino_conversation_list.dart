@@ -125,7 +125,7 @@ class CupertinoConversationListState extends OptimizedState<CupertinoConversatio
                                   Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 20),
                                     child: Divider(
-                                      color: context.theme.colorScheme.outline.withOpacity(0.5),
+                                      color: context.theme.colorScheme.outline.withValues(alpha: 0.5),
                                       thickness: 2,
                                       height: 2,
                                     ),
@@ -241,7 +241,7 @@ class CupertinoConversationListState extends OptimizedState<CupertinoConversatio
                                 ? Padding(
                                     padding: const EdgeInsets.only(left: 20),
                                     child: Divider(
-                                      color: context.theme.colorScheme.outline.withOpacity(0.5),
+                                      color: context.theme.colorScheme.outline.withValues(alpha: 0.5),
                                       thickness: 0.5,
                                       height: 0.5,
                                     ),

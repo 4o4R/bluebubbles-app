@@ -40,9 +40,9 @@ class SettingsSlider extends StatelessWidget {
       minLeadingWidth: leadingMinWidth,
       title: Slider(
         activeColor: context.theme.colorScheme.primary.oppositeLightenOrDarken(20),
-        secondaryActiveColor: context.theme.colorScheme.primary.withOpacity(0.6),
+        secondaryActiveColor: context.theme.colorScheme.primary.withValues(alpha: 0.6),
         thumbColor: context.theme.colorScheme.primary,
-        inactiveColor: context.theme.colorScheme.primary.withOpacity(0.2),
+        inactiveColor: context.theme.colorScheme.primary.withValues(alpha: 0.2),
         value: startingVal,
         onChanged: update,
         onChangeEnd: onChangeEnd,

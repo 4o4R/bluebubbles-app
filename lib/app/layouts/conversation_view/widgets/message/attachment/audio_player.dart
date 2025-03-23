@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:bluebubbles/app/wrappers/stateful_boilerplate.dart';
 import 'package:bluebubbles/helpers/helpers.dart';
@@ -104,7 +106,8 @@ class _AudioPlayerState extends OptimizedState<AudioPlayer>
                     await controller!.pausePlayer();
                   } else {
                     animController.forward();
-                    await controller!.startPlayer(finishMode: FinishMode.pause);
+                    controller!.setFinishMode(finishMode: FinishMode.pause);
+                    await controller!.startPlayer();
                   }
                   setState(() {});
                 },
@@ -200,8 +203,10 @@ class _DesktopAudioPlayerState extends OptimizedState<AudioPlayer>
         ..stream.position.listen((position) => setState(() {}))
         ..stream.completed.listen((bool completed) async {
           if (completed) {
-            await controller!.pause();
             await controller!.seek(Duration.zero);
+            if (Platform.isLinux) {
+              await controller!.pause();
+            }
             animController.reverse();
           }
           setState(() {});

@@ -7,6 +7,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:bluebubbles/utils/logger/logger.dart';
 import 'package:universal_io/io.dart';
 
 class AvatarCrop extends StatefulWidget {
@@ -23,7 +24,21 @@ class _AvatarCropState extends OptimizedState<AvatarCrop> {
   Uint8List? _imageData;
   bool _isLoading = true;
 
-  void onCropped(Uint8List croppedData) async {
+  void onCropped(CropResult croppedResult) async {
+    Uint8List croppedData;
+    switch (croppedResult) {
+      case CropSuccess(:final croppedImage):
+        croppedData = croppedImage;
+        break;
+      case CropFailure(:final cause, :final stackTrace):
+        Get.back();
+        showSnackbar("Error", "Failed to crop image");
+        Logger.debug("Failed to crop image");
+        Logger.error(cause);
+        Logger.error(stackTrace);
+        return;
+    }
+
     String appDocPath = fs.appDocDir.path;
     if (widget.index == null && widget.chat == null) {
       File file = File("$appDocPath/avatars/you/avatar-${croppedData.length}.jpg");
@@ -138,7 +153,6 @@ class _AvatarCropState extends OptimizedState<AvatarCrop> {
                           }
                         },
                         withCircleUi: true,
-                        initialSize: 0.5,
                       ),
                   ),
                 if (_imageData == null)
@@ -176,7 +190,7 @@ class _AvatarCropState extends OptimizedState<AvatarCrop> {
                         ),
                         barrierDismissible: false,
                       );
-                      onCropped(res.files.first.bytes!);
+                      onCropped(CropSuccess(res.files.first.bytes!));
                     } else {
                       _imageData = res.files.first.bytes!;
                       setState(() {});

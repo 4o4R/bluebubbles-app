@@ -164,9 +164,6 @@ class _SettingsPageState extends OptimizedState<SettingsPage> {
                                       case SocketState.connecting:
                                         subtitle = "Connecting";
                                         break;
-                                      default:
-                                        subtitle = "Error";
-                                        break;
                                     }
 
                                     return SettingsTile(
@@ -258,7 +255,7 @@ class _SettingsPageState extends OptimizedState<SettingsPage> {
                                         children: [
                                           Text(
                                             subtitle,
-                                            style: context.theme.textTheme.bodyMedium!.apply(color: context.theme.colorScheme.outline.withOpacity(0.85)),
+                                            style: context.theme.textTheme.bodyMedium!.apply(color: context.theme.colorScheme.outline.withValues(alpha: 0.85)),
                                           ),
                                           const SizedBox(width: 5),
                                           const NextButton(),
@@ -331,7 +328,7 @@ class _SettingsPageState extends OptimizedState<SettingsPage> {
                                         children: [
                                           Text(
                                             "${ss.settings.skin.value.toString().split(".").last}  |  ${AdaptiveTheme.of(context).mode.toString().split(".").last.capitalizeFirst!}",
-                                            style: context.theme.textTheme.bodyMedium!.apply(color: context.theme.colorScheme.outline.withOpacity(0.85)),
+                                            style: context.theme.textTheme.bodyMedium!.apply(color: context.theme.colorScheme.outline.withValues(alpha: 0.85)),
                                           ),
                                           const SizedBox(width: 5),
                                           const NextButton(),
@@ -476,7 +473,7 @@ class _SettingsPageState extends OptimizedState<SettingsPage> {
                                           children: [
                                             Text(
                                               ss.settings.enablePrivateAPI.value ? ss.settings.serverPrivateAPI.value == false ? "Not Set Up" : "Enabled" : "Disabled",
-                                              style: context.theme.textTheme.bodyMedium!.apply(color: context.theme.colorScheme.outline.withOpacity(0.85)),
+                                              style: context.theme.textTheme.bodyMedium!.apply(color: context.theme.colorScheme.outline.withValues(alpha: 0.85)),
                                             ),
                                             const SizedBox(width: 5),
                                             const NextButton(),
@@ -512,7 +509,7 @@ class _SettingsPageState extends OptimizedState<SettingsPage> {
                                           children: [
                                             Text(
                                               ss.settings.redactedMode.value ? "Enabled" : "Disabled",
-                                              style: context.theme.textTheme.bodyMedium!.apply(color: context.theme.colorScheme.outline.withOpacity(0.85)),
+                                              style: context.theme.textTheme.bodyMedium!.apply(color: context.theme.colorScheme.outline.withValues(alpha: 0.85)),
                                             ),
                                             const SizedBox(width: 5),
                                             const NextButton(),
@@ -616,7 +613,8 @@ class _SettingsPageState extends OptimizedState<SettingsPage> {
                                       subtitle:
                                           "Backup and restore all app settings and custom themes",
                                     ),
-                                    const SettingsDivider(),
+                                    if (!kIsWeb && !kIsDesktop)
+                                      const SettingsDivider(),
                                     if (!kIsWeb && !kIsDesktop)
                                       SettingsTile(
                                         backgroundColor: tileColor,

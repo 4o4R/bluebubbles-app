@@ -815,7 +815,7 @@ Widget buildConversationViewHeader(BuildContext context, Chat chat, ThemeData th
   return const SizedBox.shrink();/*CupertinoNavigationBar(
       backgroundColor: theme.colorScheme.secondary.withAlpha(125),
       border: Border(
-        bottom: BorderSide(color: Colors.white.withOpacity(0.2), width: 0.2),
+        bottom: BorderSide(color: Colors.white.withValues(alpha: 0.2), width: 0.2),
       ),
       leading: GestureDetector(
         onTap: () {

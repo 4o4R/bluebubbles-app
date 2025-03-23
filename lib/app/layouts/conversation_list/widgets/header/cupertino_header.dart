@@ -151,7 +151,7 @@ class CupertinoMiniHeader extends StatelessWidget {
               return Container(
                 width: ns.width(context),
                 height: (topMargin - 20).clamp(kIsDesktop ? 65 : 40, double.infinity),
-                color: context.theme.colorScheme.properSurface.withOpacity(0.5),
+                color: context.theme.colorScheme.properSurface.withValues(alpha: 0.5),
                 alignment: Alignment.bottomCenter,
                 child: Padding(
                   padding: EdgeInsets.only(bottom: kIsDesktop ? 10 : 5),
