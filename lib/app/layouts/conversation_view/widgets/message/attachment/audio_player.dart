@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:bluebubbles/app/wrappers/stateful_boilerplate.dart';
 import 'package:bluebubbles/helpers/helpers.dart';
@@ -202,6 +204,9 @@ class _DesktopAudioPlayerState extends OptimizedState<AudioPlayer>
         ..stream.completed.listen((bool completed) async {
           if (completed) {
             await controller!.seek(Duration.zero);
+            if (Platform.isLinux) {
+              await controller!.pause();
+            }
             animController.reverse();
           }
           setState(() {});
