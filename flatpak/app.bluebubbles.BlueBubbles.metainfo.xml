@@ -66,6 +66,25 @@
   </screenshots>
 
   <releases>
+    <release date="2025-03-24" version="1.15.1.0">
+      <url type="details">https://github.com/BlueBubblesApp/bluebubbles-app/releases/tag/v1.15.1%2B71</url>
+      <description>
+        <p>Enhancements</p>
+        <ul>
+          <li>Adds option to set a custom notification sound.</li>
+          <li>Adds toggle to turn off message notifications.</li>
+          <li>Updated markdown-style emoji insertion with new emoji set and better tone support.</li>
+        </ul>
+        <p>Fixes</p>
+        <ul>
+          <li>Fixes issue where messages would sometimes not sync if internet connection was lost (such as when closing a laptop).</li>
+          <li>Fixes search filter UI.</li>
+          <li>Fixes issue where notifications would not be sent if certain pages were in view.</li>
+          <li>Fixes file drag/drop functionality.</li>
+          <li>Fixes "Launch at Startup Minimized" setting not functioning correctly.</li>
+        </ul>
+      </description>
+    </release>
     <release date="2024-11-18" version="1.15.0.0">
       <url type="details">https://github.com/BlueBubblesApp/bluebubbles-app/releases/tag/v1.15.0%2B70</url>
       <description>
