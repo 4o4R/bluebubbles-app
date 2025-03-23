@@ -342,7 +342,7 @@ class MessagesViewState extends OptimizedState<MessagesView> {
     const moonIcon = CupertinoIcons.moon_fill;
     return DropRegion(
       hitTestBehavior: HitTestBehavior.translucent,
-      formats: Formats.standardFormats.whereType<FileFormat>().toList(),
+      formats: Platform.isLinux ? Formats.standardFormats : Formats.standardFormats.whereType<FileFormat>().toList(),
       onDropOver: (DropOverEvent event) {
         if (!event.session.allowedOperations.contains(DropOperation.copy)) {
           dragging.value = false;
