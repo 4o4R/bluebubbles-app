@@ -1,7 +1,6 @@
 import 'package:bluebubbles/helpers/helpers.dart';
 import 'package:bluebubbles/database/database.dart';
 import 'package:bluebubbles/services/ui/contact_service.dart';
-import 'package:bluebubbles/utils/logger/logger.dart';
 import 'package:collection/collection.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
@@ -9,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:idb_shim/idb.dart' as idb;
 import 'package:idb_shim/idb_browser.dart' hide Database;
+import 'package:io/io.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -41,7 +41,7 @@ class FilesystemService extends GetxService {
     if (!kIsWeb) {
       //ignore: unnecessary_cast, we need this as a workaround
       appDocDir = (kIsDesktop ? await getApplicationSupportDirectory() : await getApplicationDocumentsDirectory()) as Directory;
-      if (kIsDesktop && Platform.isWindows) {
+      if (isMsix) {
         final String appDataRoot = joinAll(split(appDocDir.absolute.path).slice(0, 4));
         final Directory msStoreLocation = Directory(join(
             appDataRoot,
@@ -52,9 +52,17 @@ class FilesystemService extends GetxService {
             "Roaming",
             "BlueBubbles",
             "bluebubbles"));
-        if (!appDocDir.existsSync() && msStoreLocation.existsSync()) {
-          appDocDir = msStoreLocation;
+        // Check if the non-msix directory exists
+        final Directory nonMsixLocation = Directory(join(
+          appDataRoot,
+          "Roaming",
+          "BlueBubbles",
+          "bluebubbles"
+        ));
+        if (!msStoreLocation.existsSync() && nonMsixLocation.existsSync()) {
+          await copyPath(nonMsixLocation.path, msStoreLocation.path);
         }
+        appDocDir = msStoreLocation;
       }
       if (!headless) {
         final file = await rootBundle.load("assets/images/no-video-preview.png");
@@ -141,20 +149,6 @@ class FilesystemService extends GetxService {
     // Rebuild the filename
     return (ext != null && ext.isNotEmpty) ? '$filename.$ext' : filename;
   }
-
-  void copyDirectory(Directory source, Directory destination) =>
-    source.listSync(recursive: false).forEach((element) async {
-      if (element is Directory) {
-        Directory newDirectory = Directory(join(destination.absolute.path, basename(element.path)));
-        newDirectory.createSync();
-        Logger.info("Created new directory ${basename(element.path)}");
-
-        copyDirectory(element.absolute, newDirectory);
-      } else if (element is File) {
-        element.copySync(join(destination.path, basename(element.path)));
-        Logger.info("Created file ${basename(element.path)}");
-      }
-    });
 
   Future<String> saveToDownloads(File file) async {
     if (kIsWeb) throw "Cannot save file on web!";

@@ -7,6 +7,7 @@ import 'package:bluebubbles/services/services.dart';
 import 'package:bluebubbles/utils/logger/logger.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
+import 'package:io/io.dart';
 import 'package:path/path.dart';
 
 class Database {
@@ -123,7 +124,7 @@ class Database {
         Directory oldCustom = Directory(join(ss.prefs.getString('custom-path')!, 'objectbox'));
         if (oldCustom.existsSync()) {
           Logger.info("Detected prior use of custom path option. Migrating...");
-          fs.copyDirectory(oldCustom, objectBoxDirectory);
+          await copyPath(oldCustom.path, objectBoxDirectory.path);
         }
         await ss.prefs.remove('use-custom-path');
         await ss.prefs.remove('custom-path');
