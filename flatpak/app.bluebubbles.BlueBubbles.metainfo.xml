@@ -66,6 +66,15 @@
   </screenshots>
 
   <releases>
+    <release date="2025-03-26" version="1.15.3.0">
+      <url type="details">https://github.com/BlueBubblesApp/bluebubbles-app/releases/tag/v1.15.3%2B72-desktop</url>
+      <description>
+        <p>Fixes</p>
+        <ul>
+          <li>Fixes lag issues.</li>
+        </ul>
+      </description>
+    </release>
     <release date="2025-03-24" version="1.15.1.0">
       <url type="details">https://github.com/BlueBubblesApp/bluebubbles-app/releases/tag/v1.15.1%2B71-desktop</url>
       <description>
