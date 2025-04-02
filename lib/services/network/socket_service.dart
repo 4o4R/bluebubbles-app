@@ -104,8 +104,9 @@ class SocketService extends GetxService {
       internetConnection = InternetConnection.createInstance(
         customCheckOptions: [
           InternetCheckOption(
-              uri: Uri.parse(serverAddress),
-              timeout: const Duration(seconds: 5),
+            uri: Uri.parse(serverAddress),
+            timeout: const Duration(seconds: 5),
+            headers: http.headers,
           ),
         ],
         useDefaultOptions: false,
