@@ -62,6 +62,7 @@ class CloudMessagingService extends GetxService {
 
     // Don't do anything if on web or desktop
     if (kIsWeb || kIsDesktop) {
+      await getOrCreateUniqueId();
       Logger.debug("Platform ${kIsWeb ? "web" : Platform.operatingSystem} detected, not authing with FCM!",
           tag: 'FCM-Auth');
       closeCompleter = true;

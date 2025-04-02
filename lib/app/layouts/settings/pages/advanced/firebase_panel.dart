@@ -95,7 +95,7 @@ class _FirebasePanelState extends OptimizedState<FirebasePanel> {
                   backgroundColor: tileColor,
                   children: [
                     Obx(() {
-                      final _enabled = ss.settings.firstFcmRegisterDate.value != 0 && !ss.fcmData.isNull;
+                      final _enabled = (kIsDesktop || ss.settings.firstFcmRegisterDate.value != 0) && !ss.fcmData.isNull;
                       return SettingsTile(
                         backgroundColor: tileColor,
                         title: "Firebase Status",
@@ -257,12 +257,14 @@ class _FirebasePanelState extends OptimizedState<FirebasePanel> {
                         trailing: const NextButton()
                       );
                     }),
-                    Obx(() {
-                      final _enabled = ss.settings.firstFcmRegisterDate.value != 0 && !ss.fcmData.isNull;
-                      if (!_enabled) return const SizedBox.shrink();
-                      return const SettingsDivider();
-                    }),
-                    Obx(() {
+                    if (!kIsDesktop && !kIsWeb)
+                      Obx(() {
+                        final _enabled = ss.settings.firstFcmRegisterDate.value != 0 && !ss.fcmData.isNull;
+                        if (!_enabled) return const SizedBox.shrink();
+                        return const SettingsDivider();
+                      }),
+                    if (!kIsDesktop && !kIsWeb)
+                      Obx(() {
                       final _enabled = ss.settings.firstFcmRegisterDate.value != 0 && !ss.fcmData.isNull;
                       if (!_enabled) return const SizedBox.shrink();
 
