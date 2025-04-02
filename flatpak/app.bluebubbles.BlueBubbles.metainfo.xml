@@ -66,6 +66,16 @@
   </screenshots>
 
   <releases>
+    <release date="2025-04-03" version="1.15.4.0">
+      <url type="details">https://github.com/BlueBubblesApp/bluebubbles-app/releases/tag/v1.15.4%2B73-desktop</url>
+      <description>
+        <p>Fixes</p>
+        <ul>
+          <li>Fixes connection issues when using custom headers.</li>
+          <li>Fixes Firebase Panel UI not showing when a Firebase project has been configured.</li>
+        </ul>
+      </description>
+    </release>
     <release date="2025-03-26" version="1.15.3.0">
       <url type="details">https://github.com/BlueBubblesApp/bluebubbles-app/releases/tag/v1.15.3%2B72-desktop</url>
       <description>
