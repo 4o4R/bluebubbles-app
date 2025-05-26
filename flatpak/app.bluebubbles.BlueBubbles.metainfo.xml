@@ -66,6 +66,22 @@
   </screenshots>
 
   <releases>
+    <release date="2025-05-26" version="1.15.5.0">
+      <url type="details">https://github.com/BlueBubblesApp/bluebubbles-app/releases/tag/v1.15.5%2B74-desktop</url>
+      <description>
+        <p>Enhancements</p>
+        <ul>
+          <li>Adds ability to copy attachments to the clipboard</li>
+          <li>Better handling of picked attachments and pasting</li>
+        </ul>
+        <p>Fixes</p>
+        <ul>
+          <li>Fixes crash on startup</li>
+          <li>Fixes location preview image when sending location.</li>
+          <li>Fixes Linux attachment paste</li>
+        </ul>
+      </description>
+    </release>
     <release date="2025-04-03" version="1.15.4.0">
       <url type="details">https://github.com/BlueBubblesApp/bluebubbles-app/releases/tag/v1.15.4%2B73-desktop</url>
       <description>
