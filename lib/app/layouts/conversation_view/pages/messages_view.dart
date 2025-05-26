@@ -378,10 +378,10 @@ class MessagesViewState extends OptimizedState<MessagesView> {
               fileName = basename(filePath);
             }
             if (filePath.isEmpty) {
-              filePath = "Dragged_File_${randomString(8)}";
+              filePath = "Dragged_File_${controller.pickedAttachments.length + 1}";
             }
             if (fileName.isEmpty) {
-              fileName = "Dragged_File_${randomString(8)}";
+              fileName = "Dragged_File_${controller.pickedAttachments.length + 1}";
             }
             controller.pickedAttachments.add(PlatformFile(
               path: filePath,

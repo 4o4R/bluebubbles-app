@@ -19,10 +19,12 @@ class PickedAttachment extends StatefulWidget {
     required this.data,
     required this.controller,
     required this.onRemove,
+    required this.pickedAttachmentIndex,
   });
   final PlatformFile data;
   final ConversationViewController? controller;
   final Function(PlatformFile) onRemove;
+  final int pickedAttachmentIndex;
 
   @override
   State<PickedAttachment> createState() => _PickedAttachmentState();
@@ -149,7 +151,7 @@ class _PickedAttachmentState extends OptimizedState<PickedAttachment> with Autom
                             ),
                             onPressed: () {
                               if (widget.controller != null) {
-                                widget.controller!.pickedAttachments.removeWhere((e) => e.path == widget.data.path);
+                                widget.controller!.pickedAttachments.removeAt(widget.pickedAttachmentIndex);
                                 widget.controller!.chat.textFieldAttachments.removeWhere((e) => e == widget.data.path);
                                 widget.controller!.chat.save(updateTextFieldAttachments: true);
                                 widget.controller!.lastFocusedNode.requestFocus();
@@ -187,7 +189,7 @@ class _PickedAttachmentState extends OptimizedState<PickedAttachment> with Autom
                 ),
                 onPressed: () {
                   if (widget.controller != null) {
-                    widget.controller!.pickedAttachments.removeWhere((e) => e.path == widget.data.path);
+                    widget.controller!.pickedAttachments.removeAt(widget.pickedAttachmentIndex);
                     widget.controller!.chat.textFieldAttachments.removeWhere((e) => e == widget.data.path);
                     widget.controller!.chat.save(updateTextFieldAttachments: true);
                     widget.controller!.lastFocusedNode.requestFocus();

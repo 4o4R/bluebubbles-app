@@ -63,7 +63,7 @@ class OtherFile extends StatelessWidget {
             if (res.type == ResultType.noAppToOpen) {
               showSnackbar('Error', "No handler for this file type! Using share menu instead.");
               await Future.delayed(const Duration(seconds: 1));
-              Share.file(file.name, file.path!);
+              Share.files([file.path!]);
             } else if (res.type == ResultType.error) {
               showSnackbar('Error', res.message);
             } else if (res.type == ResultType.fileNotFound) {
@@ -71,7 +71,7 @@ class OtherFile extends StatelessWidget {
             } else if (res.type == ResultType.permissionDenied) {
               showSnackbar('Permission Denied', "BlueBubbles does not have access to this file! Using share menu instead.");
               await Future.delayed(const Duration(seconds: 1));
-              Share.file(file.name, file.path!);
+              Share.files([file.path!]);
             }
           } catch (ex) {
             Logger.error("Error opening file: ${file.path}", error: ex);

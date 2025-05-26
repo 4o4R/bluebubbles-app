@@ -775,7 +775,7 @@ class _ServerManagementPanelState extends CustomState<ServerManagementPanel, voi
                               await logFile.writeAsString(response.data['data']);
 
                               try {
-                                Share.file("BlueBubbles Server Log", logFile.absolute.path);
+                                Share.files([logFile.absolute.path]);
                                 controller.fetchStatus.value = null;
                               } catch (ex) {
                                 controller.fetchStatus.value = "Failed to share file! ${ex.toString()}";

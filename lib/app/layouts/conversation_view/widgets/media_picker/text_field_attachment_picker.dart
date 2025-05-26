@@ -343,7 +343,7 @@ class _AttachmentPickerState extends OptimizedState<AttachmentPicker> {
                                                 final uint8 = bytes.buffer.asUint8List();
                                                 controller.pickedAttachments.add(PlatformFile(
                                                   path: null,
-                                                  name: "handwritten-${randomString(3)}.png",
+                                                  name: "handwritten-${controller.pickedAttachments.length + 1}.png",
                                                   bytes: uint8,
                                                   size: uint8.lengthInBytes,
                                                 ));

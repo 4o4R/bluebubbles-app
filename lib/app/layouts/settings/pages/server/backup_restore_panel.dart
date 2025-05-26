@@ -447,7 +447,7 @@ class _BackupRestorePanelState extends OptimizedState<BackupRestorePanel> {
                                     if (kIsDesktop) {
                                       launchUrl(Uri.file(dirname(filePath)));
                                     }
-                                    Share.file("BlueBubbles Settings", filePath);
+                                    Share.files([filePath]);
                                   },
                                   child: Text(kIsDesktop ? "OPEN FOLDER": "SHARE", style: TextStyle(color: context.theme.colorScheme.onSecondary)),
                                 ),
@@ -867,7 +867,7 @@ class _BackupRestorePanelState extends OptimizedState<BackupRestorePanel> {
                                     launchUrl(Uri.file(dirname(filePath)));
                                     return;
                                   }
-                                  Share.file("BlueBubbles Theming", filePath);
+                                  Share.files([filePath]);
                                 },
                                 child: Text(kIsDesktop ? "OPEN FOLDER" : "SHARE", style: TextStyle(color: context.theme.colorScheme.onSecondary)),
                               ),

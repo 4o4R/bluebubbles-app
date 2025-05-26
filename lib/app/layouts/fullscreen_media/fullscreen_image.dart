@@ -126,12 +126,10 @@ class _FullscreenImageState extends OptimizedState<FullscreenImage> with Automat
                         color: context.theme.colorScheme.onSecondary,
                       ),
                       onPressed: () async {
-                        if (widget.file.path == null)
+                        if (widget.file.path == null) {
                           return showSnackbar("Error", "Failed to find a path to share attachment!");
-                        Share.file(
-                          "Shared ${widget.attachment.mimeType!.split("/")[0]} from BlueBubbles: ${widget.attachment.transferName}",
-                          widget.file.path!,
-                        );
+                        }
+                        Share.files([widget.file.path!]);
                       },
                     ),
                   ),
@@ -188,10 +186,7 @@ class _FullscreenImageState extends OptimizedState<FullscreenImage> with Automat
                   } else if (value == 1) {
                     if (kIsWeb || kIsDesktop) return showMetadataDialog(widget.attachment, context);
                     if (widget.file.path == null) return;
-                    Share.file(
-                      "Shared ${widget.attachment.mimeType!.split("/")[0]} from BlueBubbles: ${widget.attachment.transferName}",
-                      widget.file.path!,
-                    );
+                    Share.files([widget.file.path!]);
                   } else if (value == 2) {
                     if (kIsWeb || kIsDesktop) return refreshAttachment();
                     showMetadataDialog(widget.attachment, context);

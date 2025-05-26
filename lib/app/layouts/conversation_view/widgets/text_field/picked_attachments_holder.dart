@@ -81,10 +81,11 @@ class _PickedAttachmentsHolderState extends OptimizedState<PickedAttachmentsHold
                             controller: widget.controller,
                             onRemove: (file) {
                               if (widget.controller == null) {
-                                pickedAttachments.removeWhere((e) => e.path == file.path);
+                                pickedAttachments.removeAt(index);
                                 setState(() {});
                               }
                             },
+                            pickedAttachmentIndex: index,
                           );
                         },
                         childCount: pickedAttachments.length,

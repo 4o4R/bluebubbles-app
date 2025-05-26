@@ -201,7 +201,7 @@ class _TroubleshootPanelState extends OptimizedState<TroubleshootPanel> {
                               "Logs have been exported to your downloads folder. Tap here to share it.",
                               durationMs: 5000,
                               onTap: (snackbar) async {
-                                Share.file("BlueBubbles Logs", newPath);
+                                Share.files([newPath]);
                               },
                             );
                           } catch (ex, stacktrace) {

@@ -8,23 +8,23 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:metadata_fetch/metadata_fetch.dart';
-import 'package:share_plus/share_plus.dart' as sp;
+import 'package:share_plus/share_plus.dart';
 import 'package:tuple/tuple.dart';
 import 'package:universal_io/io.dart';
 
 class Share {
   /// Share a file with other apps.
-  static void file(String subject, String filepath) async {
+  static void files(List<String> filepaths) async {
     if (kIsDesktop) {
       showSnackbar("Unsupported", "Can't share files on desktop yet!");
     } else {
-      sp.Share.shareXFiles([sp.XFile(filepath)], text: subject);
+      await SharePlus.instance.share(ShareParams(files: filepaths.map((String path) => XFile(path)).toList()));
     }
   }
 
   /// Share text with other apps.
-  static void text(String subject, String text) {
-    sp.Share.share(text, subject: subject);
+  static void text(String text) async {
+    await SharePlus.instance.share(ShareParams(text: text));
   }
 
   static Future<void> location(Chat chat) async {
@@ -112,7 +112,8 @@ class Share {
       final bytes = Uint8List.fromList(utf8.encode(vcfString));
       final meta = await MetadataFetch.extract(
           "https://maps.apple.com/?ll=${_locationData.latitude},${_locationData.longitude}&q=${_locationData.latitude},${_locationData.longitude}");
-      String url = meta!.image!;
+      print("https://maps.apple.com/?ll=${_locationData.latitude},${_locationData.longitude}&q=${_locationData.latitude},${_locationData.longitude}");
+      String url = "https://maps.apple.com${meta!.image}";
       String? title = meta.title;
 
       return Tuple5(_attachmentGuid, fileName, bytes, url, title);

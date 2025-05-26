@@ -31,6 +31,7 @@ import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:pasteboard/pasteboard.dart';
 import 'package:path/path.dart' hide context;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sprung/sprung.dart';
@@ -466,9 +467,25 @@ class _MessagePopupState extends OptimizedState<MessagePopup> with SingleTickerP
   void copyText() {
     Clipboard.setData(ClipboardData(text: part.fullText));
     popDetails();
-    if (!Platform.isAndroid || (fs.androidInfo?.version.sdkInt ?? 0) < 33) {
-      showSnackbar("Copied", "Copied to clipboard!");
+  }
+
+  void copyAttachment() {
+    if (part.attachments.length == 1 && part.attachments.first.mimeStart == "image") {
+      Uint8List bytes = File(part.attachments.first.path).readAsBytesSync();
+      Pasteboard.writeImage(bytes).then((_) {
+        popDetails();
+      }).catchError((e) {
+        Logger.error("Failed to copy image!", error: e);
+        showSnackbar("Copy Error", "Failed to copy image!");
+      });
+      return;
     }
+    Pasteboard.writeFiles(part.attachments.map((element) => element.path).toList()).then((_) {
+      popDetails();
+    }).catchError((e) {
+      Logger.error("Failed to copy attachment(s)!", error: e);
+      showSnackbar("Copy Error", "Failed to copy attachment(s)!");
+    });
   }
 
   void copySelection() {
@@ -728,17 +745,9 @@ class _MessagePopupState extends OptimizedState<MessagePopup> with SingleTickerP
 
   void share() {
     if (part.attachments.isNotEmpty && !message.isLegacyUrlPreview && !kIsWeb && !kIsDesktop) {
-      for (Attachment? element in part.attachments) {
-        Share.file(
-          "${element!.mimeType!.split("/")[0].capitalizeFirst} shared from BlueBubbles: ${element.transferName}",
-          element.path,
-        );
-      }
+      Share.files(part.attachments.map((a) => a.path).nonNulls.toList());
     } else if (part.text!.isNotEmpty) {
-      Share.text(
-        "Text shared from BlueBubbles",
-        part.text!,
-      );
+      Share.text(part.text!);
     }
     popDetails();
   }
@@ -879,6 +888,11 @@ class _MessagePopupState extends OptimizedState<MessagePopup> with SingleTickerP
             onTap: copyText,
             action: DetailsMenuAction.CopyText,
           ),
+        if (showDownload && kIsDesktop)
+          DetailsMenuActionWidget(
+            onTap: copyAttachment,
+            action: DetailsMenuAction.CopyAttachment,
+          ),
         if (showDownload &&
             supportsOriginalDownload &&
             part.attachments
@@ -908,7 +922,7 @@ class _MessagePopupState extends OptimizedState<MessagePopup> with SingleTickerP
             onTap: showThread,
             action: DetailsMenuAction.ViewThread,
           ),
-        if ((part.attachments.isNotEmpty && !kIsWeb && !kIsDesktop) || (!kIsWeb && !kIsDesktop && !isNullOrEmpty(part.text)))
+        if ((part.attachments.isNotEmpty && !kIsWeb && !(kIsDesktop && Platform.isLinux)) || (!kIsWeb && !(kIsDesktop && Platform.isLinux) && !isNullOrEmpty(part.text)))
           DetailsMenuActionWidget(
             onTap: share,
             action: DetailsMenuAction.Share,
