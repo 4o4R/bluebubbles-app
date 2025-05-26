@@ -130,7 +130,7 @@ class _NotificationPanelState extends OptimizedState<NotificationPanel> with Sin
                 onTap: () async {
                   final TextEditingController controller = TextEditingController();
                   controller.text = ss.settings.globalTextDetection.value;
-                  showDialog(
+                  await showDialog(
                     context: context,
                     builder: (context) => TextDetectionDialog(controller),
                   );
