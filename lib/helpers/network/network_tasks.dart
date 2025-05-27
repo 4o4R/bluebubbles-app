@@ -76,7 +76,7 @@ class NetworkTasks {
                   break;
                 }
               } catch (ex) {
-                Logger.debug('Failed to connect to localhost addres: $addr');
+                Logger.debug('Failed to connect to localhost address: $addr');
               }
             }
             if (address != null) break;
@@ -93,7 +93,7 @@ class NetworkTasks {
                   break;
                 }
               } catch (ex) {
-                Logger.debug('Failed to connect to localhost addres: $addr');
+                Logger.debug('Failed to connect to localhost address: $addr');
               }
             }
             if (address != null) break;
@@ -144,7 +144,7 @@ class NetworkTasks {
                 break;
               }
             } catch (ex) {
-              Logger.debug('Failed to connect to localhost addres: $addr');
+              Logger.debug('Failed to connect to localhost address: $addr');
             }
           }
           if (address != null) break;
