@@ -378,7 +378,7 @@ class SpellCheckTextEditingController extends TextEditingController {
 
           final prevMistakeEnd = i == 0 ? 0 : mistakes[i - 1].endOffset - offset;
           final leadingNonMistakeText = chunk.substring(prevMistakeEnd, mistakeStart);
-          if (leadingNonMistakeText.isNotEmpty) spans.add(TextSpan(text: leadingNonMistakeText, style: style));
+          if (leadingNonMistakeText.isNotEmpty) spans.addAll(buildAppleEmojiTextSpans(text: leadingNonMistakeText, style: style));
 
           spans.add(
             TextSpan(
@@ -398,13 +398,41 @@ class SpellCheckTextEditingController extends TextEditingController {
           if (i == mistakes.length - 1) {
             final nextMistakeStart = i == mistakes.length - 1 ? chunk.length : mistakes[i + 1].offset - offset;
             final trailingNonMistakeText = chunk.substring(mistakeEnd, nextMistakeStart);
-            if (trailingNonMistakeText.isNotEmpty) spans.add(TextSpan(text: trailingNonMistakeText, style: style));
+            if (trailingNonMistakeText.isNotEmpty) spans.addAll(buildAppleEmojiTextSpans(text: trailingNonMistakeText, style: style));
           }
         }
         return TextSpan(children: spans);
       }
     }
-    return TextSpan(text: chunk, style: style);
+
+    return TextSpan(children: buildAppleEmojiTextSpans(text: chunk, style: style));
+  }
+
+  List<InlineSpan> buildAppleEmojiTextSpans({required String text, required TextStyle? style}) {
+    if (!fs.fontExistsOnDisk.value) return [TextSpan(text: text, style: style)];
+
+    final emojiMatches = emojiRegex.allMatches(text);
+    if (emojiMatches.isEmpty) return [TextSpan(text: text, style: style)];
+
+    List<InlineSpan> spans = [];
+    int lastIndex = 0;
+    for (final match in emojiMatches) {
+      if (match.start > lastIndex) {
+        spans.add(TextSpan(text: text.substring(lastIndex, match.start), style: style));
+      }
+      spans.add(
+        TextSpan(
+          text: match.group(0),
+          style: style?.copyWith(fontFamily: "Apple Color Emoji") ?? const TextStyle(fontFamily: "Apple Color Emoji")
+        ),
+      );
+      lastIndex = match.end;
+    }
+    if (lastIndex < text.length) {
+      spans.add(TextSpan(text: text.substring(lastIndex), style: style));
+    }
+
+    return spans;
   }
 
   @override

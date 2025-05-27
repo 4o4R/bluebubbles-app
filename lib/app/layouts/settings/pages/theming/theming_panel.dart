@@ -2,7 +2,6 @@ import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:bluebubbles/app/layouts/settings/widgets/content/next_button.dart';
 import 'package:bluebubbles/helpers/helpers.dart';
 import 'package:bluebubbles/utils/window_effects.dart';
-import 'package:bluebubbles/utils/logger/logger.dart';
 import 'package:bluebubbles/app/layouts/settings/pages/theming/avatar/custom_avatar_color_panel.dart';
 import 'package:bluebubbles/app/layouts/settings/pages/theming/avatar/custom_avatar_panel.dart';
 import 'package:bluebubbles/app/layouts/settings/widgets/settings_widgets.dart';
@@ -10,7 +9,6 @@ import 'package:bluebubbles/app/layouts/settings/pages/theming/advanced/advanced
 import 'package:bluebubbles/app/wrappers/stateful_boilerplate.dart';
 import 'package:bluebubbles/database/models.dart';
 import 'package:bluebubbles/services/services.dart';
-import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -26,9 +24,6 @@ class ThemingPanelController extends StatefulController {
   final RxList<DisplayMode> modes = <DisplayMode>[].obs;
   final RxList<int> refreshRates = <int>[].obs;
   final RxInt currentMode = 0.obs;
-  final RxBool downloadingFont = false.obs;
-  final RxnDouble progress = RxnDouble();
-  final RxnInt totalSize = RxnInt();
 
   @override
   void onReady() async {
@@ -542,7 +537,7 @@ class _ThemingPanelState extends CustomState<ThemingPanel, void, ThemingPanelCon
                                       children: <Widget>[
                                         Obx(
                                               () => Text(
-                                              '${controller.progress.value != null && controller.totalSize.value != null ? (controller.progress.value! * controller.totalSize.value! / 1000).getFriendlySize(withSuffix: false) : ""} / ${((controller.totalSize.value ?? 0).toDouble() / 1000).getFriendlySize()} (${((controller.progress.value ?? 0) * 100).floor()}%)',
+                                              '${http.fontDownloadProgress.value != null && http.fontDownloadTotalSize.value != null ? (http.fontDownloadProgress.value! * http.fontDownloadTotalSize.value! / 1000).getFriendlySize(withSuffix: false) : ""} / ${((http.fontDownloadTotalSize.value ?? 0).toDouble() / 1000).getFriendlySize()} (${((http.fontDownloadProgress.value ?? 0) * 100).floor()}%)',
                                               style: context.theme.textTheme.bodyLarge),
                                         ),
                                         const SizedBox(height: 10.0),
@@ -552,7 +547,7 @@ class _ThemingPanelState extends CustomState<ThemingPanel, void, ThemingPanelCon
                                             child: LinearProgressIndicator(
                                               backgroundColor: context.theme.colorScheme.outline,
                                               valueColor: AlwaysStoppedAnimation<Color>(context.theme.colorScheme.primary),
-                                              value: controller.progress.value,
+                                              value: http.fontDownloadProgress.value,
                                               minHeight: 5,
                                             ),
                                           ),
@@ -561,13 +556,13 @@ class _ThemingPanelState extends CustomState<ThemingPanel, void, ThemingPanelCon
                                           height: 15.0,
                                         ),
                                         Obx(() => Text(
-                                          controller.progress.value == 1 ? "Download Complete!" : "You can close this dialog. The font will continue to download in the background.",
+                                          http.fontDownloadProgress.value == 1 ? "Download Complete!" : "You can close this dialog. The font will continue to download in the background.",
                                           textAlign: TextAlign.center,
                                           style: context.theme.textTheme.bodyLarge,
                                         )),
                                       ]),
                                   actions: [
-                                    Obx(() => controller.downloadingFont.value
+                                    Obx(() => http.downloadingFont.value
                                         ? Container(height: 0, width: 0)
                                         : TextButton(
                                       child: Text("Close", style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)),
@@ -576,8 +571,8 @@ class _ThemingPanelState extends CustomState<ThemingPanel, void, ThemingPanelCon
                                         Get.back();
                                         Future.delayed(const Duration(milliseconds: 400), ()
                                         {
-                                          controller.progress.value = null;
-                                          controller.totalSize.value = null;
+                                          http.fontDownloadProgress.value = null;
+                                          http.fontDownloadTotalSize.value = null;
                                         });
                                       },
                                     ),
@@ -585,46 +580,11 @@ class _ThemingPanelState extends CustomState<ThemingPanel, void, ThemingPanelCon
                                   ],
                                 ),
                               );
-                              final response = await http.downloadFromUrl(
-                                "https://github.com/BlueBubblesApp/bluebubbles-fonts/releases/latest/download/AppleColorEmoji.ttf",
-                                progress: (current, total) {
-                                  if (current <= total) {
-                                    controller.downloadingFont.value = true;
-                                    controller.progress.value = current / total;
-                                    controller.totalSize.value = total;
-                                  }
-                                },
-                              ).catchError((err, stack) {
-                                Logger.error("Failed to fetch font!", error: err, trace: stack);
-                                showSnackbar("Error", "Failed to fetch font! Error: ${err.toString()}");
-                                return Response(requestOptions: RequestOptions(path: ''));
-                              });
-                              Get.back();
-                              controller.downloadingFont.value = false;
-                              if (response.statusCode == 200) {
-                                try {
-                                  final Uint8List data = response.data;
-                                  final file = File("${fs.appDocDir.path}/font/apple.ttf");
-                                  await file.create(recursive: true);
-                                  await file.writeAsBytes(data);
-                                  fs.fontExistsOnDisk.value = true;
-                                  final fontLoader = FontLoader("Apple Color Emoji");
-                                  final cachedFontBytes = ByteData.view(data.buffer);
-                                  fontLoader.addFont(
-                                    Future<ByteData>.value(cachedFontBytes),
-                                  );
-                                  await fontLoader.load();
-                                  showSnackbar("Notice", "Font loaded");
-                                } catch (e, stack) {
-                                  Logger.error("Failed to load font!", error: e, trace: stack);
-                                  showSnackbar("Error", "Failed to load font! Error: ${e.toString()}");
-                                }
-                              } else {
-                                showSnackbar("Error", "Failed to fetch font");
-                              }
+
+                              http.downloadAppleEmojiFont();
                             },
                             title:
-                            kIsWeb ? "Upload Font File" : "Download${controller.downloadingFont.value ? "ing" : ""} iOS Emoji Font${controller.downloadingFont.value ? " (${controller.progress.value != null && controller.totalSize.value != null ? (controller.progress.value! * controller.totalSize.value! / 1000).getFriendlySize(withSuffix: false) : ""} / ${((controller.totalSize.value ?? 0).toDouble() / 1000).getFriendlySize()}) (${((controller.progress.value ?? 0) * 100).floor()}%)" : ""}",
+                            kIsWeb ? "Upload Font File" : "Download${http.downloadingFont.value ? "ing" : ""} iOS Emoji Font${http.downloadingFont.value ? " (${http.fontDownloadProgress.value != null && http.fontDownloadTotalSize.value != null ? (http.fontDownloadProgress.value! * http.fontDownloadTotalSize.value! / 1000).getFriendlySize(withSuffix: false) : ""} / ${((http.fontDownloadTotalSize.value ?? 0).toDouble() / 1000).getFriendlySize()}) (${((http.fontDownloadProgress.value ?? 0) * 100).floor()}%)" : ""}",
                             subtitle: kIsWeb ? "Upload your ttf emoji file into BlueBubbles" : null,
                           );
                         } else {

@@ -1,11 +1,14 @@
 import 'package:bluebubbles/database/models.dart';
+import 'package:bluebubbles/helpers/ui/ui_helpers.dart';
 import 'package:bluebubbles/utils/logger/logger.dart';
 import 'package:bluebubbles/services/services.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/services.dart';
 import 'package:native_dio_adapter/native_dio_adapter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart' hide Response, FormData, MultipartFile;
+import 'package:universal_io/io.dart';
 
 /// Get an instance of our [HttpService]
 HttpService http = Get.isRegistered<HttpService>() ? Get.find<HttpService>() : Get.put(HttpService());
@@ -19,6 +22,11 @@ class HttpService extends GetxService {
   /// Get the URL origin from the current server address
   String get origin => originOverride ?? (Uri.parse(ss.settings.serverAddress.value).hasScheme ? Uri.parse(ss.settings.serverAddress.value).origin : '');
   String get apiRoot => "$origin/api/v1";
+
+  /// iOS font download status
+  RxBool downloadingFont = false.obs;
+  RxnDouble fontDownloadProgress = RxnDouble();
+  RxnInt fontDownloadTotalSize = RxnInt();
 
   /// Helper function to build query params, this way we only need to add the
   /// required guid auth param in one place
@@ -1180,6 +1188,51 @@ class HttpService extends GetxService {
       );
       return returnSuccessOrError(response);
     });
+  }
+
+  Future<void> downloadAppleEmojiFont() async {
+    if (downloadingFont.value) return;
+
+    final response = await downloadFromUrl(
+      "https://github.com/BlueBubblesApp/bluebubbles-fonts/releases/latest/download/AppleColorEmoji.ttf",
+      progress: (current, total) {
+        if (current <= total) {
+          downloadingFont.value = true;
+          fontDownloadProgress.value = current / total;
+          fontDownloadTotalSize.value = total;
+        }
+      }
+    ).catchError((error) {
+      downloadingFont.value = false;
+      fontDownloadProgress.value = null;
+      fontDownloadTotalSize.value = null;
+
+      return Response(requestOptions: RequestOptions(path: ''));
+    }).whenComplete(() {
+      downloadingFont.value = false;
+      fontDownloadProgress.value = null;
+      fontDownloadTotalSize.value = null;
+    });
+
+    if (response.statusCode == 200) {
+      try {
+        final Uint8List data = response.data;
+        final file = File("${fs.appDocDir.path}/font/apple.ttf");
+        await file.create(recursive: true);
+        await file.writeAsBytes(data);
+        fs.fontExistsOnDisk.value = true;
+        final fontLoader = FontLoader("Apple Color Emoji");
+        final cachedFontBytes = ByteData.view(data.buffer);
+        fontLoader.addFont(
+          Future<ByteData>.value(cachedFontBytes),
+        );
+        await fontLoader.load();
+        showSnackbar("Notice", "Font loaded");
+      } catch (e, stack) {
+        Logger.error("Failed to load font!", error: e, trace: stack);
+        showSnackbar("Error", "Failed to load font! Error: ${e.toString()}");
+      }
+    }
   }
 
   // The following methods are for Firebase only
