@@ -89,45 +89,16 @@ class _NotificationPanelState extends OptimizedState<NotificationPanel> with Sin
                 backgroundColor: tileColor,
               )),
               const SettingsDivider(padding: EdgeInsets.only(left: 16.0)),
-              /*if (!kIsWeb)
-                                    Obx(() {
-                                      if (iOS)
-                                        return Container(
-                                          decoration: BoxDecoration(
-                                            color: tileColor,
-                                          ),
-                                          padding: EdgeInsets.only(left: 15),
-                                          child: Text("Select Notification Sound"),
-                                        );
-                                      else return SizedBox.shrink();
-                                    }),
-                                  if (!kIsWeb)
-                                    Obx(() => SettingsOptions<String>(
-                                      initial: settings.settings.notificationSound.value,
-                                      onChanged: (val) {
-                                        if (val == null) return;
-                                        settings.settings.notificationSound.value = val;
-                                        saveSettings();
-                                      },
-                                      options: ["default", "twig.wav", "walrus.wav", "sugarfree.wav", "raspberry.wav"],
-                                      textProcessing: (val) => val.toString().split(".").first.capitalizeFirst!,
-                                      capitalize: false,
-                                      title: "Notification Sound",
-                                      subtitle: "Set a custom notification sound for the app",
-                                      backgroundColor: tileColor,
-                                      secondaryColor: headerColor,
-                                    )),
-                                  if (!kIsWeb)
-                                    Container(
-                                      color: tileColor,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(left: 15.0),
-                                        child: SettingsDivider(color: context.theme.colorScheme.surfaceVariant),
-                                      ),
-                                    ),*/
-              SettingsTile(
+              Obx(() => SettingsSwitch(
                 title: "Text Detection",
-                onTap: () async {
+                subtitle: "Mute all chats except when your choice of text is found in a message",
+                initialVal: ss.settings.globalTextDetection.value.isNotEmpty,
+                onChanged: (bool val) async {
+                  if (!val) {
+                    ss.settings.globalTextDetection.value = "";
+                    saveSettings();
+                    return;
+                  }
                   final TextEditingController controller = TextEditingController();
                   controller.text = ss.settings.globalTextDetection.value;
                   await showDialog(
@@ -138,8 +109,22 @@ class _NotificationPanelState extends OptimizedState<NotificationPanel> with Sin
                   saveSettings();
                 },
                 backgroundColor: tileColor,
-                subtitle: "Mute all chats except when your choice of text is found in a message",
-              ),
+              )),
+              Obx(() => ss.settings.globalTextDetection.value.isNotEmpty ? SettingsTile(
+                title: "Whitelisted Phrases",
+                subtitle: ss.settings.globalTextDetection.value,
+                leading: Icon(iOS ? CupertinoIcons.pencil : Icons.edit_outlined),
+                onTap: () async {
+                  final TextEditingController controller = TextEditingController();
+                  controller.text = ss.settings.globalTextDetection.value;
+                  await showDialog(
+                    context: context,
+                    builder: (context) => TextDetectionDialog(controller),
+                  );
+                  ss.settings.globalTextDetection.value = controller.text;
+                  saveSettings();
+                },
+              ) : const SizedBox.shrink())
             ]),
             SettingsHeader(
                 iosSubtitle: iosSubtitle,

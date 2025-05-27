@@ -233,6 +233,7 @@ class TextDetectionDialog extends StatelessWidget {
             ),
             TextField(
               controller: controller,
+              autofocus: true,
               decoration: InputDecoration(
                 labelText: "Enter text to whitelist...",
                 enabledBorder: OutlineInputBorder(
@@ -244,16 +245,13 @@ class TextDetectionDialog extends StatelessWidget {
                       color: context.theme.colorScheme.primary,
                     )),
               ),
+              onSubmitted: (value) => Get.back(),
             ),
           ]),
       actions: [
         TextButton(
             child: Text("OK", style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)),
             onPressed: () {
-              if (controller.text.isEmpty) {
-                showSnackbar("Error", "Please enter text!");
-                return;
-              }
               Get.back();
             }
         ),
