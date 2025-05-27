@@ -297,7 +297,13 @@ class _DesktopPanelState extends OptimizedState<DesktopPanel> {
                           max: 100,
                           divisions: 100,
                           formatValue: (val) => "${val.toInt()}",
-                          update: (val) => ss.settings.desktopNotificationSoundVolume.value = val.toInt(),
+                          update: (val) {
+                            ss.settings.desktopNotificationSoundVolume.value = val.toInt();
+                          },
+                          onChangeEnd: (val) {
+                            ss.settings.desktopNotificationSoundVolume.value = val.toInt();
+                            saveSettings();
+                          },
                         ),
                       )),
                   Obx(() => AnimatedSizeAndFade.showHide(

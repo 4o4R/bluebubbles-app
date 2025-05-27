@@ -656,7 +656,7 @@ class Settings {
     s.windowEffectCustomOpacityLight.value = map['windowEffectCustomOpacityLight']?.toDouble() ?? 0.5;
     s.windowEffectCustomOpacityDark.value = map['windowEffectCustomOpacityDark']?.toDouble() ?? 0.5;
     s.desktopNotifications.value = map['desktopNotifications'] ?? true;
-    s.desktopNotificationSoundVolume.value = map['desktopNotificationSound'] ?? 100;
+    s.desktopNotificationSoundVolume.value = map['desktopNotificationSoundVolume'] ?? 100;
     s.desktopNotificationSoundPath.value = map['desktopNotificationSoundPath'];
     s.useDesktopAccent.value = map['useDesktopAccent'] ?? map['useWindowsAccent'] ?? false;
     s.firstFcmRegisterDate.value = map['firstFcmRegisterDate'] ?? 0;

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:bluebubbles/helpers/ui/facetime_helpers.dart';
 import 'package:bluebubbles/database/models.dart';
 import 'package:bluebubbles/services/services.dart';
@@ -352,6 +353,18 @@ class ActionHandler extends GetxService {
     bool shouldNotify = shouldNotifyForNewMessageGuid(m.guid!);
     if (!shouldNotify) {
       Logger.info("Not notifying for already handled new message with GUID ${m.guid}...", tag: "ActionHandler");
+    } else if (kIsDesktop && ls.isAlive) {
+      Player player = Player();
+      player.stream.completed
+          .firstWhere((completed) => completed)
+          .then((_) async => Future.delayed(const Duration(milliseconds: 500), () async => await player.dispose()));
+      await player.setVolume(ss.settings.soundVolume.value.toDouble());
+      await player.open(Media(ss.settings.receiveSoundPath.value!));
+    } else if (!kIsDesktop && !kIsWeb) {
+      PlayerController controller = PlayerController();
+      await controller
+          .preparePlayer(path: ss.settings.receiveSoundPath.value!, volume: ss.settings.soundVolume.value / 100)
+          .then((_) => controller.startPlayer());
     }
 
     if ((!ls.isAlive || ss.settings.endpointUnifiedPush.value != "" || (cm.activeChat == null && Get.rawRoute?.settings.name != "/")) && shouldNotify) {
