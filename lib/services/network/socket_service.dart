@@ -26,6 +26,7 @@ class SocketService extends GetxService {
   SocketState _lastState = SocketState.disconnected;
   RxString lastError = "".obs;
   Timer? _reconnectTimer;
+  bool _hadNetworkConnection = true;
   late Socket socket;
 
   String get serverAddress => http.origin;
@@ -38,12 +39,23 @@ class SocketService extends GetxService {
     Logger.debug("Initializing socket service...");
     startSocket();
     Connectivity().onConnectivityChanged.listen((event) {
-      if (!event.contains(ConnectivityResult.wifi) &&
-          !event.contains(ConnectivityResult.ethernet) &&
-          http.originOverride != null) {
-        Logger.info("Detected switch off wifi, removing localhost address...");
-        http.originOverride = null;
+      final bool hasNetwork =
+          event.contains(ConnectivityResult.wifi) || event.contains(ConnectivityResult.ethernet);
+
+      if (!hasNetwork) {
+        if (http.originOverride != null) {
+          Logger.info("Detected switch off wifi, removing localhost address...");
+          http.originOverride = null;
+        }
+        _hadNetworkConnection = false;
+        return;
       }
+
+      if (!_hadNetworkConnection) {
+        Logger.info("Connectivity restored, attempting socket reconnect...");
+        reconnect();
+      }
+      _hadNetworkConnection = true;
     });
     Logger.debug("Initialized socket service");
   }
@@ -144,6 +156,20 @@ class SocketService extends GetxService {
     return completer.future;
   }
 
+  void _scheduleSocketRecovery({Duration delay = const Duration(seconds: 5)}) {
+    _reconnectTimer?.cancel();
+    _reconnectTimer = Timer(delay, () async {
+      if (state.value == SocketState.connected || isNullOrEmpty(serverAddress)) return;
+
+      await fdb.fetchNewUrl();
+      restartSocket();
+
+      if (state.value == SocketState.connected || ss.settings.keepAppAlive.value) return;
+
+      notif.createSocketError();
+    });
+  }
+
   void handleStatusUpdate(SocketState status, dynamic data) {
     if (_lastState == status) return;
     _lastState = status;
@@ -159,6 +185,7 @@ class SocketService extends GetxService {
       case SocketState.disconnected:
         Logger.info("Disconnected from socket...");
         state.value = SocketState.disconnected;
+        _scheduleSocketRecovery(delay: const Duration(seconds: 3));
         return;
       case SocketState.connecting:
         Logger.info("Connecting to socket...");
@@ -172,19 +199,7 @@ class SocketService extends GetxService {
         }
 
         state.value = SocketState.error;
-        // After 5 seconds of an error, we should retry the connection
-        _reconnectTimer = Timer(const Duration(seconds: 5), () async {
-          if (state.value == SocketState.connected) return;
-
-          await fdb.fetchNewUrl();
-          restartSocket();
-
-          if (state.value == SocketState.connected) return;
-
-          if (!ss.settings.keepAppAlive.value) {
-            notif.createSocketError();
-          }
-        });
+        _scheduleSocketRecovery();
         return;
       default:
         return;

@@ -519,7 +519,7 @@ class _ServerManagementPanelState extends CustomState<ServerManagementPanel, voi
                           title: "Manually Sync Messages",
                           subtitle: socket.state.value == SocketState.connected
                               ? "Tap to sync messages"
-                              : "Disconnected, cannot sync",
+                              : "Socket disconnected, will still attempt sync",
                           backgroundColor: tileColor,
                           leading: SettingsLeadingIcon(
                             iosIcon: CupertinoIcons.arrow_2_circlepath,
@@ -527,13 +527,18 @@ class _ServerManagementPanelState extends CustomState<ServerManagementPanel, voi
                             containerColor: Colors.yellow[700],
                           ),
                           onTap: () async {
-                            if (socket.state.value != SocketState.connected) return;
                             if (manager != null) {
                               showDialog(
                                 context: context,
                                 builder: (context) => SyncDialog(manager: manager!),
                               );
                             } else {
+                              if (socket.state.value != SocketState.connected) {
+                                showSnackbar(
+                                  "Socket Disconnected",
+                                  "Attempting incremental sync via REST API anyway.",
+                                );
+                              }
                               final date = await showTimeframePicker("How Far Back?", context, showHourPicker: false);
                               if (date == null) return;
                               try {
