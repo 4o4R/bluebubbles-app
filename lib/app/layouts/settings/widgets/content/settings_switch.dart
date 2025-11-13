@@ -28,7 +28,7 @@ class SettingsSwitch extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: () => onChanged.call(!initialVal),
-        splashColor: context.theme.colorScheme.surfaceVariant,
+        splashColor: context.theme.colorScheme.surfaceContainerHighest,
         splashFactory: context.theme.splashFactory,
         child: ListTile(
           mouseCursor: MouseCursor.defer,

@@ -190,7 +190,7 @@ class _ExpandedHeaderTextState extends CustomState<ExpandedHeaderText, void, Con
               : unreadChats > 0
               ? "$unreadChats unread message${unreadChats > 1 ? "s" : ""}"
               : "Messages",
-          style: context.theme.textTheme.displaySmall!.copyWith(color: context.theme.colorScheme.onBackground),
+          style: context.theme.textTheme.displaySmall!.copyWith(color: context.theme.colorScheme.onSurface),
         textAlign: TextAlign.center,
       );
     });

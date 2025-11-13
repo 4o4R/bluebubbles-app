@@ -893,7 +893,7 @@ class _ServerManagementPanelState extends CustomState<ServerManagementPanel, voi
                                 color: tileColor,
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 62.0),
-                                  child: SettingsDivider(color: context.theme.colorScheme.surfaceVariant),
+                                  child: SettingsDivider(color: context.theme.colorScheme.surfaceContainerHighest),
                                 ),
                               )
                             ],

@@ -179,7 +179,7 @@ class _NotificationPanelState extends OptimizedState<NotificationPanel> with Sin
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
-        systemNavigationBarColor: ss.settings.immersiveMode.value ? Colors.transparent : context.theme.colorScheme.background, // navigation bar color
+        systemNavigationBarColor: ss.settings.immersiveMode.value ? Colors.transparent : context.theme.colorScheme.surface, // navigation bar color
         systemNavigationBarIconBrightness: context.theme.colorScheme.brightness.opposite,
         statusBarColor: Colors.transparent, // status bar color
         statusBarIconBrightness: context.theme.colorScheme.brightness.opposite,
@@ -255,7 +255,7 @@ class _NotificationPanelState extends OptimizedState<NotificationPanel> with Sin
                                       parent: animation,
                                       curve: const Interval(0.3, 1.0, curve: Curves.easeIn),
                                     )),
-                                    child: Center(child: Text("Notifications", style: context.theme.textTheme.displaySmall!.copyWith(color: context.theme.colorScheme.onBackground), textAlign: TextAlign.center)),
+                                    child: Center(child: Text("Notifications", style: context.theme.textTheme.displaySmall!.copyWith(color: context.theme.colorScheme.onSurface), textAlign: TextAlign.center)),
                                   ),
                                   FadeTransition(
                                     opacity: Tween(begin: 1.0, end: 0.0).animate(CurvedAnimation(

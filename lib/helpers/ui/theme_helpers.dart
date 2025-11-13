@@ -119,9 +119,9 @@ mixin ThemeHelpers<T extends StatefulWidget> on State<T> {
       color: ts.inDarkMode(context)
           ? (ss.settings.windowEffect.value != WindowEffect.disabled
               ? context.theme.colorScheme.properOnSurface
-              : context.theme.colorScheme.onBackground)
+              : context.theme.colorScheme.onSurface)
           : (ss.settings.windowEffect.value != WindowEffect.disabled
-              ? context.theme.colorScheme.onBackground
+              ? context.theme.colorScheme.onSurface
               : context.theme.colorScheme.properOnSurface),
       fontWeight: FontWeight.w300);
 
@@ -130,10 +130,10 @@ mixin ThemeHelpers<T extends StatefulWidget> on State<T> {
       context.theme.textTheme.labelLarge!.copyWith(color: context.theme.colorScheme.primary, fontWeight: FontWeight.bold);
 
   Color get _headerColor => (ts.inDarkMode(context)
-      ? context.theme.colorScheme.background
+      ? context.theme.colorScheme.surface
       : context.theme.colorScheme.properSurface).withAlpha(ss.settings.windowEffect.value != WindowEffect.disabled ? 20 : 255);
 
-  Color get _tileColor => (ts.inDarkMode(context) ? context.theme.colorScheme.properSurface : context.theme.colorScheme.background)
+  Color get _tileColor => (ts.inDarkMode(context) ? context.theme.colorScheme.properSurface : context.theme.colorScheme.surface)
       .withAlpha(ss.settings.windowEffect.value != WindowEffect.disabled ? 100 : 255);
 
   /// Header / background color on settings pages
@@ -162,9 +162,9 @@ mixin ThemeHelpers<T extends StatefulWidget> on State<T> {
 }
 
 extension ColorSchemeHelpers on ColorScheme {
-  Color get properSurface => surface.computeDifference(background) < 8 ? surfaceVariant : surface;
+  Color get properSurface => surface.computeDifference(surface) < 8 ? surfaceContainerHighest : surface;
 
-  Color get properOnSurface => surface.computeDifference(background) < 8 ? onSurfaceVariant : onSurface;
+  Color get properOnSurface => surface.computeDifference(surface) < 8 ? onSurfaceVariant : onSurface;
 
   Color get iMessageBubble =>
       HSLColor.fromColor(primary).colorfulness < HSLColor.fromColor(primaryContainer).colorfulness ? primary : primaryContainer;

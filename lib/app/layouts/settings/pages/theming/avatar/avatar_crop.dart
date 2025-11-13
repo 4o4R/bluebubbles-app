@@ -74,13 +74,13 @@ class _AvatarCropState extends OptimizedState<AvatarCrop> {
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
-        systemNavigationBarColor: ss.settings.immersiveMode.value ? Colors.transparent : context.theme.colorScheme.background, // navigation bar color
+        systemNavigationBarColor: ss.settings.immersiveMode.value ? Colors.transparent : context.theme.colorScheme.surface, // navigation bar color
         systemNavigationBarIconBrightness: context.theme.colorScheme.brightness.opposite,
         statusBarColor: Colors.transparent, // status bar color
         statusBarIconBrightness: context.theme.colorScheme.brightness.opposite,
       ),
       child: Scaffold(
-          backgroundColor: context.theme.colorScheme.background,
+          backgroundColor: context.theme.colorScheme.surface,
           appBar: PreferredSize(
             preferredSize: Size(ns.width(context), kIsDesktop ? 80 : 50),
             child: AppBar(

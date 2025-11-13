@@ -169,7 +169,7 @@ class _MessagePopupState extends OptimizedState<MessagePopup> with SingleTickerP
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
-        systemNavigationBarColor: ss.settings.immersiveMode.value ? Colors.transparent : context.theme.colorScheme.background, // navigation bar color
+        systemNavigationBarColor: ss.settings.immersiveMode.value ? Colors.transparent : context.theme.colorScheme.surface, // navigation bar color
         systemNavigationBarIconBrightness: context.theme.colorScheme.brightness.opposite,
         statusBarColor: Colors.transparent, // status bar color
         statusBarIconBrightness: context.theme.colorScheme.brightness.opposite,
@@ -197,7 +197,7 @@ class _MessagePopupState extends OptimizedState<MessagePopup> with SingleTickerP
                 appBar: iOS
                     ? null
                     : AppBar(
-                        backgroundColor: context.theme.colorScheme.background.oppositeLightenOrDarken(5),
+                        backgroundColor: context.theme.colorScheme.surface.oppositeLightenOrDarken(5),
                         systemOverlayStyle:
                             context.theme.colorScheme.brightness == Brightness.dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
                         automaticallyImplyLeading: false,
@@ -206,7 +206,7 @@ class _MessagePopupState extends OptimizedState<MessagePopup> with SingleTickerP
                         leading: Padding(
                           padding: EdgeInsets.only(top: kIsDesktop ? 20 : 0, left: 10.0),
                           child: BackButton(
-                            color: context.theme.colorScheme.onBackground,
+                            color: context.theme.colorScheme.onSurface,
                             onPressed: () {
                               popDetails();
                               return true;
@@ -222,7 +222,7 @@ class _MessagePopupState extends OptimizedState<MessagePopup> with SingleTickerP
                       onTap: popDetails,
                       child: iOS
                           ? (ss.settings.highPerfMode.value
-                              ? Container(color: context.theme.colorScheme.background.withOpacity(0.8))
+                              ? Container(color: context.theme.colorScheme.surface.withOpacity(0.8))
                               : BackdropFilter(
                                   filter: ImageFilter.blur(
                                       sigmaX: kIsDesktop && ss.settings.windowEffect.value != WindowEffect.disabled ? 10 : 30,
@@ -746,7 +746,6 @@ class _MessagePopupState extends OptimizedState<MessagePopup> with SingleTickerP
   Future<void> remindLater() async {
     if (Platform.isAndroid) {
       bool denied = await Permission.scheduleExactAlarm.isDenied;
-      ;
       bool permanentlyDenied = await Permission.scheduleExactAlarm.isPermanentlyDenied;
       if (denied && !permanentlyDenied) {
         await Permission.scheduleExactAlarm.request();
@@ -833,7 +832,7 @@ class _MessagePopupState extends OptimizedState<MessagePopup> with SingleTickerP
           height: context.height * 1 / 4,
           child: Container(
             padding: const EdgeInsets.all(10.0),
-            decoration: BoxDecoration(color: context.theme.colorScheme.background, borderRadius: const BorderRadius.all(Radius.circular(10))),
+            decoration: BoxDecoration(color: context.theme.colorScheme.surface, borderRadius: const BorderRadius.all(Radius.circular(10))),
             child: SingleChildScrollView(
               child: SelectableText(
                 str,

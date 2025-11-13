@@ -82,7 +82,7 @@ class _ReplyBubbleState extends CustomState<ReplyBubble, void, MessageWidgetCont
                     style: context.textTheme.bodyMedium!.apply(fontSizeFactor: 1.15),
                   ),
                 ]),
-                style: context.textTheme.labelLarge!.copyWith(color: context.theme.colorScheme.onBackground),
+                style: context.textTheme.labelLarge!.copyWith(color: context.theme.colorScheme.onSurface),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),

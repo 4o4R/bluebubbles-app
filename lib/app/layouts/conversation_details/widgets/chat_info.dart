@@ -186,7 +186,7 @@ class _ChatInfoState extends OptimizedState<ChatInfo> {
                               width: 30,
                               height: 30,
                               decoration: BoxDecoration(
-                                border: Border.all(color: context.theme.colorScheme.background, width: 1),
+                                border: Border.all(color: context.theme.colorScheme.surface, width: 1),
                                 shape: BoxShape.circle,
                                 color: context.theme.colorScheme.tertiaryContainer,
                               ),
@@ -214,13 +214,13 @@ class _ChatInfoState extends OptimizedState<ChatInfo> {
                 text: TextSpan(
                   style: context.theme.textTheme.headlineMedium!.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: context.theme.colorScheme.onBackground,
+                    color: context.theme.colorScheme.onSurface,
                   ),
                   children: MessageHelper.buildEmojiText(
                     _title,
                     context.theme.textTheme.headlineMedium!.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: context.theme.colorScheme.onBackground,
+                      color: context.theme.colorScheme.onSurface,
                     ),
                   ),
                 ),
@@ -261,7 +261,7 @@ class _ChatInfoState extends OptimizedState<ChatInfo> {
                     ),
                   ),
                 ),
-                trailing: Icon(Icons.edit_outlined, color: context.theme.colorScheme.onBackground),
+                trailing: Icon(Icons.edit_outlined, color: context.theme.colorScheme.onSurface),
               ),
             ),
           ),
@@ -276,7 +276,7 @@ class _ChatInfoState extends OptimizedState<ChatInfo> {
                   updatePhoto();
                 },
                 title: Text("Update group photo", style: context.theme.textTheme.bodyLarge!),
-                trailing: Icon(Icons.edit_outlined, color: context.theme.colorScheme.onBackground),
+                trailing: Icon(Icons.edit_outlined, color: context.theme.colorScheme.onSurface),
               ),
             ),
           ),

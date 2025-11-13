@@ -44,7 +44,7 @@ class ScrollbarWrapper extends StatelessWidget {
                   mmbScrollConfig: MMBScrollConfig(
                     customScrollCursor: DefaultCustomScrollCursor(
                       cursorColor: context.textTheme.labelLarge!.color!,
-                      backgroundColor: context.theme.colorScheme.background,
+                      backgroundColor: context.theme.colorScheme.surface,
                       borderColor: context.textTheme.headlineMedium!.color!,
                     ),
                     decelerationForce: reverse ? -1000.0 : 1000.0,

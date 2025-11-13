@@ -71,20 +71,20 @@ class _LoggingPanel extends State<LoggingPanel> {
     final Rx<Color> _backgroundColor =
         (kIsDesktop && ss.settings.windowEffect.value == WindowEffect.disabled
                 ? Colors.transparent
-                : context.theme.colorScheme.background)
+                : context.theme.colorScheme.surface)
             .obs;
 
     if (kIsDesktop) {
       ss.settings.windowEffect.listen((WindowEffect effect) =>
           _backgroundColor.value = effect != WindowEffect.disabled
               ? Colors.transparent
-              : context.theme.colorScheme.background);
+              : context.theme.colorScheme.surface);
     }
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle(
           systemNavigationBarColor: ss.settings.immersiveMode.value
               ? Colors.transparent
-              : context.theme.colorScheme.background, // navigation bar color
+              : context.theme.colorScheme.surface, // navigation bar color
           systemNavigationBarIconBrightness:
               context.theme.colorScheme.brightness.opposite,
           statusBarColor: Colors.transparent, // status bar color
@@ -100,7 +100,7 @@ class _LoggingPanel extends State<LoggingPanel> {
                 child: BackdropFilter(
                   child: AppBar(
                     systemOverlayStyle: ThemeData.estimateBrightnessForColor(
-                                context.theme.colorScheme.background) ==
+                                context.theme.colorScheme.surface) ==
                             Brightness.dark
                         ? SystemUiOverlayStyle.light
                         : SystemUiOverlayStyle.dark,

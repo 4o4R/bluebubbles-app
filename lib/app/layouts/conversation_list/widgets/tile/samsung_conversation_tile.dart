@@ -57,7 +57,7 @@ class _SamsungConversationTileState extends CustomState<SamsungConversationTile,
                   Obx(() => ChatSubtitle(
                         parentController: controller,
                         style: context.theme.textTheme.bodyMedium!.copyWith(
-                          color: controller.shouldHighlight.value ? context.theme.colorScheme.onBackground : context.theme.colorScheme.outline,
+                          color: controller.shouldHighlight.value ? context.theme.colorScheme.onSurface : context.theme.colorScheme.outline,
                           height: 1.5,
                         ),
                       )),
@@ -201,7 +201,7 @@ class _SamsungTrailingState extends CustomState<SamsungTrailing, void, Conversat
                   color: (cachedLatestMessage?.error ?? 0) > 0
                       ? context.theme.colorScheme.error
                       : controller.shouldHighlight.value || unread
-                          ? context.theme.colorScheme.onBackground
+                          ? context.theme.colorScheme.onSurface
                           : context.theme.colorScheme.outline,
                   fontWeight: controller.shouldHighlight.value ? FontWeight.w500 : null,
                 ),
@@ -212,7 +212,7 @@ class _SamsungTrailingState extends CustomState<SamsungTrailing, void, Conversat
             if (muteType == "mute")
               Obx(() => Icon(
                     Icons.notifications_off,
-                    color: controller.shouldHighlight.value || unread ? context.theme.colorScheme.onBackground : context.theme.colorScheme.outline,
+                    color: controller.shouldHighlight.value || unread ? context.theme.colorScheme.onSurface : context.theme.colorScheme.outline,
                     size: 16,
                   )),
             if (muteType == "mute") const SizedBox(width: 2.0),

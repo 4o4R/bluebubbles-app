@@ -120,7 +120,7 @@ class PageContent extends StatelessWidget {
               title,
               style: context.theme.textTheme.displayMedium!.apply(
                 fontWeightDelta: 2,
-              ).copyWith(height: 1.35, color: context.theme.colorScheme.onBackground)
+              ).copyWith(height: 1.35, color: context.theme.colorScheme.onSurface)
           ),
         ),
       ),
@@ -201,8 +201,8 @@ class PageButtons extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20.0),
                 ),
               ),
-              backgroundColor: WidgetStateProperty.all(context.theme.colorScheme.background),
-              shadowColor: WidgetStateProperty.all(context.theme.colorScheme.background),
+              backgroundColor: WidgetStateProperty.all(context.theme.colorScheme.surface),
+              shadowColor: WidgetStateProperty.all(context.theme.colorScheme.surface),
               maximumSize: WidgetStateProperty.all(const Size(200, 36)),
               minimumSize: WidgetStateProperty.all(const Size(30, 30)),
             ),
@@ -212,9 +212,9 @@ class PageButtons extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.arrow_back, color: context.theme.colorScheme.onBackground, size: 20),
+                Icon(Icons.arrow_back, color: context.theme.colorScheme.onSurface, size: 20),
                 const SizedBox(width: 10),
-                Text("Back", style: context.theme.textTheme.bodyLarge!.apply(fontSizeFactor: 1.1, color: context.theme.colorScheme.onBackground)),
+                Text("Back", style: context.theme.textTheme.bodyLarge!.apply(fontSizeFactor: 1.1, color: context.theme.colorScheme.onSurface)),
               ],
             ),
           ),

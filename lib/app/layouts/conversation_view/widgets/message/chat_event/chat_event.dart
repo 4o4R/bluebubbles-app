@@ -61,7 +61,7 @@ class ChatEvent extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
-                        color: context.theme.colorScheme.background,
+                        color: context.theme.colorScheme.surface,
                         borderRadius: const BorderRadius.all(Radius.circular(10))
                     ),
                     child: SingleChildScrollView(

@@ -248,7 +248,7 @@ class _AdvancedThemingContentState extends OptimizedState<AdvancedThemingContent
                         color: tileColor,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 15.0),
-                          child: SettingsDivider(color: context.theme.colorScheme.surfaceVariant),
+                          child: SettingsDivider(color: context.theme.colorScheme.surfaceContainerHighest),
                         ),
                       ),
                       SettingsTile(

@@ -72,7 +72,7 @@ class _SyncProgressState extends OptimizedState<SyncProgress> {
                 "${(syncManager.progress.value * 100).toInt()}%",
                 style: context.theme.textTheme.bodyLarge!.apply(
                   fontSizeDelta: 1.5,
-                  color: context.theme.colorScheme.onBackground,
+                  color: context.theme.colorScheme.onSurface,
                 ).copyWith(height: 2),
               )),
               const SizedBox(height: 15),
@@ -135,8 +135,8 @@ class _SyncProgressState extends OptimizedState<SyncProgress> {
                         borderRadius: BorderRadius.circular(20.0),
                       ),
                     ),
-                    backgroundColor: WidgetStateProperty.all(context.theme.colorScheme.background),
-                    shadowColor: WidgetStateProperty.all(context.theme.colorScheme.background),
+                    backgroundColor: WidgetStateProperty.all(context.theme.colorScheme.surface),
+                    shadowColor: WidgetStateProperty.all(context.theme.colorScheme.surface),
                     maximumSize: WidgetStateProperty.all(Size(context.width * 2 / 3, 36)),
                     minimumSize: WidgetStateProperty.all(Size(context.width * 2 / 3, 36)),
                   ),
@@ -163,10 +163,10 @@ class _SyncProgressState extends OptimizedState<SyncProgress> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.upload, color: context.theme.colorScheme.onBackground, size: 20),
+                      Icon(Icons.upload, color: context.theme.colorScheme.onSurface, size: 20),
                       const SizedBox(width: 10),
                       Text("Restore Backups",
-                          style: context.theme.textTheme.bodyLarge!.apply(fontSizeFactor: 1.1, color: context.theme.colorScheme.onBackground)),
+                          style: context.theme.textTheme.bodyLarge!.apply(fontSizeFactor: 1.1, color: context.theme.colorScheme.onSurface)),
                     ],
                   ),
                 ),

@@ -128,7 +128,7 @@ void sendEffectAction(
               },
               child: AnnotatedRegion<SystemUiOverlayStyle>(
                 value: SystemUiOverlayStyle(
-                  systemNavigationBarColor: ss.settings.immersiveMode.value ? Colors.transparent : context.theme.colorScheme.background,
+                  systemNavigationBarColor: ss.settings.immersiveMode.value ? Colors.transparent : context.theme.colorScheme.surface,
                   // navigation bar color
                   systemNavigationBarIconBrightness: context.theme.colorScheme.brightness.opposite,
                   statusBarColor: Colors.transparent,

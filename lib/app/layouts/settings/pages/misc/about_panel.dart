@@ -139,7 +139,7 @@ class _AboutPanelState extends OptimizedState<AboutPanel> {
                                       ),
                                 ),
                               ),
-                              backgroundColor: context.theme.colorScheme.background,
+                              backgroundColor: context.theme.colorScheme.surface,
                               appBar: AppBar(
                                 toolbarHeight: 50,
                                 elevation: 0,

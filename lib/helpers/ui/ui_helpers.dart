@@ -106,7 +106,7 @@ Widget buildProgressIndicator(BuildContext context, {double size = 20, double st
   return ss.settings.skin.value == Skins.iOS
       ? Theme(
           data: ThemeData(
-            cupertinoOverrideTheme: CupertinoThemeData(brightness: ThemeData.estimateBrightnessForColor(context.theme.colorScheme.background)),
+            cupertinoOverrideTheme: CupertinoThemeData(brightness: ThemeData.estimateBrightnessForColor(context.theme.colorScheme.surface)),
           ),
           child: CupertinoActivityIndicator(
             radius: size / 2,
@@ -481,7 +481,7 @@ Future<void> paintGroupAvatar({
         ..layout()
         ..paint(canvas, Offset(left + realSize * 0.25, top + realSize * 0.25));
     } else {
-      Paint paint = Paint()..color = ss.settings.skin.value == Skins.Samsung ? theme.colorScheme.secondary : theme.colorScheme.background;
+      Paint paint = Paint()..color = ss.settings.skin.value == Skins.Samsung ? theme.colorScheme.secondary : theme.colorScheme.surface;
       canvas.drawCircle(Offset(left + realSize * 0.5, top + realSize * 0.5), realSize * 0.5, paint);
       await paintAvatar(
         handle: participants[index],

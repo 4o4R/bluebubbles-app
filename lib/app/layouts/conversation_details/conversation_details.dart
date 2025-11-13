@@ -138,7 +138,7 @@ class _ConversationDetailsState extends OptimizedState<ConversationDetails> with
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
-        systemNavigationBarColor: ss.settings.immersiveMode.value ? Colors.transparent : context.theme.colorScheme.background, // navigation bar color
+        systemNavigationBarColor: ss.settings.immersiveMode.value ? Colors.transparent : context.theme.colorScheme.surface, // navigation bar color
         systemNavigationBarIconBrightness: context.theme.colorScheme.brightness.opposite,
         statusBarColor: Colors.transparent, // status bar color
         statusBarIconBrightness: context.theme.colorScheme.brightness.opposite,
@@ -169,7 +169,7 @@ class _ConversationDetailsState extends OptimizedState<ConversationDetails> with
             Obx(() {
               if (selected.isNotEmpty) {
                 return IconButton(
-                  icon: Icon(iOS ? CupertinoIcons.xmark : Icons.close, color: context.theme.colorScheme.onBackground),
+                  icon: Icon(iOS ? CupertinoIcons.xmark : Icons.close, color: context.theme.colorScheme.onSurface),
                   onPressed: () {
                     selected.clear();
                   },
@@ -181,7 +181,7 @@ class _ConversationDetailsState extends OptimizedState<ConversationDetails> with
             Obx(() {
               if (selected.isNotEmpty) {
                 return IconButton(
-                  icon: Icon(iOS ? CupertinoIcons.cloud_download : Icons.file_download, color: context.theme.colorScheme.onBackground),
+                  icon: Icon(iOS ? CupertinoIcons.cloud_download : Icons.file_download, color: context.theme.colorScheme.onSurface),
                   onPressed: () {
                     final attachments = media.where((e) => selected.contains(e.guid!));
                     for (Attachment a in attachments) {

@@ -67,7 +67,7 @@ class ConversationViewState extends OptimizedState<ConversationView> {
       value: SystemUiOverlayStyle(
         systemNavigationBarColor: ss.settings.immersiveMode.value
             ? Colors.transparent
-            : context.theme.colorScheme.background,
+            : context.theme.colorScheme.surface,
         systemNavigationBarIconBrightness: context.theme.colorScheme.brightness.opposite,
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: context.theme.colorScheme.brightness.opposite,
@@ -112,7 +112,7 @@ class ConversationViewState extends OptimizedState<ConversationView> {
             top: false,
             bottom: false,
             child: Scaffold(
-              backgroundColor: ss.settings.windowEffect.value != WindowEffect.disabled ? Colors.transparent : context.theme.colorScheme.background,
+              backgroundColor: ss.settings.windowEffect.value != WindowEffect.disabled ? Colors.transparent : context.theme.colorScheme.surface,
               extendBodyBehindAppBar: true,
               appBar: PreferredSize(
                   preferredSize: Size(ns.width(context), (kIsDesktop ? (!iOS ? 25 : 5) : 0) + 90 * (iOS ? ss.settings.avatarScale.value : 0) + (!iOS ? kToolbarHeight : 0)),

@@ -36,7 +36,7 @@ class HeaderText extends StatelessWidget {
             ? "Unknown Senders"
             : "Messages",
         style: context.textTheme.headlineLarge!.copyWith(
-          color: context.theme.colorScheme.onBackground,
+          color: context.theme.colorScheme.onSurface,
           fontWeight: FontWeight.w400,
           fontSize: fontSize,
         ),
@@ -254,7 +254,7 @@ class CupertinoOverflowMenu extends StatelessWidget {
           subtitle: "Tap to open profile",
           onTap: () => goToProfile(context),
         ),
-        PullDownMenuDivider.large(color: context.theme.colorScheme.background.withOpacity(0.5)),
+        PullDownMenuDivider.large(color: context.theme.colorScheme.surface.withOpacity(0.5)),
         PullDownMenuItem(
           title: 'Mark All As Read',
           icon: CupertinoIcons.check_mark_circled,

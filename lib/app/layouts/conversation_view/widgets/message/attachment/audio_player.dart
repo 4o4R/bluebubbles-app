@@ -46,8 +46,9 @@ class _AudioPlayerState extends OptimizedState<AudioPlayer>
   @override
   void initState() {
     super.initState();
-    if (attachment != null)
+    if (attachment != null) {
       controller = cvController?.audioPlayers[attachment!.guid];
+    }
     updateObx(() {
       initBytes();
     });
@@ -63,8 +64,9 @@ class _AudioPlayerState extends OptimizedState<AudioPlayer>
   }
 
   void initBytes() async {
-    if (attachment != null)
+    if (attachment != null) {
       controller = cvController?.audioPlayers[attachment!.guid];
+    }
     if (controller == null) {
       controller = PlayerController()
         ..addListener(() {
@@ -79,8 +81,9 @@ class _AudioPlayerState extends OptimizedState<AudioPlayer>
         setState(() {});
       });
       await controller!.preparePlayer(path: file.path!);
-      if (attachment != null)
+      if (attachment != null) {
         cvController?.audioPlayers[attachment!.guid!] = controller!;
+      }
     }
     setState(() {});
   }
@@ -176,8 +179,9 @@ class _DesktopAudioPlayerState extends OptimizedState<AudioPlayer>
   @override
   void initState() {
     super.initState();
-    if (attachment != null)
+    if (attachment != null) {
       controller = cvController?.audioPlayersDesktop[attachment!.guid];
+    }
     updateObx(() {
       initBytes();
     });
@@ -193,8 +197,9 @@ class _DesktopAudioPlayerState extends OptimizedState<AudioPlayer>
   }
 
   void initBytes() async {
-    if (attachment != null)
+    if (attachment != null) {
       controller = cvController?.audioPlayersDesktop[attachment!.guid];
+    }
     if (controller == null) {
       controller = Player()
         ..stream.position.listen((position) => setState(() {}))
@@ -208,8 +213,9 @@ class _DesktopAudioPlayerState extends OptimizedState<AudioPlayer>
         });
       await controller!.setPlaylistMode(PlaylistMode.none);
       await controller!.open(Media(file.path!), play: false);
-      if (attachment != null)
+      if (attachment != null) {
         cvController?.audioPlayersDesktop[attachment!.guid!] = controller!;
+      }
     }
     setState(() {});
   }

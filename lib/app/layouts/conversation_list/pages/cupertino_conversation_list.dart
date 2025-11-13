@@ -30,7 +30,7 @@ class CupertinoConversationListState extends OptimizedState<CupertinoConversatio
 
   bool get showUnknown => widget.parentController.showUnknownSenders;
 
-  Color get backgroundColor => ss.settings.windowEffect.value == WindowEffect.disabled ? context.theme.colorScheme.background : Colors.transparent;
+  Color get backgroundColor => ss.settings.windowEffect.value == WindowEffect.disabled ? context.theme.colorScheme.surface : Colors.transparent;
 
   ConversationListController get controller => widget.parentController;
 
@@ -48,7 +48,7 @@ class CupertinoConversationListState extends OptimizedState<CupertinoConversatio
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ss.settings.windowEffect.value != WindowEffect.disabled ? Colors.transparent : context.theme.colorScheme.background,
+      backgroundColor: ss.settings.windowEffect.value != WindowEffect.disabled ? Colors.transparent : context.theme.colorScheme.surface,
       extendBodyBehindAppBar: !showArchived && !showUnknown,
       floatingActionButton: Obx(() => !ss.settings.moveChatCreatorToHeader.value && !showArchived && !showUnknown
           ? ConversationListFAB(parentController: controller)

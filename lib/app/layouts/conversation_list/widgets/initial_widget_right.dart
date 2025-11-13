@@ -16,7 +16,7 @@ class _InitialWidgetRightState extends OptimizedState<InitialWidgetRight> {
   Widget build(BuildContext context) {
     return Obx(
       () => Scaffold(
-        backgroundColor: ss.settings.windowEffect.value != WindowEffect.disabled ? Colors.transparent : context.theme.colorScheme.background,
+        backgroundColor: ss.settings.windowEffect.value != WindowEffect.disabled ? Colors.transparent : context.theme.colorScheme.surface,
         extendBodyBehindAppBar: true,
         body: Center(
           child: Container(child: Text("Select a chat from the list", style: context.theme.textTheme.bodyLarge)),

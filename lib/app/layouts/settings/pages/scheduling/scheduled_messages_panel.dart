@@ -87,7 +87,7 @@ class _ScheduledMessagesPanelState extends OptimizedState<ScheduledMessagesPanel
       ),
       actions: [
         IconButton(
-          icon: Icon(iOS ? CupertinoIcons.arrow_counterclockwise : Icons.refresh, color: context.theme.colorScheme.onBackground),
+          icon: Icon(iOS ? CupertinoIcons.arrow_counterclockwise : Icons.refresh, color: context.theme.colorScheme.onSurface),
           onPressed: () {
             setState(() {
               fetching = true;

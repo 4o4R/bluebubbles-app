@@ -16,19 +16,19 @@ class PinnedOrderPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final Rx<Color> _backgroundColor = (kIsDesktop && ss.settings.windowEffect.value == WindowEffect.disabled
             ? Colors.transparent
-            : context.theme.colorScheme.background)
+            : context.theme.colorScheme.surface)
         .obs;
     final ScrollController scrollController = ScrollController();
 
     if (kIsDesktop) {
       ss.settings.windowEffect.listen((WindowEffect effect) => _backgroundColor.value =
-          effect != WindowEffect.disabled ? Colors.transparent : context.theme.colorScheme.background);
+          effect != WindowEffect.disabled ? Colors.transparent : context.theme.colorScheme.surface);
     }
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
         systemNavigationBarColor: ss.settings.immersiveMode.value
             ? Colors.transparent
-            : context.theme.colorScheme.background, // navigation bar color
+            : context.theme.colorScheme.surface, // navigation bar color
         systemNavigationBarIconBrightness: context.theme.colorScheme.brightness.opposite,
         statusBarColor: Colors.transparent, // status bar color
         statusBarIconBrightness: context.theme.colorScheme.brightness.opposite,
@@ -42,7 +42,7 @@ class PinnedOrderPanel extends StatelessWidget {
               child: BackdropFilter(
                 child: AppBar(
                   systemOverlayStyle:
-                      ThemeData.estimateBrightnessForColor(context.theme.colorScheme.background) == Brightness.dark
+                      ThemeData.estimateBrightnessForColor(context.theme.colorScheme.surface) == Brightness.dark
                           ? SystemUiOverlayStyle.light
                           : SystemUiOverlayStyle.dark,
                   toolbarHeight: kIsDesktop ? 80 : 50,

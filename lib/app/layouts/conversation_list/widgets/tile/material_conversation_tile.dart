@@ -236,7 +236,7 @@ class _MaterialTrailingState extends CustomState<MaterialTrailing, void, Convers
                         color: (cachedLatestMessage?.error ?? 0) > 0
                             ? context.theme.colorScheme.error
                             : controller.shouldHighlight.value || unread
-                                ? context.theme.colorScheme.onBackground
+                                ? context.theme.colorScheme.onSurface
                                 : context.theme.colorScheme.outline,
                         fontWeight: unread
                             ? FontWeight.w600

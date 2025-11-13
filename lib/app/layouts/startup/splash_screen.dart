@@ -29,7 +29,7 @@ class _SplashScreenState extends OptimizedState<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: context.theme.colorScheme.background,
+        backgroundColor: context.theme.colorScheme.surface,
         body: Center(
           child: Hero(
             tag: "setup-icon",

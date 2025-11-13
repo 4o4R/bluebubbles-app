@@ -30,7 +30,7 @@ class _AdvancedThemingTileState extends OptimizedState<AdvancedThemingTile> {
           child: Container(
             decoration: widget.tuple.item1.value.computeDifference(ts.inDarkMode(context)
                 || ss.settings.skin.value == Skins.Samsung
-                ? context.theme.colorScheme.background : context.theme.colorScheme.properSurface) < 15 ? BoxDecoration(
+                ? context.theme.colorScheme.surface : context.theme.colorScheme.properSurface) < 15 ? BoxDecoration(
               border: Border.all(width: 0.5, color: context.theme.colorScheme.outline),
               borderRadius: BorderRadius.circular(20)
             ) : null,

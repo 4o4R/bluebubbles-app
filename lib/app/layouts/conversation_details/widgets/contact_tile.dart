@@ -89,7 +89,7 @@ class ContactTile extends StatelessWidget {
                     child: Icon(
                         ss.settings.skin.value == Skins.iOS ? CupertinoIcons.mail : Icons.email,
                         color: ss.settings.skin.value != Skins.iOS
-                            ? context.theme.colorScheme.onBackground
+                            ? context.theme.colorScheme.onSurface
                             : context.theme.colorScheme.onSecondary,
                         size: ss.settings.skin.value != Skins.iOS ? 25 : 20
                     ),
@@ -110,7 +110,7 @@ class ContactTile extends StatelessWidget {
                             ? CupertinoIcons.phone
                             : Icons.call,
                         color: ss.settings.skin.value != Skins.iOS
-                            ? context.theme.colorScheme.onBackground
+                            ? context.theme.colorScheme.onSurface
                             : context.theme.colorScheme.onSecondary,
                         size: ss.settings.skin.value != Skins.iOS ? 25 : 20
                     ),
@@ -131,7 +131,7 @@ class ContactTile extends StatelessWidget {
                             ? CupertinoIcons.video_camera
                             : Icons.video_call_outlined,
                         color: ss.settings.skin.value != Skins.iOS
-                            ? context.theme.colorScheme.onBackground
+                            ? context.theme.colorScheme.onSurface
                             : context.theme.colorScheme.onSecondary,
                         size: ss.settings.skin.value != Skins.iOS ? 25 : 20
                     ),

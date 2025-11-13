@@ -25,7 +25,7 @@ class _MaterialConversationListState extends OptimizedState<MaterialConversation
   bool get showArchived => widget.parentController.showArchivedChats;
   bool get showUnknown => widget.parentController.showUnknownSenders;
   Color get backgroundColor => ss.settings.windowEffect.value == WindowEffect.disabled
-      ? context.theme.colorScheme.background
+      ? context.theme.colorScheme.surface
       : Colors.transparent;
   ConversationListController get controller => widget.parentController;
 

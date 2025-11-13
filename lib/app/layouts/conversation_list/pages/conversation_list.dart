@@ -174,7 +174,7 @@ class _ConversationListState extends CustomState<ConversationList, void, Convers
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
-        systemNavigationBarColor: ss.settings.immersiveMode.value ? Colors.transparent : context.theme.colorScheme.background, // navigation bar color
+        systemNavigationBarColor: ss.settings.immersiveMode.value ? Colors.transparent : context.theme.colorScheme.surface, // navigation bar color
         systemNavigationBarIconBrightness: brightness,
         statusBarColor: Colors.transparent, // status bar color
         statusBarIconBrightness: brightness.opposite,

@@ -85,7 +85,7 @@ class _SetupViewState extends OptimizedState<SetupView> {
     return PopScope(
       canPop: false,
       child: Scaffold(
-        backgroundColor: ss.settings.windowEffect.value != WindowEffect.disabled ? Colors.transparent : context.theme.colorScheme.background,
+        backgroundColor: ss.settings.windowEffect.value != WindowEffect.disabled ? Colors.transparent : context.theme.colorScheme.surface,
         body: SafeArea(
           child: Column(
             children: <Widget>[

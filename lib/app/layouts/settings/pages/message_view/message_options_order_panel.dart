@@ -29,18 +29,18 @@ class _MessageOptionsOrderPanelState extends OptimizedState<MessageOptionsOrderP
   @override
   Widget build(BuildContext context) {
     final Rx<Color> _backgroundColor =
-        (kIsDesktop && ss.settings.windowEffect.value != WindowEffect.disabled ? Colors.transparent : context.theme.colorScheme.background).obs;
+        (kIsDesktop && ss.settings.windowEffect.value != WindowEffect.disabled ? Colors.transparent : context.theme.colorScheme.surface).obs;
 
-    final Color tileColor = (ts.inDarkMode(context) ? context.theme.colorScheme.properSurface : context.theme.colorScheme.background)
+    final Color tileColor = (ts.inDarkMode(context) ? context.theme.colorScheme.properSurface : context.theme.colorScheme.surface)
         .withAlpha(ss.settings.windowEffect.value != WindowEffect.disabled ? 100 : 255);
 
     if (kIsDesktop) {
       ss.settings.windowEffect.listen((WindowEffect effect) =>
-          _backgroundColor.value = effect != WindowEffect.disabled ? Colors.transparent : context.theme.colorScheme.background);
+          _backgroundColor.value = effect != WindowEffect.disabled ? Colors.transparent : context.theme.colorScheme.surface);
     }
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
-        systemNavigationBarColor: ss.settings.immersiveMode.value ? Colors.transparent : context.theme.colorScheme.background, // navigation bar color
+        systemNavigationBarColor: ss.settings.immersiveMode.value ? Colors.transparent : context.theme.colorScheme.surface, // navigation bar color
         systemNavigationBarIconBrightness: context.theme.colorScheme.brightness.opposite,
         statusBarColor: Colors.transparent, // status bar color
         statusBarIconBrightness: context.theme.colorScheme.brightness.opposite,
@@ -53,7 +53,7 @@ class _MessageOptionsOrderPanelState extends OptimizedState<MessageOptionsOrderP
             child: ClipRRect(
               child: BackdropFilter(
                 child: AppBar(
-                  systemOverlayStyle: ThemeData.estimateBrightnessForColor(context.theme.colorScheme.background) == Brightness.dark
+                  systemOverlayStyle: ThemeData.estimateBrightnessForColor(context.theme.colorScheme.surface) == Brightness.dark
                       ? SystemUiOverlayStyle.light
                       : SystemUiOverlayStyle.dark,
                   toolbarHeight: kIsDesktop ? 80 : 50,

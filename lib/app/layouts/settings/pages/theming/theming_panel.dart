@@ -210,7 +210,7 @@ class _ThemingPanelState extends CustomState<ThemingPanel, void, ThemingPanelCon
                               ss.settings.windowEffectCustomOpacityDark.value = WindowEffects.defaultOpacity(dark: true);
                             }
                             await ss.prefs.setString('window-effect', effect.toString());
-                            await WindowEffects.setEffect(color: context.theme.colorScheme.background);
+                            await WindowEffects.setEffect(color: context.theme.colorScheme.surface);
                             saveSettings();
                           },
                           title: "Window Effect",
@@ -225,7 +225,7 @@ class _ThemingPanelState extends CustomState<ThemingPanel, void, ThemingPanelCon
                               subtitle: "${WindowEffects.descriptions[ss.settings.windowEffect.value]}\n\nOperating System Version: ${Platform.operatingSystemVersion}\nBuild number: ${parsedWindowsVersion()}${parsedWindowsVersion() < 22000 && ss.settings.windowEffect.value == WindowEffect.acrylic ? "\n\n⚠️ This effect causes window movement lag on Windows 10" : ""}",
                         )),
                       Obx(() {
-                        if (WindowEffects.dependsOnColor() && !WindowEffects.isDark(color: context.theme.colorScheme.background)) {
+                        if (WindowEffects.dependsOnColor() && !WindowEffects.isDark(color: context.theme.colorScheme.surface)) {
                           return SettingsTile(
                             title: "Background Opacity (Light)",
                             trailing: ss.settings.windowEffectCustomOpacityLight.value != WindowEffects.defaultOpacity(dark: false) ? ElevatedButton(
@@ -240,7 +240,7 @@ class _ThemingPanelState extends CustomState<ThemingPanel, void, ThemingPanelCon
                         return const SizedBox.shrink();
                       }),
                       Obx(() {
-                        if (WindowEffects.dependsOnColor() && !WindowEffects.isDark(color: context.theme.colorScheme.background)) {
+                        if (WindowEffects.dependsOnColor() && !WindowEffects.isDark(color: context.theme.colorScheme.surface)) {
                           return SettingsSlider(
                             startingVal: ss.settings.windowEffectCustomOpacityLight.value,
                             max: 1,
@@ -256,7 +256,7 @@ class _ThemingPanelState extends CustomState<ThemingPanel, void, ThemingPanelCon
                         return const SizedBox.shrink();
                       }),
                       Obx(() {
-                        if (WindowEffects.dependsOnColor() && WindowEffects.isDark(color: context.theme.colorScheme.background)) {
+                        if (WindowEffects.dependsOnColor() && WindowEffects.isDark(color: context.theme.colorScheme.surface)) {
                           return SettingsTile(
                             title: "Background Opacity (Dark)",
                             trailing: ss.settings.windowEffectCustomOpacityDark.value != WindowEffects.defaultOpacity(dark: true) ? ElevatedButton(
@@ -271,7 +271,7 @@ class _ThemingPanelState extends CustomState<ThemingPanel, void, ThemingPanelCon
                         return const SizedBox.shrink();
                       }),
                       Obx(() {
-                        if (WindowEffects.dependsOnColor() && WindowEffects.isDark(color: context.theme.colorScheme.background)) {
+                        if (WindowEffects.dependsOnColor() && WindowEffects.isDark(color: context.theme.colorScheme.surface)) {
                           return SettingsSlider(
                             startingVal: ss.settings.windowEffectCustomOpacityDark.value,
                             max: 1,

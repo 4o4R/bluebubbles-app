@@ -62,7 +62,7 @@ class SearchViewState extends OptimizedState<SearchView> {
   DateTime? sinceDate;
 
   Color get backgroundColor => ss.settings.windowEffect.value == WindowEffect.disabled
-      ? context.theme.colorScheme.background
+      ? context.theme.colorScheme.surface
       : Colors.transparent;
 
   @override
@@ -313,7 +313,7 @@ class SearchViewState extends OptimizedState<SearchView> {
                                           data: ThemeData(
                                             cupertinoOverrideTheme: CupertinoThemeData(
                                                 brightness: ThemeData.estimateBrightnessForColor(
-                                                    context.theme.colorScheme.background)),
+                                                    context.theme.colorScheme.surface)),
                                           ),
                                           child: const CupertinoActivityIndicator(),
                                         )
@@ -490,7 +490,7 @@ class SearchViewState extends OptimizedState<SearchView> {
                           border: !ss.settings.hideDividers.value
                               ? Border(
                                   bottom: BorderSide(
-                                    color: context.theme.colorScheme.background.oppositeLightenOrDarken(15),
+                                    color: context.theme.colorScheme.surface.oppositeLightenOrDarken(15),
                                     width: 0.5,
                                   ),
                                 )

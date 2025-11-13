@@ -155,7 +155,7 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                               width: 30,
                               height: 30,
                               decoration: BoxDecoration(
-                                border: Border.all(color: context.theme.colorScheme.background, width: 1),
+                                border: Border.all(color: context.theme.colorScheme.surface, width: 1),
                                 shape: BoxShape.circle,
                                 color: context.theme.colorScheme.tertiaryContainer,
                               ),
@@ -181,14 +181,14 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                         text: TextSpan(
                           style: context.theme.textTheme.headlineMedium!.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: context.theme.colorScheme.onBackground,
+                            color: context.theme.colorScheme.onSurface,
                           ),
                           children: MessageHelper.buildEmojiText(
                             ss.settings.redactedMode.value && ss.settings.hideContactInfo.value
                                 ? "User Name" : ss.settings.userName.value,
                             context.theme.textTheme.headlineMedium!.copyWith(
                               fontWeight: FontWeight.bold,
-                              color: context.theme.colorScheme.onBackground,
+                              color: context.theme.colorScheme.onSurface,
                             ),
                           ),
                         ),
@@ -270,7 +270,7 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                             : ss.settings.iCloudAccount.isEmpty
                             ? "Unknown iCloud account"
                             : ss.settings.iCloudAccount.value, style: context.theme.textTheme.bodyMedium!.apply(color: context.theme.colorScheme.outline)),
-                        trailing: Icon(Icons.edit_outlined, color: context.theme.colorScheme.onBackground),
+                        trailing: Icon(Icons.edit_outlined, color: context.theme.colorScheme.onSurface),
                       ),
                     ),
                   ),
@@ -285,7 +285,7 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                           updatePhoto();
                         },
                         title: Text("Update your photo", style: context.theme.textTheme.bodyLarge!),
-                        trailing: Icon(Icons.edit_outlined, color: context.theme.colorScheme.onBackground),
+                        trailing: Icon(Icons.edit_outlined, color: context.theme.colorScheme.onSurface),
                       ),
                     ),
                   ),
@@ -360,7 +360,7 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                           color: tileColor,
                           child: Padding(
                             padding: const EdgeInsets.only(left: 15.0),
-                            child: SettingsDivider(color: context.theme.colorScheme.surfaceVariant),
+                            child: SettingsDivider(color: context.theme.colorScheme.surfaceContainerHighest),
                           ),
                         ),
                       if (accountInfo['active_alias'] != null)

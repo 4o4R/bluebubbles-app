@@ -82,7 +82,7 @@ class _SettingsPageState extends OptimizedState<SettingsPage> {
       value: SystemUiOverlayStyle(
         systemNavigationBarColor: ss.settings.immersiveMode.value
             ? Colors.transparent
-            : context.theme.colorScheme.background, // navigation bar color
+            : context.theme.colorScheme.surface, // navigation bar color
         systemNavigationBarIconBrightness:
             context.theme.colorScheme.brightness.opposite,
         statusBarColor: Colors.transparent, // status bar color
@@ -94,7 +94,7 @@ class _SettingsPageState extends OptimizedState<SettingsPage> {
           },
           child: Obx(() => Container(
                 color:
-                    context.theme.colorScheme.background.themeOpacity(context),
+                    context.theme.colorScheme.surface.themeOpacity(context),
                 child: TabletModeWrapper(
                   initialRatio: 0.4,
                   minRatio: kIsDesktop || kIsWeb ? 0.2 : 0.33,

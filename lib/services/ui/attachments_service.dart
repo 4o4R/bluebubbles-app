@@ -156,7 +156,7 @@ class AttachmentsService extends GetxService {
           durationMs: 3000,
           button: TextButton(
             style: TextButton.styleFrom(
-              backgroundColor: Get.theme.colorScheme.surfaceVariant,
+              backgroundColor: Get.theme.colorScheme.surfaceContainerHighest,
             ),
             onPressed: () {
               launchUrl(Uri.file(destinationPath));
@@ -228,8 +228,6 @@ class AttachmentsService extends GetxService {
           savePath = ss.settings.autoSaveDocsLocation.value;
         }
       }
-
-      if (savePath == null) return;
       final String resolvedPath = savePath;
       final bytes = file.bytes != null && file.bytes!.isNotEmpty ? file.bytes! : await File(file.path!).readAsBytes();
       await File(join(resolvedPath, file.name)).writeAsBytes(bytes);

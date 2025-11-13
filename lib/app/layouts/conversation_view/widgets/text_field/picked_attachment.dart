@@ -85,7 +85,7 @@ class _PickedAttachmentState extends OptimizedState<PickedAttachment> with Autom
             child: OpenContainer(
               tappable: false,
               openColor: Colors.black,
-              closedColor: context.theme.colorScheme.background,
+              closedColor: context.theme.colorScheme.surface,
               openBuilder: (_, closeContainer) {
                 final fakeAttachment = Attachment(
                   transferName: widget.data.name,
@@ -181,7 +181,7 @@ class _PickedAttachmentState extends OptimizedState<PickedAttachment> with Autom
                 ),
                 child: Icon(
                   Icons.close,
-                  color: context.theme.colorScheme.background,
+                  color: context.theme.colorScheme.surface,
                   size: 18,
                 ),
                 onPressed: () {

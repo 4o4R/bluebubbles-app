@@ -95,7 +95,7 @@ class _ConversationPeekViewState extends OptimizedState<ConversationPeekView> wi
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
         systemNavigationBarColor: ss.settings.immersiveMode.value
-            ? Colors.transparent : context.theme.colorScheme.background, // navigation bar color
+            ? Colors.transparent : context.theme.colorScheme.surface, // navigation bar color
         systemNavigationBarIconBrightness: context.theme.colorScheme.brightness.opposite,
         statusBarColor: Colors.transparent, // status bar color
         statusBarIconBrightness: context.theme.colorScheme.brightness.opposite,
@@ -168,7 +168,7 @@ class _ConversationPeekViewState extends OptimizedState<ConversationPeekView> wi
                             child: DeferredPointerHandler(
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: ts.inDarkMode(context) ? context.theme.colorScheme.properSurface.darkenPercent(30) : context.theme.colorScheme.background,
+                                  color: ts.inDarkMode(context) ? context.theme.colorScheme.properSurface.darkenPercent(30) : context.theme.colorScheme.surface,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 width: min(context.width - 50, 500),
@@ -382,7 +382,7 @@ class _ConversationPeekViewState extends OptimizedState<ConversationPeekView> wi
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
         child: Container(
-          color: (ts.inDarkMode(context) ? context.theme.colorScheme.properSurface : context.theme.colorScheme.background).withAlpha(150),
+          color: (ts.inDarkMode(context) ? context.theme.colorScheme.properSurface : context.theme.colorScheme.surface).withAlpha(150),
           width: maxMenuWidth,
           child: Column(
             mainAxisSize: MainAxisSize.min,
