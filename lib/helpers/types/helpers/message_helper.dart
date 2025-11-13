@@ -227,23 +227,26 @@ class MessageHelper {
   static String _getAttachmentText(List<Attachment?> attachments) {
     Map<String, int> counts = {};
     for (Attachment? attachment in attachments) {
-      String? mime = attachment!.mimeType;
-      String key;
-      if (mime.contains("vcard")) {
-      key = "contact card";
-    } else if (mime.contains("location")) {
-      key = "location";
-    } else if (mime.contains("contact")) {
-      key = "contact";
-    } else if (mime.contains("video")) {
-      key = "movie";
-    } else if (mime.contains("image/gif")) {
-      key = "GIF";
-    } else if (mime.contains("application/pdf")) {
-      key = "PDF";
-    } else {
-      key = mime.split("/").first;
-    }
+      if (attachment == null) continue;
+      final String? mime = attachment.mimeType;
+      final String key;
+      if (mime == null) {
+        key = "attachment";
+      } else if (mime.contains("vcard")) {
+        key = "contact card";
+      } else if (mime.contains("location")) {
+        key = "location";
+      } else if (mime.contains("contact")) {
+        key = "contact";
+      } else if (mime.contains("video")) {
+        key = "movie";
+      } else if (mime.contains("image/gif")) {
+        key = "GIF";
+      } else if (mime.contains("application/pdf")) {
+        key = "PDF";
+      } else {
+        key = mime.split("/").first;
+      }
 
       int current = counts.containsKey(key) ? counts[key]! : 0;
       counts[key] = current + 1;

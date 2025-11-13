@@ -419,14 +419,15 @@ class _BackupRestorePanelState extends OptimizedState<BackupRestorePanel> {
                                 return;
                               }
                               if (kIsDesktop) {
-                                String? _filePath = await FilePicker.platform.saveFile(
+                                final selectedPath = await FilePicker.platform.saveFile(
                                   initialDirectory: (await getDownloadsDirectory())?.path,
                                   dialogTitle: 'Choose a location to save this file',
                                   fileName: "BB-Settings-$name.json",
                                   type: FileType.custom,
                                   allowedExtensions: ["json"],
                                 );
-                                filePath = _filePath;
+                                if (selectedPath == null) return;
+                                filePath = selectedPath;
                               }
                               File file = File(filePath);
                               await file.create(recursive: true);
@@ -835,7 +836,7 @@ class _BackupRestorePanelState extends OptimizedState<BackupRestorePanel> {
                               return;
                             }
                             if (kIsDesktop) {
-                              String? _filePath = await FilePicker.platform.saveFile(
+                              final selectedPath = await FilePicker.platform.saveFile(
                                 initialDirectory: (await getDownloadsDirectory())?.path,
                                 dialogTitle: 'Choose a location to save this file',
                                 fileName: "BlueBubbles-theming-${now.year}${now.month}${now.day}_${now
@@ -843,7 +844,8 @@ class _BackupRestorePanelState extends OptimizedState<BackupRestorePanel> {
                                 type: FileType.custom,
                                 allowedExtensions: ["json"],
                               );
-                              filePath = _filePath;
+                              if (selectedPath == null) return;
+                              filePath = selectedPath;
                             }
                             File file = File(filePath);
                             await file.create(recursive: true);

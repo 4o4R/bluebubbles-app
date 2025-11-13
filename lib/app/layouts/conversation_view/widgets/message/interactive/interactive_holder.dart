@@ -65,18 +65,19 @@ class _InteractiveHolderState extends CustomState<InteractiveHolder, void, Messa
         child: InkWell(
           onTap: payloadData == null ? null : () async {
             String? url;
-            if (payloadData!.type == PayloadType.url) {
-              url = payloadData!.urlData!.first.url ?? payloadData!.urlData!.first.originalUrl;
-            } else {
-              url = payloadData!.appData!.first.url;
-            }
-            if (Uri.tryParse(url) != null) {
-              await launchUrl(
-                Uri.parse(url),
-                mode: LaunchMode.externalApplication,
-              );
-            }
-          },
+                if (payloadData!.type == PayloadType.url) {
+                  url = payloadData!.urlData!.first.url ?? payloadData!.urlData!.first.originalUrl;
+                } else {
+                  url = payloadData!.appData!.first.url;
+                }
+                final uri = url != null ? Uri.tryParse(url) : null;
+                if (uri != null) {
+                  await launchUrl(
+                    uri,
+                    mode: LaunchMode.externalApplication,
+                  );
+                }
+              },
           child: CustomPaint(
             painter: iOS ? null : TailPainter(
               isFromMe: message.isFromMe!,

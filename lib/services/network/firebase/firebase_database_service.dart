@@ -37,8 +37,8 @@ class FirebaseDatabaseService extends GetxService {
   Future<bool> fetchFirebaseConfig() async {
     try {
       final response = await http.fcmClient();
-      Map<String, dynamic>? data = response.data["data"];
-      if (!isNullOrEmpty(data)) {
+      final Map<String, dynamic>? data = response.data["data"] as Map<String, dynamic>?;
+      if (data != null && data.isNotEmpty) {
         FCMData newData = FCMData.fromMap(data);
         await ss.saveFCMData(newData);
       }

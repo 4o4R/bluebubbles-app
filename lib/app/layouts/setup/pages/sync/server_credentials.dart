@@ -590,13 +590,13 @@ class _ServerCredentialsState extends OptimizedState<ServerCredentials> {
         }
 
         // Make sure we have a URL and password
-        String? password = result[0];
-        String? serverURL = sanitizeServerAddress(address: result[1]);
-        if (serverURL.isEmpty || password == null || password.isEmpty) {
+        final String? password = result[0];
+        final String? serverURL = sanitizeServerAddress(address: result[1]);
+        if (isNullOrEmpty(serverURL) || password == null || password.isEmpty) {
           throw Exception("Could not detect server URL and password!");
         }
 
-        connect(serverURL, password);
+        connect(serverURL!, password);
       }
     } catch (e) {
       showDialog(
@@ -641,10 +641,14 @@ class _ServerCredentialsState extends OptimizedState<ServerCredentials> {
       return;
     }
 
-    String? addr = sanitizeServerAddress(address: url);
+    final String? addr = sanitizeServerAddress(address: url);
+    if (isNullOrEmpty(addr)) {
+      controller.updateConnectError("Please enter a valid URL.");
+      return;
+    }
 
     ss.settings.guidAuthKey.value = password;
-    await saveNewServerUrl(addr, saveAdditionalSettings: ["guidAuthKey"]);
+    await saveNewServerUrl(addr!, saveAdditionalSettings: ["guidAuthKey"]);
 
     // Request data from the API
     showDialog(
@@ -695,11 +699,12 @@ class _ServerCredentialsState extends OptimizedState<ServerCredentials> {
     // Server didn't even respond
     if (serverResponse?.statusCode != 200) {
       socket.forgetConnection();
-      return controller.updateConnectError("Failed to connect to $addr! Please ensure your Server's URL is accessible from your device.");
+      return controller.updateConnectError("Failed to connect to ${addr ?? url}! Please ensure your Server's URL is accessible from your device.");
     }
     // Ignore any other server errors unless user is using ngrok or cloudflare
     final data = fcmResponse?.data;
-    if ((data == null || isNullOrEmpty(data["data"])) && (addr.contains("ngrok.io") || addr.contains("trycloudflare.com"))) {
+    final String sanitizedAddr = addr ?? url;
+    if ((data == null || isNullOrEmpty(data["data"])) && (sanitizedAddr.contains("ngrok.io") || sanitizedAddr.contains("trycloudflare.com"))) {
       return controller.updateConnectError("Firebase is required when using Ngrok or Cloudflare!");
     } else {
       try {

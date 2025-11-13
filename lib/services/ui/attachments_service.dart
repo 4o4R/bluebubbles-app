@@ -128,7 +128,7 @@ class AttachmentsService extends GetxService {
         ..setAttribute("download", file.name)
         ..click();
     } else if (kIsDesktop) {
-      String? savePath = await FilePicker.platform.saveFile(
+      final String? savePath = await FilePicker.platform.saveFile(
         initialDirectory: (await getDownloadsDirectory())?.path,
         dialogTitle: 'Choose a location to save this file',
         fileName: file.name,
@@ -137,75 +137,70 @@ class AttachmentsService extends GetxService {
         allowedExtensions: file.extension != null ? [file.extension!] : null,
       );
 
-      if (await File(savePath).exists()) {
-      await showDialog(
-        barrierDismissible: false,
-        context: Get.context!,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(
-              "Confirm save",
-              style: context.theme.textTheme.titleLarge,
-            ),
-            content: Text("This file already exists.\nAre you sure you want to overwrite it?", style: context.theme.textTheme.bodyLarge),
-            backgroundColor: context.theme.colorScheme.properSurface,
-            actions: <Widget>[
-              TextButton(
-                child: Text("No", style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              TextButton(
-                child: Text("Yes", style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)),
-                onPressed: () async {
-                  if (file.path != null) {
-                    await File(file.path!).copy(savePath);
-                  } else {
-                    await File(savePath).writeAsBytes(file.bytes!);
-                  }
-                  Navigator.of(context).pop();
-                  showSnackbar(
-                    'Success',
-                    'Saved attachment to $savePath!',
-                    durationMs: 3000,
-                    button: TextButton(
-                      style: TextButton.styleFrom(
-                        backgroundColor: Get.theme.colorScheme.surfaceVariant,
-                      ),
-                      onPressed: () {
-                        launchUrl(Uri.file(savePath));
-                      },
-                      child: Text("OPEN FILE", style: TextStyle(color: Get.theme.colorScheme.onSurfaceVariant)),
-                    ),
-                  );
-                },
-              ),
-            ],
-          );
-        },
-      );
-    } else {
-      if (file.path != null) {
-        await File(file.path!).copy(savePath);
-      } else {
-        await File(savePath).writeAsBytes(file.bytes!);
+      if (savePath == null) return;
+      final String destinationPath = savePath;
+      final destinationFile = File(destinationPath);
+
+      Future<void> writeFile() async {
+        if (file.path != null) {
+          await File(file.path!).copy(destinationPath);
+        } else {
+          await destinationFile.writeAsBytes(file.bytes!);
+        }
       }
-      showSnackbar(
-        'Success',
-        'Saved attachment to $savePath!',
-        durationMs: 3000,
-        button: TextButton(
-          style: TextButton.styleFrom(
-            backgroundColor: Get.theme.colorScheme.surfaceVariant,
+
+      void showSuccessSnackbar() {
+        showSnackbar(
+          'Success',
+          'Saved attachment to $destinationPath!',
+          durationMs: 3000,
+          button: TextButton(
+            style: TextButton.styleFrom(
+              backgroundColor: Get.theme.colorScheme.surfaceVariant,
+            ),
+            onPressed: () {
+              launchUrl(Uri.file(destinationPath));
+            },
+            child: Text("OPEN FILE", style: TextStyle(color: Get.theme.colorScheme.onSurfaceVariant)),
           ),
-          onPressed: () {
-            launchUrl(Uri.file(savePath));
+        );
+      }
+
+      if (await destinationFile.exists()) {
+        await showDialog(
+          barrierDismissible: false,
+          context: Get.context!,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(
+                "Confirm save",
+                style: context.theme.textTheme.titleLarge,
+              ),
+              content: Text("This file already exists.\nAre you sure you want to overwrite it?", style: context.theme.textTheme.bodyLarge),
+              backgroundColor: context.theme.colorScheme.properSurface,
+              actions: <Widget>[
+                TextButton(
+                  child: Text("No", style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                TextButton(
+                  child: Text("Yes", style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)),
+                  onPressed: () async {
+                    await writeFile();
+                    Navigator.of(context).pop();
+                    showSuccessSnackbar();
+                  },
+                ),
+              ],
+            );
           },
-          child: Text("OPEN FILE", style: TextStyle(color: Get.theme.colorScheme.onSurfaceVariant)),
-        ),
-      );
-    }
+        );
+      } else {
+        await writeFile();
+        showSuccessSnackbar();
+      }
     } else {
       String? savePath;
 
@@ -215,6 +210,7 @@ class AttachmentsService extends GetxService {
           dialogTitle: 'Choose a location to save this file',
           lockParentWindow: true,
         );
+        if (savePath == null) return;
       } else {
         if (file.name.toLowerCase().endsWith(".mov")) {
           savePath = join("/storage/emulated/0/", ss.settings.autoSavePicsLocation.value);
@@ -233,10 +229,12 @@ class AttachmentsService extends GetxService {
         }
       }
 
+      if (savePath == null) return;
+      final String resolvedPath = savePath;
       final bytes = file.bytes != null && file.bytes!.isNotEmpty ? file.bytes! : await File(file.path!).readAsBytes();
-      await File(join(savePath, file.name)).writeAsBytes(bytes);
-      showSnackbar('Success', 'Saved attachment to ${savePath.replaceAll("/storage/emulated/0/", "")} folder!');
-        }
+      await File(join(resolvedPath, file.name)).writeAsBytes(bytes);
+      showSnackbar('Success', 'Saved attachment to ${resolvedPath.replaceAll("/storage/emulated/0/", "")} folder!');
+    }
   }
 
   Future<bool> canAutoDownload() async {

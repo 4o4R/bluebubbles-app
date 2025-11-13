@@ -59,17 +59,17 @@ class _OauthPanelState extends OptimizedState<OauthPanel> {
     }
 
     // If the URL is invalid, show an error
-    String? addr = sanitizeServerAddress(address: url);
-    if (!isValid) {
+    final String? addr = sanitizeServerAddress(address: url);
+    if (!isValid || isNullOrEmpty(addr)) {
       error = "Server address is invalid!";
       setState(() {});
       return;
     }
 
-    String oldPassword = ss.settings.guidAuthKey.value;
-    String oldAddr = ss.settings.serverAddress.value;
+    final String oldPassword = ss.settings.guidAuthKey.value;
+    final String oldAddr = ss.settings.serverAddress.value;
 
-    ss.settings.serverAddress.value = addr;
+    ss.settings.serverAddress.value = addr!;
     ss.settings.guidAuthKey.value = password;
 
     dio.Response? serverResponse;

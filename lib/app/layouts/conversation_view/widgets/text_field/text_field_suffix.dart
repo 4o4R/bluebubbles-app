@@ -105,27 +105,24 @@ class _TextFieldSuffixState extends OptimizedState<TextFieldSuffix> {
                       bitRate: 320000,
                     );
                   } else {
-                    late final String? path;
+                    late final String path;
                     late final PlatformFile file;
                     if (kIsDesktop) {
-                      path = await RecordPlatform.instance.stop(widget.controller!.chat.guid);
-                      final _file = File(path);
-                      file = PlatformFile(
-                        name: basename(_file.path),
-                        path: _file.path,
-                        bytes: await _file.readAsBytes(),
-                        size: await _file.length(),
-                      );
+                      final stoppedPath = await RecordPlatform.instance.stop(widget.controller!.chat.guid);
+                      if (stoppedPath == null) return;
+                      path = stoppedPath;
                     } else {
-                      path = await widget.recorderController!.stop();
-                      final _file = File(path);
-                      file = PlatformFile(
-                        name: basename(_file.path),
-                        path: _file.path,
-                        bytes: await _file.readAsBytes(),
-                        size: await _file.length(),
-                      );
+                      final stoppedPath = await widget.recorderController!.stop();
+                      if (stoppedPath == null) return;
+                      path = stoppedPath;
                     }
+                    final recordingFile = File(path);
+                    file = PlatformFile(
+                      name: basename(recordingFile.path),
+                      path: recordingFile.path,
+                      bytes: await recordingFile.readAsBytes(),
+                      size: await recordingFile.length(),
+                    );
                     await showDialog(
                       context: context,
                       barrierDismissible: false,
