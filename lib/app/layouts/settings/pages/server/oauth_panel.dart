@@ -60,7 +60,7 @@ class _OauthPanelState extends OptimizedState<OauthPanel> {
 
     // If the URL is invalid, show an error
     String? addr = sanitizeServerAddress(address: url);
-    if (!isValid || addr == null) {
+    if (!isValid) {
       error = "Server address is invalid!";
       setState(() {});
       return;

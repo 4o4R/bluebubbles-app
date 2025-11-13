@@ -549,7 +549,7 @@ class Message {
       }
       associatedMessages.removeWhere((message) {
         Message? _message = messages.firstWhereOrNull((e) => e.guid == message.guid);
-        _message?.hasReactions = message.hasReactions;
+        _message.hasReactions = message.hasReactions;
         return _message != null;
       });
       try {

@@ -62,11 +62,6 @@ class _ManualEntryDialogState extends OptimizedState<ManualEntryDialog> {
     }
 
     String? addr = sanitizeServerAddress(address: url);
-    if (addr == null) {
-      error = "Server address is invalid!";
-      setState(() {});
-      return;
-    }
 
     ss.settings.guidAuthKey.value = password;
     await saveNewServerUrl(addr, restartSocket: false, force: true, saveAdditionalSettings: ["guidAuthKey"]);

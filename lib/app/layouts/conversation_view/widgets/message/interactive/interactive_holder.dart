@@ -70,7 +70,7 @@ class _InteractiveHolderState extends CustomState<InteractiveHolder, void, Messa
             } else {
               url = payloadData!.appData!.first.url;
             }
-            if (url != null && Uri.tryParse(url) != null) {
+            if (Uri.tryParse(url) != null) {
               await launchUrl(
                 Uri.parse(url),
                 mode: LaunchMode.externalApplication,

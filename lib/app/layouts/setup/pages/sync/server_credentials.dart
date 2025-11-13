@@ -592,7 +592,7 @@ class _ServerCredentialsState extends OptimizedState<ServerCredentials> {
         // Make sure we have a URL and password
         String? password = result[0];
         String? serverURL = sanitizeServerAddress(address: result[1]);
-        if (serverURL == null || serverURL.isEmpty || password == null || password.isEmpty) {
+        if (serverURL.isEmpty || password == null || password.isEmpty) {
           throw Exception("Could not detect server URL and password!");
         }
 
@@ -642,10 +642,6 @@ class _ServerCredentialsState extends OptimizedState<ServerCredentials> {
     }
 
     String? addr = sanitizeServerAddress(address: url);
-    if (addr == null) {
-      controller.updateConnectError("Server address is invalid!");
-      return;
-    }
 
     ss.settings.guidAuthKey.value = password;
     await saveNewServerUrl(addr, saveAdditionalSettings: ["guidAuthKey"]);

@@ -181,7 +181,7 @@ class _ContactAvatarWidgetState extends OptimizedState<ContactAvatarWidget> {
                   String? initials = widget.handle?.initials?.substring(0, iOS ? null : 1);
                   if (!isNullOrEmpty(initials) && !hide) {
                     return Text(
-                      initials!,
+                      initials,
                       key: Key("$keyPrefix-avatar-text"),
                       style: TextStyle(
                         fontSize: (widget.fontSize ?? 18).roundToDouble() * (material ? 1.25 : 1),

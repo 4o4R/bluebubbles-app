@@ -448,7 +448,7 @@ class ActionHandler extends GetxService {
       Contact? contact = cs.getContact(address);
       chatIcon = contact?.avatar;
       caller = contact?.displayName ?? caller;
-      await notif.createIncomingFaceTimeNotification(null, caller!, chatIcon, false);
+      await notif.createIncomingFaceTimeNotification(null, caller, chatIcon, false);
     }
   }
 

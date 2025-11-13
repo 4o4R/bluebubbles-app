@@ -137,77 +137,75 @@ class AttachmentsService extends GetxService {
         allowedExtensions: file.extension != null ? [file.extension!] : null,
       );
 
-      if (savePath == null) {
-        return showSnackbar('Error', 'You didn\'t select a file path!');
-      } else if (await File(savePath).exists()) {
-        await showDialog(
-          barrierDismissible: false,
-          context: Get.context!,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text(
-                "Confirm save",
-                style: context.theme.textTheme.titleLarge,
-              ),
-              content: Text("This file already exists.\nAre you sure you want to overwrite it?", style: context.theme.textTheme.bodyLarge),
-              backgroundColor: context.theme.colorScheme.properSurface,
-              actions: <Widget>[
-                TextButton(
-                  child: Text("No", style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                TextButton(
-                  child: Text("Yes", style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)),
-                  onPressed: () async {
-                    if (file.path != null) {
-                      await File(file.path!).copy(savePath);
-                    } else {
-                      await File(savePath).writeAsBytes(file.bytes!);
-                    }
-                    Navigator.of(context).pop();
-                    showSnackbar(
-                      'Success',
-                      'Saved attachment to $savePath!',
-                      durationMs: 3000,
-                      button: TextButton(
-                        style: TextButton.styleFrom(
-                          backgroundColor: Get.theme.colorScheme.surfaceVariant,
-                        ),
-                        onPressed: () {
-                          launchUrl(Uri.file(savePath));
-                        },
-                        child: Text("OPEN FILE", style: TextStyle(color: Get.theme.colorScheme.onSurfaceVariant)),
-                      ),
-                    );
-                  },
-                ),
-              ],
-            );
-          },
-        );
-      } else {
-        if (file.path != null) {
-          await File(file.path!).copy(savePath);
-        } else {
-          await File(savePath).writeAsBytes(file.bytes!);
-        }
-        showSnackbar(
-          'Success',
-          'Saved attachment to $savePath!',
-          durationMs: 3000,
-          button: TextButton(
-            style: TextButton.styleFrom(
-              backgroundColor: Get.theme.colorScheme.surfaceVariant,
+      if (await File(savePath).exists()) {
+      await showDialog(
+        barrierDismissible: false,
+        context: Get.context!,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+              "Confirm save",
+              style: context.theme.textTheme.titleLarge,
             ),
-            onPressed: () {
-              launchUrl(Uri.file(savePath));
-            },
-            child: Text("OPEN FILE", style: TextStyle(color: Get.theme.colorScheme.onSurfaceVariant)),
-          ),
-        );
+            content: Text("This file already exists.\nAre you sure you want to overwrite it?", style: context.theme.textTheme.bodyLarge),
+            backgroundColor: context.theme.colorScheme.properSurface,
+            actions: <Widget>[
+              TextButton(
+                child: Text("No", style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: Text("Yes", style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)),
+                onPressed: () async {
+                  if (file.path != null) {
+                    await File(file.path!).copy(savePath);
+                  } else {
+                    await File(savePath).writeAsBytes(file.bytes!);
+                  }
+                  Navigator.of(context).pop();
+                  showSnackbar(
+                    'Success',
+                    'Saved attachment to $savePath!',
+                    durationMs: 3000,
+                    button: TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Get.theme.colorScheme.surfaceVariant,
+                      ),
+                      onPressed: () {
+                        launchUrl(Uri.file(savePath));
+                      },
+                      child: Text("OPEN FILE", style: TextStyle(color: Get.theme.colorScheme.onSurfaceVariant)),
+                    ),
+                  );
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      if (file.path != null) {
+        await File(file.path!).copy(savePath);
+      } else {
+        await File(savePath).writeAsBytes(file.bytes!);
       }
+      showSnackbar(
+        'Success',
+        'Saved attachment to $savePath!',
+        durationMs: 3000,
+        button: TextButton(
+          style: TextButton.styleFrom(
+            backgroundColor: Get.theme.colorScheme.surfaceVariant,
+          ),
+          onPressed: () {
+            launchUrl(Uri.file(savePath));
+          },
+          child: Text("OPEN FILE", style: TextStyle(color: Get.theme.colorScheme.onSurfaceVariant)),
+        ),
+      );
+    }
     } else {
       String? savePath;
 
@@ -235,14 +233,10 @@ class AttachmentsService extends GetxService {
         }
       }
 
-      if (savePath != null) {
-        final bytes = file.bytes != null && file.bytes!.isNotEmpty ? file.bytes! : await File(file.path!).readAsBytes();
-        await File(join(savePath, file.name)).writeAsBytes(bytes);
-        showSnackbar('Success', 'Saved attachment to ${savePath.replaceAll("/storage/emulated/0/", "")} folder!');
-      } else {
-        return showSnackbar('Error', 'You didn\'t select a file path!');
-      }
-    }
+      final bytes = file.bytes != null && file.bytes!.isNotEmpty ? file.bytes! : await File(file.path!).readAsBytes();
+      await File(join(savePath, file.name)).writeAsBytes(bytes);
+      showSnackbar('Success', 'Saved attachment to ${savePath.replaceAll("/storage/emulated/0/", "")} folder!');
+        }
   }
 
   Future<bool> canAutoDownload() async {

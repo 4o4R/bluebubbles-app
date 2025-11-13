@@ -426,9 +426,6 @@ class _BackupRestorePanelState extends OptimizedState<BackupRestorePanel> {
                                   type: FileType.custom,
                                   allowedExtensions: ["json"],
                                 );
-                                if (_filePath == null) {
-                                  return showSnackbar('Failed', 'You didn\'t select a file path!');
-                                }
                                 filePath = _filePath;
                               }
                               File file = File(filePath);
@@ -846,9 +843,6 @@ class _BackupRestorePanelState extends OptimizedState<BackupRestorePanel> {
                                 type: FileType.custom,
                                 allowedExtensions: ["json"],
                               );
-                              if (_filePath == null) {
-                                return showSnackbar('Failed', 'You didn\'t select a file path!');
-                              }
                               filePath = _filePath;
                             }
                             File file = File(filePath);

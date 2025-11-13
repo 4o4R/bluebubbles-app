@@ -553,27 +553,16 @@ Future<void> paintAvatar(
 
   String? initials = handle == null ? "Y" : handle.initials;
 
-  if (initials == null) {
-    IconData icon = Icons.person;
+  TextPainter text = TextPainter()
+    ..textDirection = TextDirection.ltr
+    ..textAlign = TextAlign.center
+    ..text = TextSpan(
+      text: initials,
+      style: TextStyle(fontSize: fontSize),
+    )
+    ..layout();
 
-    TextPainter()
-      ..textDirection = TextDirection.rtl
-      ..textAlign = TextAlign.center
-      ..text = TextSpan(text: String.fromCharCode(icon.codePoint), style: TextStyle(fontSize: fontSize, fontFamily: icon.fontFamily))
-      ..layout()
-      ..paint(canvas, Offset(dx + size * 0.25, dy + size * 0.25));
-  } else {
-    TextPainter text = TextPainter()
-      ..textDirection = TextDirection.ltr
-      ..textAlign = TextAlign.center
-      ..text = TextSpan(
-        text: initials,
-        style: TextStyle(fontSize: fontSize),
-      )
-      ..layout();
-
-    text.paint(canvas, Offset(dx + (size - text.width) * 0.5, dy + (size - text.height) * 0.5));
-  }
+  text.paint(canvas, Offset(dx + (size - text.width) * 0.5, dy + (size - text.height) * 0.5));
 }
 
 Future<Uint8List?> clip(Uint8List data, {required int size, required bool circle}) async {

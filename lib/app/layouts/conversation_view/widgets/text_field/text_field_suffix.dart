@@ -109,7 +109,6 @@ class _TextFieldSuffixState extends OptimizedState<TextFieldSuffix> {
                     late final PlatformFile file;
                     if (kIsDesktop) {
                       path = await RecordPlatform.instance.stop(widget.controller!.chat.guid);
-                      if (path == null) return;
                       final _file = File(path);
                       file = PlatformFile(
                         name: basename(_file.path),
@@ -119,7 +118,6 @@ class _TextFieldSuffixState extends OptimizedState<TextFieldSuffix> {
                       );
                     } else {
                       path = await widget.recorderController!.stop();
-                      if (path == null) return;
                       final _file = File(path);
                       file = PlatformFile(
                         name: basename(_file.path),

@@ -761,7 +761,7 @@ Widget buildConversationViewHeader(BuildContext context, Chat chat, ThemeData th
           ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
       elevation: 0.0,
       title: Text(
-        title!,
+        title,
         style: theme.textTheme.headlineMedium!.apply(color: fontColor),
       ),
       bottom: PreferredSize(

@@ -65,10 +65,6 @@ Future<String?> googleOAuth(BuildContext context) async {
             throw Exception("Scopes not granted!");
           }
         }
-        // error if token is not present
-        if (token == null) {
-          throw Exception("No access token!");
-        }
       } else {
         // error if account is not present
         throw Exception("No account!");
@@ -94,10 +90,6 @@ Future<String?> googleOAuth(BuildContext context) async {
       );
       Future.delayed(const Duration(milliseconds: 500), () async => await windowManager.show());
       token = result?.accessToken;
-      // error if token is not present
-      if (token == null) {
-        throw Exception("No access token!");
-      }
     } catch (e, stack) {
       Logger.error("Failed to sign in with Google (Desktop)", error: e, trace: stack);
       return null;

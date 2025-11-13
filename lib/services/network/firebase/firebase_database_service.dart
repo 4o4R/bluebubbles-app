@@ -39,7 +39,7 @@ class FirebaseDatabaseService extends GetxService {
       final response = await http.fcmClient();
       Map<String, dynamic>? data = response.data["data"];
       if (!isNullOrEmpty(data)) {
-        FCMData newData = FCMData.fromMap(data!);
+        FCMData newData = FCMData.fromMap(data);
         await ss.saveFCMData(newData);
       }
     } catch (e, s) {
