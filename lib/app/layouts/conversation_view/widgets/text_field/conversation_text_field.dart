@@ -596,12 +596,17 @@ class ConversationTextFieldState extends CustomState<ConversationTextField, void
                 IconButton(
                     icon: Icon(Icons.gif, color: context.theme.colorScheme.outline, size: 28),
                     onPressed: () async {
+                      final String? giphyKey = kIsWeb ? GIPHY_API_KEY : dotenv.maybeGet('GIPHY_API_KEY');
+                      if (giphyKey == null || giphyKey.isEmpty) {
+                        showSnackbar("Unavailable", "Add a GIPHY API key to use GIF search.");
+                        return;
+                      }
                       if (kIsDesktop || kIsWeb) {
                         controller.showingOverlays = true;
                       }
                       GiphyGif? gif = await GiphyGet.getGif(
                         context: context,
-                        apiKey: kIsWeb ? GIPHY_API_KEY : dotenv.get('GIPHY_API_KEY'),
+                        apiKey: giphyKey,
                         tabColor: context.theme.primaryColor,
                         showEmojis: false,
                       );

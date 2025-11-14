@@ -275,6 +275,20 @@ class Message {
   bool didNotifyRecipient;
   bool isBookmarked;
 
+  String? get errorMessage => metadata?['errorMessage'];
+  set errorMessage(String? value) {
+    if (value == null) {
+      if (metadata == null) return;
+      final updated = Map<String, dynamic>.from(metadata!);
+      updated.remove('errorMessage');
+      metadata = updated.isEmpty ? null : updated;
+    } else {
+      final updated = Map<String, dynamic>.from(metadata ?? {});
+      updated['errorMessage'] = value;
+      metadata = updated;
+    }
+  }
+
   final RxInt _error = RxInt(0);
   int get error => _error.value;
   set error(int i) => _error.value = i;
@@ -591,6 +605,7 @@ class Message {
     existing.wasDeliveredQuietly = newMessage.wasDeliveredQuietly ? newMessage.wasDeliveredQuietly : existing.wasDeliveredQuietly;
     existing.didNotifyRecipient = newMessage.didNotifyRecipient ? newMessage.didNotifyRecipient : existing.didNotifyRecipient;
     existing._error.value = newMessage._error.value;
+    existing.errorMessage = newMessage.errorMessage;
 
     try {
       Database.messages.put(existing, mode: PutMode.update);
@@ -981,6 +996,12 @@ class Message {
   }
 
   static Message merge(Message existing, Message newMessage) {
+    final bool newGuidLooksTemporary = (newMessage.guid?.startsWith("temp") ?? false) ||
+        (newMessage.guid?.startsWith("error-") ?? false);
+    final bool replacingLegacyGuid = newGuidLooksTemporary &&
+        existing.guid != null &&
+        newMessage.guid != null &&
+        existing.guid != newMessage.guid;
     existing.id ??= newMessage.id;
     existing.guid ??= newMessage.guid;
   
@@ -1045,7 +1066,7 @@ class Message {
     }
 
     // Update error
-    if (existing._error.value != newMessage._error.value) {
+    if (!replacingLegacyGuid && existing._error.value != newMessage._error.value) {
       existing._error.value = newMessage._error.value;
     }
 
@@ -1057,6 +1078,11 @@ class Message {
 
     // Update metadata
     existing.metadata = mergeTopLevelDicts(existing.metadata, newMessage.metadata);
+    if (replacingLegacyGuid) {
+      existing.errorMessage = null;
+    } else if (newMessage.metadata?.containsKey('errorMessage') ?? false) {
+      existing.errorMessage = newMessage.errorMessage;
+    }
 
     // Update original ROWID
     if (existing.originalROWID == null && newMessage.originalROWID != null) {

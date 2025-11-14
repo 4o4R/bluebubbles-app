@@ -36,6 +36,9 @@ class _DeliveredIndicatorState extends CustomState<DeliveredIndicator, void, Mes
   }
 
   bool get shouldShow {
+    if (message.error > 0 || message.errorMessage != null || (message.guid?.startsWith("error-") ?? false)) {
+      return false;
+    }
     if (controller.audioWasKept.value != null) return true;
     if (widget.forceShow || message.guid!.contains("temp")) return true;
     if ((!message.isFromMe! && iOS) || (controller.parts.lastOrNull?.isUnsent ?? false)) return false;

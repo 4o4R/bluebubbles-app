@@ -3,26 +3,28 @@ import 'package:bluebubbles/helpers/helpers.dart';
 import 'package:dio/dio.dart';
 
 Message handleSendError(dynamic error, Message m) {
+  String description = "An unknown error occurred.";
+  int code = MessageError.BAD_REQUEST.code;
+
   if (error is Response) {
-    m.guid = m.guid!.replaceAll("temp", "error-${error.data['error']['message'] ?? error.data.toString()}");
-    m.error = error.statusCode ?? MessageError.BAD_REQUEST.code;
+    description = error.data['error']?['message']?.toString() ?? error.data.toString();
+    code = error.statusCode ?? MessageError.BAD_REQUEST.code;
   } else if (error is DioException) {
-    String _error;
     if (error.type == DioExceptionType.connectionTimeout) {
-      _error = "Connect timeout occured! Check your connection.";
+      description = "Connect timeout occured! Check your connection.";
     } else if (error.type == DioExceptionType.sendTimeout) {
-      _error = "Send timeout occured!";
+      description = "Send timeout occured!";
     } else if (error.type == DioExceptionType.receiveTimeout) {
-      _error = "Receive data timeout occured! Check server logs for more info.";
+      description = "Receive data timeout occured! Check server logs for more info.";
     } else {
-      _error = error.error.toString();
+      description = error.error?.toString() ?? "An unknown Dio error occurred.";
     }
-    m.guid = m.guid!.replaceAll("temp", "error-$_error");
-    m.error = error.response?.statusCode ?? MessageError.BAD_REQUEST.code;
+    code = error.response?.statusCode ?? MessageError.BAD_REQUEST.code;
   } else {
-    m.guid = m.guid!.replaceAll("temp", "error-Connection timeout, please check your internet connection and try again");
-    m.error = MessageError.BAD_REQUEST.code;
+    description = "Connection timeout, please check your internet connection and try again";
   }
 
+  m.error = code;
+  m.errorMessage = description;
   return m;
 }

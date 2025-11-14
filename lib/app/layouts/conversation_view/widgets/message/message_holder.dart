@@ -713,12 +713,14 @@ class _MessageHolderState extends CustomState<MessageHolder, void, MessageWidget
               if (message.isFromMe! && !message.isGroupEvent)
                 SelectCheckbox(message: message, controller: widget.cvController),
               Obx(() {
-                if (message.error > 0 || message.guid!.startsWith("error-")) {
+                final bool hasLegacyErrorGuid = message.guid!.startsWith("error-");
+                final String? storedError = message.errorMessage;
+                if (message.error > 0 || hasLegacyErrorGuid || storedError != null) {
                   int errorCode = message.error;
-                  String errorText = "An unknown internal error occurred.";
+                  String errorText = storedError ?? "An unknown internal error occurred.";
                   if (errorCode == 22) {
                     errorText = "The recipient is not registered with iMessage!";
-                  } else if (message.guid!.startsWith("error-")) {
+                  } else if (storedError == null && hasLegacyErrorGuid) {
                     errorText = message.guid!.split('-')[1];
                   }
 
@@ -755,6 +757,7 @@ class _MessageHolderState extends CustomState<MessageHolder, void, MessageWidget
                                   // Re-send
                                   message.id = null;
                                   message.error = 0;
+                                  message.errorMessage = null;
                                   message.dateCreated = DateTime.now();
                                   if (message.attachments.isNotEmpty) {
                                     outq.queue(OutgoingItem(

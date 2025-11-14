@@ -47,8 +47,8 @@ abstract class Queue extends GetxService {
             items.remove(i);
             final m = i.message;
             final tempGuid = m.guid;
-            m.guid = m.guid!.replaceAll("temp", "error-Canceled due to previous failure");
             m.error = MessageError.BAD_REQUEST.code;
+            m.errorMessage = "Canceled due to previous failure";
             Message.replaceMessage(tempGuid, m);
           }
         }

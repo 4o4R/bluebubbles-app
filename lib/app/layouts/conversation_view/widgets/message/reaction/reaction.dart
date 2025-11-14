@@ -223,12 +223,14 @@ class ReactionWidgetState extends OptimizedState<ReactionWidget> {
           left: !messageIsFromMe ? 0 : -75,
           right: messageIsFromMe ? 0 : -75,
           child: Obx(() {
-            if (reaction.error > 0 || reaction.guid!.startsWith("error-")) {
+            final bool hasLegacyErrorGuid = reaction.guid!.startsWith("error-");
+            final String? storedError = reaction.errorMessage;
+            if (reaction.error > 0 || hasLegacyErrorGuid || storedError != null) {
               int errorCode = reaction.error;
-              String errorText = "An unknown internal error occurred.";
+              String errorText = storedError ?? "An unknown internal error occurred.";
               if (errorCode == 22) {
                 errorText = "The recipient is not registered with iMessage!";
-              } else if (reaction.guid!.startsWith("error-")) {
+              } else if (storedError == null && hasLegacyErrorGuid) {
                 errorText = reaction.guid!.split('-')[1];
               }
 
@@ -321,4 +323,3 @@ class ReactionWidgetState extends OptimizedState<ReactionWidget> {
     );
   }
 }
-
