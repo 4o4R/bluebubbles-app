@@ -39,9 +39,7 @@ class SocketService extends GetxService {
     Logger.debug("Initializing socket service...");
     startSocket();
     Connectivity().onConnectivityChanged.listen((event) {
-      final bool hasNetwork =
-          event.contains(ConnectivityResult.wifi) || event.contains(ConnectivityResult.ethernet);
-
+      final bool hasNetwork = event.isNotEmpty && !event.contains(ConnectivityResult.none);
       if (!hasNetwork) {
         if (http.originOverride != null) {
           Logger.info("Detected switch off wifi, removing localhost address...");
