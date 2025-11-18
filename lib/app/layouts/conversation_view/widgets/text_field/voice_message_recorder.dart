@@ -24,10 +24,10 @@ class VoiceMessageRecorder extends StatefulWidget {
   final bool samsung;
 
   @override
-  _VoiceMessageRecorderState createState() => _VoiceMessageRecorderState();
+  VoiceMessageRecorderState createState() => VoiceMessageRecorderState();
 }
 
-class _VoiceMessageRecorderState extends State<VoiceMessageRecorder> {
+class VoiceMessageRecorderState extends State<VoiceMessageRecorder> {
   late Stream<Duration> recordingDurationStream;
 
   @override

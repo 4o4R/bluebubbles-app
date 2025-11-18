@@ -41,7 +41,7 @@ dependencies:
     git:
       url: https://github.com/BlueBubblesApp/flutter_desktop_webview_auth.git
       ref: webkit2gtk-4.1
-  device_info_plus: ^12.2.0
+  device_info_plus: ^11.5.0 # constrained by super_native_extensions
   dio: ^5.9.0
   disable_battery_optimization: # for jcenter() gradle deprecation
     git:
@@ -126,11 +126,11 @@ dependencies:
   network_info_plus: ^7.0.0
   network_tools: ^6.0.5
   numberpicker: ^2.1.2
-  objectbox: ^5.0.2
+  objectbox: ^4.1.0 # keep with 4.x generator compatible with build_runner 2.4.x
   objectbox_flutter_libs: any
   on_exit: ^1.0.0
   open_filex: ^4.7.0
-  package_info_plus: ^9.0.0
+  package_info_plus: ^8.3.1 # constrained by geolocator_linux 0.2.x
   particles_flutter: ^1.0.1
   pasteboard: ^0.4.0
   path: ^1.9.1
@@ -208,13 +208,13 @@ dependency_overrides:
   frontend_server_client: ^4.0.0  # for build_runner issues on v3.24.0
 
 dev_dependencies:
-  build_runner: ^2.10.3
+  build_runner: ^2.4.13 # keep build ^2.x for objectbox_generator/encrypt compatibility
   build_verify: ^3.1.1
   flutter_launcher_icons: ^0.14.4
   flutter_native_splash: ^2.4.7
   flutter_lints: ^6.0.0
   peanut: ^6.0.0
-  objectbox_generator: any
+  objectbox_generator: ^4.1.0
   flutter_test:
     sdk: flutter
 

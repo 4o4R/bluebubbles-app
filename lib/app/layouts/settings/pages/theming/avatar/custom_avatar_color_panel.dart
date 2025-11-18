@@ -19,7 +19,7 @@ class CustomAvatarColorPanelController extends StatefulController {
     });
   }
 
-  Future<void> getCustomHandles({force = false}) async {
+  Future<void> getCustomHandles({bool force = false}) async {
     List<Handle> handles = Handle.find();
     if (isNullOrEmpty(handles)) return;
 

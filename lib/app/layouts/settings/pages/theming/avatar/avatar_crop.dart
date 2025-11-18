@@ -126,10 +126,7 @@ class _AvatarCropState extends OptimizedState<AvatarCrop> {
                         controller: _cropController,
                         image: _imageData!,
                         onCropped: (result) {
-                          final bytes = result is CropResult ? result.bytes : null;
-                          if (bytes != null) {
-                            onCropped(bytes);
-                          }
+                          if (result is CropSuccess) onCropped(result.croppedImage);
                         },
                         onStatusChanged: (status) {
                           if (status == CropStatus.ready || status == CropStatus.cropping) {
