@@ -41,7 +41,7 @@ dependencies:
     git:
       url: https://github.com/BlueBubblesApp/flutter_desktop_webview_auth.git
       ref: webkit2gtk-4.1
-  device_info_plus: ^11.5.0 # constrained for super_native_extensions 0.9.x
+  device_info_plus: ^11.5.0 # constrained by super_drag_and_drop/super_native_extensions on desktop
   dio: ^5.9.0
   disable_battery_optimization: # for jcenter() gradle deprecation
     git:
@@ -130,7 +130,7 @@ dependencies:
   objectbox_flutter_libs: any
   on_exit: ^1.0.0
   open_filex: ^4.7.0
-  package_info_plus: ^8.3.1 # geolocator_linux 0.2.x requires <9
+  package_info_plus: ^8.3.1 # constrained by geolocator_linux 0.2.x
   particles_flutter: ^1.0.1
   pasteboard: ^0.4.0
   path: ^1.9.1
