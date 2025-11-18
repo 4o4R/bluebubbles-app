@@ -900,7 +900,7 @@ class TextFieldComponentState extends State<TextFieldComponent> {
     final txtController = controller?.textController ?? textController;
     final subjController = controller?.subjectTextController ?? subjectTextController;
     return Focus(
-      onKeyEvent: (_, ev) => handleKey(_, ev, context, isChatCreator),
+      onKeyEvent: (node, ev) => handleKey(node, ev, context, isChatCreator),
       child: Padding(
         padding: const EdgeInsets.only(right: 5.0),
         child: ValueListenableBuilder<bool>(
