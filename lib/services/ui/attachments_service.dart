@@ -210,7 +210,6 @@ class AttachmentsService extends GetxService {
           dialogTitle: 'Choose a location to save this file',
           lockParentWindow: true,
         );
-        if (savePath == null) return;
       } else {
         if (file.name.toLowerCase().endsWith(".mov")) {
           savePath = join("/storage/emulated/0/", ss.settings.autoSavePicsLocation.value);
