@@ -1,8 +1,12 @@
 import 'dart:async';
 
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:bluebubbles/helpers/helpers.dart';
 import 'package:bluebubbles/services/services.dart';
 import 'package:bluebubbles/utils/logger/logger.dart';
+import 'package:crypto/crypto.dart';
 import 'package:desktop_webview_auth/desktop_webview_auth.dart';
 import 'package:desktop_webview_auth/google.dart';
 import 'package:flutter/foundation.dart';
@@ -99,15 +103,22 @@ Future<String?> googleOAuth(BuildContext context) async {
       ).timeout(const Duration(seconds: 120));
       Future.delayed(const Duration(milliseconds: 500), () async => await windowManager.show());
       token = result?.accessToken;
+      token ??= await _desktopBrowserOAuth(context, defaultScopes);
       if (token == null) {
         await _showDesktopOAuthErrorDialog(context);
       }
     } on TimeoutException {
       Logger.error("Google sign-in timed out waiting for desktop webview");
-      await _showWebViewMissingDialog(context);
+      token = await _desktopBrowserOAuth(context, defaultScopes);
+      if (token == null) {
+        await _showDesktopOAuthErrorDialog(context);
+      }
     } catch (e, stack) {
       Logger.error("Failed to sign in with Google (Desktop)", error: e, trace: stack);
-      await _showDesktopOAuthErrorDialog(context);
+      token = await _desktopBrowserOAuth(context, defaultScopes);
+      if (token == null) {
+        await _showDesktopOAuthErrorDialog(context);
+      }
       return null;
     }
   }
@@ -180,6 +191,89 @@ Future<void> _showDesktopOAuthErrorDialog(BuildContext context) async {
       backgroundColor: context.theme.colorScheme.properSurface,
     ),
   );
+}
+
+Future<String?> _desktopBrowserOAuth(BuildContext context, List<String> scopes) async {
+  universal_io.HttpServer? server;
+  try {
+    server = await universal_io.HttpServer.bind(universal_io.InternetAddress.loopbackIPv4, 0);
+    final verifier = _generateCodeVerifier();
+    final challenge = base64Url.encode(sha256.convert(utf8.encode(verifier)).bytes).replaceAll('=', '');
+    final redirectUri = 'http://localhost:${server.port}/oauth/callback';
+
+    final authUri = Uri.https('accounts.google.com', '/o/oauth2/v2/auth', {
+      'client_id': fdb.getClientId()!,
+      'redirect_uri': redirectUri,
+      'response_type': 'code',
+      'scope': scopes.join(' '),
+      'access_type': 'offline',
+      'prompt': 'consent',
+      'code_challenge': challenge,
+      'code_challenge_method': 'S256',
+    });
+
+    await launchUrl(authUri, mode: LaunchMode.externalApplication);
+
+    String? code;
+    await for (final request in server) {
+      if (request.uri.path == '/oauth/callback') {
+        code = request.uri.queryParameters['code'];
+        request.response
+          ..statusCode = 200
+          ..headers.contentType = universal_io.ContentType.html
+          ..write('<html><body><script>window.close();</script>You may close this window.</body></html>');
+        await request.response.close();
+        await server.close(force: true);
+        break;
+      }
+    }
+
+    if (code == null) return null;
+    return await _exchangeCodeForToken(code, verifier, redirectUri);
+  } catch (e, stack) {
+    Logger.error('Desktop browser OAuth failed', error: e, trace: stack);
+    return null;
+  } finally {
+    await server?.close();
+  }
+}
+
+String _generateCodeVerifier() {
+  const length = 64;
+  const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-._~';
+  final random = Random.secure();
+  return List.generate(length, (_) => charset[random.nextInt(charset.length)]).join();
+}
+
+Future<String?> _exchangeCodeForToken(String code, String verifier, String redirectUri) async {
+  try {
+    final client = universal_io.HttpClient();
+    final request = await client.postUrl(Uri.parse('https://oauth2.googleapis.com/token'));
+    final body = {
+      'client_id': fdb.getClientId()!,
+      'code': code,
+      'code_verifier': verifier,
+      'grant_type': 'authorization_code',
+      'redirect_uri': redirectUri,
+    };
+    final encoded = body.entries.map((e) => '${Uri.encodeQueryComponent(e.key)}=${Uri.encodeQueryComponent(e.value)}').join('&');
+    request.headers.contentType = universal_io.ContentType('application', 'x-www-form-urlencoded', charset: 'utf-8');
+    request.write(encoded);
+    final response = await request.close();
+    final responseBody = await response.transform(utf8.decoder).join();
+    final json = jsonDecode(responseBody) as Map<String, dynamic>;
+    await client.close();
+
+    if (response.statusCode != 200) {
+      Logger.error('Token exchange failed', error: json);
+      return null;
+    }
+
+    return json['access_token'] as String?;
+  } catch (e, stack) {
+    Logger.error('Failed exchanging Google auth code', error: e, trace: stack);
+    return null;
+  }
 }
 
 Future<List<Map>> fetchFirebaseProjects(String token) async {
