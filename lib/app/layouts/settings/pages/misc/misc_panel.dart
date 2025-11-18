@@ -41,9 +41,10 @@ class _MiscPanelState extends OptimizedState<MiscPanel> {
                             onChanged: (bool val) async {
                               var localAuth = LocalAuthentication();
                               bool didAuthenticate = await localAuth.authenticate(
-                                  localizedReason:
-                                      'Please authenticate to ${val == true ? "enable" : "disable"} security',
-                                  options: const AuthenticationOptions(stickyAuth: true));
+                                localizedReason:
+                                    'Please authenticate to ${val == true ? "enable" : "disable"} security',
+                                stickyAuth: true,
+                              );
                               if (didAuthenticate) {
                                 ss.settings.shouldSecure.value = val;
                                 if (val == false) {
@@ -116,8 +117,9 @@ class _MiscPanelState extends OptimizedState<MiscPanel> {
                             onChanged: (val) async {
                               var localAuth = LocalAuthentication();
                               bool didAuthenticate = await localAuth.authenticate(
-                                  localizedReason: 'Please authenticate to change your security level',
-                                  options: const AuthenticationOptions(stickyAuth: true));
+                                localizedReason: 'Please authenticate to change your security level',
+                                stickyAuth: true,
+                              );
                               if (didAuthenticate) {
                                 if (val != null) {
                                   ss.settings.securityLevel.value = val;

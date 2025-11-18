@@ -747,12 +747,11 @@ class ConversationTextFieldState extends CustomState<ConversationTextField, void
                             checkPlatformCompatibility: true,
                             emojiViewConfig: EmojiViewConfig(
                               emojiSizeMax: 28,
-                              backgroundColor: Colors.transparent,
-                              columns: emojiColumns,
-                              noRecents: Text("No Recents", style: context.textTheme.headlineMedium!.copyWith(color: context.theme.colorScheme.outline))
-                            ),
-                            swapCategoryAndBottomBar: true,
-                            skinToneConfig: const SkinToneConfig(enabled: false),
+                            backgroundColor: Colors.transparent,
+                            columns: emojiColumns,
+                            noRecents: Text("No Recents", style: context.textTheme.headlineMedium!.copyWith(color: context.theme.colorScheme.outline))
+                          ),
+                          skinToneConfig: const SkinToneConfig(enabled: false),
                             categoryViewConfig: const CategoryViewConfig(
                               backgroundColor: Colors.transparent,
                               dividerColor: Colors.transparent,

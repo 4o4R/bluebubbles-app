@@ -57,7 +57,7 @@ class AttachmentDownloadService extends GetxService {
       // first check if we have an active chat that needs downloads, if so prioritize that chat
       if (cm.activeChat != null && _downloaders.containsKey(cm.activeChat!.chat.guid)) {
         activeChatDownloader = _downloaders[cm.activeChat!.chat.guid]!.firstWhereOrNull((e) => !e.isFetching);
-        activeChatDownloader.fetchAttachment();
+        activeChatDownloader?.fetchAttachment();
       }
       // otherwise just grab a random attachment that needs fetching
       if (activeChatDownloader == null) {

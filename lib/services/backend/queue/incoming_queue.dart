@@ -9,12 +9,12 @@ IncomingQueue inq = Get.isRegistered<IncomingQueue>() ? Get.find<IncomingQueue>(
 class IncomingQueue extends Queue {
 
   @override
-  Future<void> prepItem(QueueItem _) async {}
+  Future<void> prepItem(QueueItem queueItem) async {}
 
   @override
-  Future<void> handleQueueItem(QueueItem _) async {
-    assert(_ is IncomingItem);
-    final item = _ as IncomingItem;
+  Future<void> handleQueueItem(QueueItem queueItem) async {
+    assert(queueItem is IncomingItem);
+    final item = queueItem as IncomingItem;
 
     switch (item.type) {
       case QueueType.newMessage:

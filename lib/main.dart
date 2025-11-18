@@ -111,7 +111,9 @@ Future<Null> initApp(bool bubble, List<String> arguments) async {
           /* ----- TIME ZONE INITIALIZATION ----- */
           tz.initializeTimeZones();
           try {
-            tz.setLocalLocation(tz.getLocation(await FlutterTimezone.getLocalTimezone()));
+            final localTz = await FlutterTimezone.getLocalTimezone();
+            final tzName = localTz is String ? localTz : localTz.name;
+            tz.setLocalLocation(tz.getLocation(tzName));
           } catch (_) {}
 
           /* ----- MLKIT INITIALIZATION ----- */
@@ -341,7 +343,7 @@ class Main extends StatelessWidget {
                         localAuth
                             .authenticate(
                                 localizedReason: 'Please authenticate to unlock BlueBubbles',
-                                options: const AuthenticationOptions(stickyAuth: true))
+                              stickyAuth: true)
                             .then((result) {
                           isAuthing = false;
                           if (result) {
@@ -382,7 +384,7 @@ class Main extends StatelessWidget {
                                       final localAuth = LocalAuthentication();
                                       bool didAuthenticate = await localAuth.authenticate(
                                           localizedReason: 'Please authenticate to unlock BlueBubbles',
-                                          options: const AuthenticationOptions(stickyAuth: true));
+                                          stickyAuth: true);
                                       if (didAuthenticate) {
                                         controller!.authSuccess(unlock: true);
                                         if (kIsDesktop) {

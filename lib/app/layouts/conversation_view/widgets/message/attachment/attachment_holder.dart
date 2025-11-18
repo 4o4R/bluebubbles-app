@@ -81,9 +81,9 @@ class _AttachmentHolderState extends CustomState<AttachmentHolder, void, Message
   }
 
   @override
-  void updateWidget(void _) {
+  void updateWidget(covariant AttachmentHolder oldWidget) {
     updateContent();
-    super.updateWidget(_);
+    super.updateWidget(oldWidget);
   }
 
   void onComplete(PlatformFile file) {
@@ -97,7 +97,10 @@ class _AttachmentHolderState extends CustomState<AttachmentHolder, void, Message
     final bool showTail = message.showTail(newerMessage) && part.part == controller.parts.length - 1;
     final bool hideAttachments = ss.settings.redactedMode.value && ss.settings.hideAttachments.value;
     return ColorFiltered(
-      colorFilter: ColorFilter.mode(context.theme.colorScheme.tertiaryContainer.withOpacity(0.5), selected ? BlendMode.srcOver : BlendMode.dstOver),
+      colorFilter: ColorFilter.mode(
+        context.theme.colorScheme.tertiaryContainer.withValues(alpha: 0.5),
+        selected ? BlendMode.srcOver : BlendMode.dstOver,
+      ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(

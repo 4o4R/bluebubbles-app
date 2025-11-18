@@ -138,7 +138,6 @@ class _AvatarCropState extends OptimizedState<AvatarCrop> {
                           }
                         },
                         withCircleUi: true,
-                        initialSize: 0.5,
                       ),
                   ),
                 if (_imageData == null)

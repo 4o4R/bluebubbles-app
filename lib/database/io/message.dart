@@ -562,10 +562,11 @@ class Message {
         }
       }
       associatedMessages.removeWhere((message) {
-        Message? existing = messages.firstWhereOrNull((e) => e.guid == message.guid);
-        existing.hasReactions = message.hasReactions;
+        final existing = messages.firstWhereOrNull((e) => e.guid == message.guid);
+        if (existing != null) {
+          existing.hasReactions = message.hasReactions;
+        }
         return true;
-              return false;
       });
       try {
         /// Update the original messages and associated messages
