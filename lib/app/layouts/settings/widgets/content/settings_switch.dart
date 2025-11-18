@@ -45,7 +45,7 @@ class SettingsSwitch extends StatelessWidget {
           ),
           trailing: Switch(
             value: initialVal,
-            activeColor: context.theme.colorScheme.primary.lightenOrDarken(15),
+            activeThumbColor: context.theme.colorScheme.primary.lightenOrDarken(15),
             onChanged: onChanged,
           ),
           subtitle: subtitle != null ? Text(

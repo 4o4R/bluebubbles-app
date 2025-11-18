@@ -262,7 +262,7 @@ Future<String?> _exchangeCodeForToken(String code, String verifier, String redir
     final response = await request.close();
     final responseBody = await response.transform(utf8.decoder).join();
     final json = jsonDecode(responseBody) as Map<String, dynamic>;
-    await client.close();
+    client.close();
 
     if (response.statusCode != 200) {
       Logger.error('Token exchange failed', error: json);

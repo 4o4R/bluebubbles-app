@@ -218,8 +218,7 @@ class _FullscreenVideoState extends OptimizedState<FullscreenVideo> with Automat
                 child: Theme(
                   data: context.theme.copyWith(
                       platform: iOS ? TargetPlatform.iOS : TargetPlatform.android,
-                      dialogBackgroundColor: context.theme.colorScheme.properSurface,
-                      iconTheme: context.theme.iconTheme.copyWith(color: context.theme.textTheme.bodyMedium?.color)),
+                      iconTheme: context.theme.iconTheme.copyWith(color: context.theme.textTheme.bodyMedium?.color), dialogTheme: DialogThemeData(backgroundColor: context.theme.colorScheme.properSurface)),
                   child: Stack(
                     alignment: Alignment.center,
                     children: <Widget>[

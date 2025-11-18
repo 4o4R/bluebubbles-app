@@ -24,19 +24,20 @@ list(APPEND FLUTTER_PLUGIN_LIST
   permission_handler_windows
   printing
   record_windows
-  screen_brightness_windows
-  screen_retriever
+  screen_retriever_windows
   secure_application
   share_plus
   super_native_extensions
   system_tray
   tray_manager
   url_launcher_windows
+  webcrypto
   window_manager
   windows_taskbar
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST
+  flutter_local_notifications_windows
   media_kit_native_event_loop
 )
 

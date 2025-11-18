@@ -636,7 +636,9 @@ class ChatCreatorState extends OptimizedState<ChatCreator> {
                                                 child: InkWell(
                                                   onTap: () {
                                                     if (selectedContacts.firstWhereOrNull((c) => c.address == e) !=
-                                                        null) return;
+                                                        null) {
+                                                      return;
+                                                    }
                                                     addSelected(
                                                         SelectedContact(displayName: contact.displayName, address: e));
                                                   },
@@ -653,7 +655,9 @@ class ChatCreatorState extends OptimizedState<ChatCreator> {
                                                 child: InkWell(
                                                   onTap: () {
                                                     if (selectedContacts.firstWhereOrNull((c) => c.address == e) !=
-                                                        null) return;
+                                                        null) {
+                                                      return;
+                                                    }
                                                     addSelected(
                                                         SelectedContact(displayName: contact.displayName, address: e));
                                                   },

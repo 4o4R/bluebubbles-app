@@ -814,7 +814,9 @@ class _ServerManagementPanelState extends CustomState<ServerManagementPanel, voi
                           // Prevent restarting more than once every 30 seconds
                           int now = DateTime.now().toUtc().millisecondsSinceEpoch;
                           if (controller.lastRestartMessages != null &&
-                              now - controller.lastRestartMessages! < 1000 * 30) return;
+                              now - controller.lastRestartMessages! < 1000 * 30) {
+                            return;
+                          }
 
                           // Save the last time we restarted
                           controller.lastRestartMessages = now;
@@ -858,14 +860,18 @@ class _ServerManagementPanelState extends CustomState<ServerManagementPanel, voi
                                       containerColor: Colors.orange),
                                   onTap: () async {
                                     if (socket.state.value != SocketState.connected ||
-                                        controller.isRestartingPrivateAPI.value) return;
+                                        controller.isRestartingPrivateAPI.value) {
+                                      return;
+                                    }
 
                                     controller.isRestartingPrivateAPI.value = true;
 
                                     // Prevent restarting more than once every 30 seconds
                                     int now = DateTime.now().toUtc().millisecondsSinceEpoch;
                                     if (controller.lastRestartPrivateAPI != null &&
-                                        now - controller.lastRestartPrivateAPI! < 1000 * 30) return;
+                                        now - controller.lastRestartPrivateAPI! < 1000 * 30) {
+                                      return;
+                                    }
 
                                     // Save the last time we restarted
                                     controller.lastRestartPrivateAPI = now;
