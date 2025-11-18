@@ -1027,7 +1027,7 @@ class _SettingsPageState extends OptimizedState<SettingsPage> {
                       },
                       child: Navigator(
                         key: Get.nestedKey(3),
-                        onDidRemovePage: (_, __) => false,
+                        onDidRemovePage: (route, page) {},
                         pages: [
                           CupertinoPage(
                               name: "initial",

@@ -191,7 +191,7 @@ class _ConversationListState extends CustomState<ConversationList, void, Convers
                 ns.maxWidthLeft = constraints.maxWidth;
                 return PopScope(
                   canPop: false,
-                  onPopInvokedWithResult: (_, __) async {
+                  onPopInvokedWithResult: (didPop, _) async {
                     Get.until((route) {
                       bool id2result = false;
                       // check if we should pop the left side first
@@ -238,7 +238,7 @@ class _ConversationListState extends CustomState<ConversationList, void, Convers
             ns.maxWidthRight = constraints.maxWidth;
                 return PopScope(
                   canPop: false,
-                  onPopInvokedWithResult: (_, __) async {
+                  onPopInvokedWithResult: (didPop, _) async {
                 Get.back(id: 2);
               },
               child: Navigator(
