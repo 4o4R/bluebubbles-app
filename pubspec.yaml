@@ -98,7 +98,7 @@ dependencies:
   image: ^4.5.4
   image_picker: ^1.2.1
   image_size_getter: ^2.4.1
-  intl: ^0.20.2
+  intl: ^0.17.0 # constrained by firebase_dart git dependency
   js: ^0.7.2
   languagetool_textfield: ^0.0.6
   launch_at_startup: ^0.5.1
@@ -197,6 +197,7 @@ dependency_overrides:
   js: ^0.7.2 # socket_io_client
   material_color_utilities: ^0.13.0 # flutter test SDK
   permission_handler_platform_interface: ^4.3.0 # BB permission_handler_windows
+  intl: ^0.17.0 # firebase_dart git requires <=0.17
   permission_handler_windows: # https://github.com/Baseflow/flutter-permission-handler/issues/983
     git:
       url: https://github.com/BlueBubblesApp/flutter-permission-handler.git
