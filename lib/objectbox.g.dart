@@ -402,7 +402,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(13, 4148278195232901830),
       name: 'Message',
-      lastPropertyId: const obx_int.IdUid(50, 2365667614914378517),
+      lastPropertyId: const obx_int.IdUid(51, 7808747138004765164),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -608,6 +608,11 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(50, 2365667614914378517),
             name: 'isDelivered',
             type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(51, 7808747138004765164),
+            name: 'errorMessage',
+            type: 9,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -1405,7 +1410,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final dbMetadataOffset = object.dbMetadata == null
               ? null
               : fbb.writeString(object.dbMetadata!);
-          fbb.startTable(51);
+          final errorMessageOffset = object.errorMessage == null
+              ? null
+              : fbb.writeString(object.errorMessage!);
+          fbb.startTable(52);
           fbb.addInt64(0, object.id ?? 0);
           fbb.addInt64(1, object.originalROWID);
           fbb.addOffset(2, guidOffset);
@@ -1446,6 +1454,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addBool(47, object.didNotifyRecipient);
           fbb.addBool(48, object.isBookmarked);
           fbb.addBool(49, object.isDelivered);
+          fbb.addOffset(50, errorMessageOffset);
           fbb.finish(fbb.endTable());
           return object.id ?? 0;
         },
@@ -1588,7 +1597,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
             ..dbMetadata = const fb.StringReader(asciiOptimization: true)
                 .vTableGetNullable(buffer, rootOffset, 94)
             ..isDelivered =
-                const fb.BoolReader().vTableGet(buffer, rootOffset, 102, false);
+                const fb.BoolReader().vTableGet(buffer, rootOffset, 102, false)
+            ..errorMessage = const fb.StringReader(asciiOptimization: true)
+                .vTableGetNullable(buffer, rootOffset, 104);
           object.chat.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 80, 0);
           object.chat.attach(store);
@@ -2196,6 +2207,10 @@ class Message_ {
   /// See [Message.isDelivered].
   static final isDelivered =
       obx.QueryBooleanProperty<Message>(_entities[5].properties[39]);
+
+  /// See [Message.errorMessage].
+  static final errorMessage =
+      obx.QueryStringProperty<Message>(_entities[5].properties[40]);
 
   /// see [Message.dbAttachments]
   static final dbAttachments =
