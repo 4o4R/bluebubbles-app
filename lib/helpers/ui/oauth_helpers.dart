@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bluebubbles/helpers/helpers.dart';
 import 'package:bluebubbles/services/services.dart';
 import 'package:bluebubbles/utils/logger/logger.dart';
@@ -7,7 +9,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:universal_io/io.dart';
+import 'package:path/path.dart' as path;
+import 'package:url_launcher/url_launcher.dart';
+import 'package:universal_io/io.dart' as universal_io;
 import 'package:window_manager/window_manager.dart';
 
 Future<String?> googleOAuth(BuildContext context) async {
@@ -20,7 +24,7 @@ Future<String?> googleOAuth(BuildContext context) async {
   ];
 
   // android / web implementation
-  if (Platform.isAndroid || kIsWeb) {
+  if (universal_io.Platform.isAndroid || kIsWeb) {
     // on web, show a dialog to make sure users allow scopes
     if (kIsWeb) {
       await showDialog(
@@ -75,6 +79,11 @@ Future<String?> googleOAuth(BuildContext context) async {
     }
     // desktop implementation
   } else {
+    if (universal_io.Platform.isWindows && !(await _hasWebView2Runtime())) {
+      await _showWebViewMissingDialog(context);
+      return null;
+    }
+
     final args = GoogleSignInArgs(
       clientId: fdb.getClientId()!,
       redirectUri: 'http://localhost:8641/oauth/callback',
@@ -87,15 +96,90 @@ Future<String?> googleOAuth(BuildContext context) async {
         args,
         width: width != null ? (width * 0.9).ceil() : null,
         height: height != null ? (height * 0.9).ceil() : null,
-      );
+      ).timeout(const Duration(seconds: 120));
       Future.delayed(const Duration(milliseconds: 500), () async => await windowManager.show());
       token = result?.accessToken;
+      if (token == null) {
+        await _showDesktopOAuthErrorDialog(context);
+      }
+    } on TimeoutException {
+      Logger.error("Google sign-in timed out waiting for desktop webview");
+      await _showWebViewMissingDialog(context);
     } catch (e, stack) {
       Logger.error("Failed to sign in with Google (Desktop)", error: e, trace: stack);
+      await _showDesktopOAuthErrorDialog(context);
       return null;
     }
   }
   return token;
+}
+
+Future<bool> _hasWebView2Runtime() async {
+  // WebView2 installs under one of these roots on Windows. If none exist, we likely can't render the webview.
+  final candidates = <String?>[
+    universal_io.Platform.environment['PROGRAMFILES(X86)'],
+    universal_io.Platform.environment['PROGRAMFILES'],
+    universal_io.Platform.environment['LOCALAPPDATA'],
+  ];
+
+  for (final root in candidates.whereType<String>()) {
+    final installDir = universal_io.Directory(path.join(root, 'Microsoft', 'EdgeWebView', 'Application'));
+    if (await installDir.exists()) {
+      final versionDirs = installDir.listSync().whereType<universal_io.Directory>();
+      if (versionDirs.isNotEmpty) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+Future<void> _showWebViewMissingDialog(BuildContext context) async {
+  const runtimeUrl = 'https://go.microsoft.com/fwlink/p/?LinkId=2124703';
+  await showDialog(
+    context: context,
+    builder: (_) => AlertDialog(
+      title: Text('WebView runtime required', style: context.theme.textTheme.titleLarge),
+      content: Text(
+        'We could not open the Google sign-in window. On Windows this usually means the Microsoft Edge WebView2 runtime is missing. Install the runtime, then try again.',
+        style: context.theme.textTheme.bodyLarge,
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text('Close', style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)),
+        ),
+        TextButton(
+          onPressed: () async {
+            await launchUrl(Uri.parse(runtimeUrl), mode: LaunchMode.externalApplication);
+            Navigator.of(context).pop();
+          },
+          child: Text('Install runtime', style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)),
+        ),
+      ],
+      backgroundColor: context.theme.colorScheme.properSurface,
+    ),
+  );
+}
+
+Future<void> _showDesktopOAuthErrorDialog(BuildContext context) async {
+  await showDialog(
+    context: context,
+    builder: (_) => AlertDialog(
+      title: Text('Google sign-in failed', style: context.theme.textTheme.titleLarge),
+      content: Text(
+        'Something went wrong opening the Google sign-in window. Please try again. If you continue to see a blank window, install or repair the Microsoft Edge WebView2 runtime.',
+        style: context.theme.textTheme.bodyLarge,
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text('OK', style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)),
+        ),
+      ],
+      backgroundColor: context.theme.colorScheme.properSurface,
+    ),
+  );
 }
 
 Future<List<Map>> fetchFirebaseProjects(String token) async {
