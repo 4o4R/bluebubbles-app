@@ -319,7 +319,7 @@ class SpellCheckTextEditingController extends TextEditingController {
                           final replacement = mistake.replacements[index];
                           return InkWell(
                             borderRadius: BorderRadius.circular(8.0),
-                            hoverColor: color.withOpacity(0.2),
+                            hoverColor: color.withValues(alpha: 0.2),
                             onTapDown: (_) {
                               replaceMistake(mistake, replacement);
                             },
@@ -435,7 +435,9 @@ class MentionTextEditingController extends SpellCheckTextEditingController {
 
   void _processMentions(String text) {
     final matches = escapingRegex.allMatches(text);
-    Iterable<int> mentionedIndices = matches.map((m) => int.tryParse(text.substring(m.start + 1, m.end - 1))).whereNotNull();
+    Iterable<int> mentionedIndices = matches
+        .map((m) => int.tryParse(text.substring(m.start + 1, m.end - 1)))
+        .nonNulls;
     mentionables.forEachIndexed((i, m) {
       if (!mentionedIndices.contains(i)) {
         m.customDisplayName = null;

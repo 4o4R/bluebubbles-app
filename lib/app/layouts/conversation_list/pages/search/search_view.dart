@@ -229,7 +229,7 @@ class SearchViewState extends OptimizedState<SearchView> {
 
     return PopScope(
         canPop: false,
-        onPopInvoked: (bool didPop) {
+        onPopInvokedWithResult: (bool didPop, dynamic _) {
           if (didPop) return;
           if (panelController.isPanelOpen) {
             panelController.close();

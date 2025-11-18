@@ -89,7 +89,7 @@ class ConversationViewState extends OptimizedState<ConversationView> {
         ),
         child: PopScope(
           canPop: false,
-          onPopInvoked: (didPop) async {
+          onPopInvokedWithResult: (didPop, _) async {
             if (didPop) return;
             if (controller.inSelectMode.value) {
               controller.inSelectMode.value = false;

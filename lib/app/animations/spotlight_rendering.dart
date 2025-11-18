@@ -106,8 +106,8 @@ class RenderSpotlight extends RenderBox {
           ..style = PaintingStyle.fill
           ..shader = RadialGradient(
               colors: [
-                Colors.white.withOpacity(0.5),
-                Colors.white.withOpacity(0.3)
+                Colors.white.withValues(alpha: 0.5),
+                Colors.white.withValues(alpha: 0.3)
               ],
               stops: [0, 0.7]
           ).createShader(Rect.fromCircle(center: Offset(centerX, centerY), radius: size))
@@ -137,10 +137,9 @@ class RenderSpotlight extends RenderBox {
         ..style = PaintingStyle.fill
         ..shader = RadialGradient(
             colors: [
-              Colors.white.withOpacity(0.5),
-              Colors.white.withOpacity(0.3),
-              if (stop != 1)
-                Colors.transparent,
+              Colors.white.withValues(alpha: 0.5),
+              Colors.white.withValues(alpha: 0.3),
+              if (stop != 1) Colors.transparent,
             ],
             stops: [0, stop == 1 ? 0.7 : stop - 0.1, if (stop != 1) stop]
         ).createShader(Rect.fromCircle(center: Offset(screenWidth, 0), radius: controller.spotlight!.position.y))

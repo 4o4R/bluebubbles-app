@@ -448,7 +448,7 @@ class _DesktopPanelState extends OptimizedState<DesktopPanel> {
                                                       );
                                                     },
                                                   ),
-                                          ).whereNotNull(),
+                                          ).nonNulls,
                                         ],
                                       ),
                                     );

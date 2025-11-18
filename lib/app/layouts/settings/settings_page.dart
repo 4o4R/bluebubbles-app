@@ -1015,7 +1015,7 @@ class _SettingsPageState extends OptimizedState<SettingsPage> {
                     ns.maxWidthSettings = constraints.maxWidth;
                     return PopScope(
                       canPop: false,
-                      onPopInvoked: (_) async {
+                      onPopInvokedWithResult: (_, __) async {
                         Get.until((route) {
                           if (route.settings.name == "initial") {
                             Get.back();
@@ -1027,10 +1027,7 @@ class _SettingsPageState extends OptimizedState<SettingsPage> {
                       },
                       child: Navigator(
                         key: Get.nestedKey(3),
-                        onPopPage: (route, _) {
-                          route.didPop(false);
-                          return false;
-                        },
+                        onDidRemovePage: (_, __) => false,
                         pages: [
                           CupertinoPage(
                               name: "initial",

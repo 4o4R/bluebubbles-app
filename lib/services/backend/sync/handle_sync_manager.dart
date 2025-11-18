@@ -194,7 +194,7 @@ class HandleSyncManager extends SyncManager {
     addToOutput("Caching chat participants...");
     for (Chat c in chats) {
       List<Handle> handles = c.participants;
-      List<int> rowIds = handles.map((e) => e.originalROWID).whereNotNull().toList();
+      List<int> rowIds = handles.map((e) => e.originalROWID).nonNulls.toList();
       chatHandleCache[c] = rowIds;
     }
   }
@@ -220,7 +220,7 @@ class HandleSyncManager extends SyncManager {
   rebuildRelationships(Map<int, Handle> handleMap) {
     addToOutput("Re-creating chat <-> handle relationships");
     chatHandleCache.forEach((key, value) {
-      List<Handle> relations = value.map((e) => handleMap[e]).whereNotNull().toList();
+      List<Handle> relations = value.map((e) => handleMap[e]).nonNulls.toList();
       key.handles.addAll(relations);
       key.handles.applyToDb();
     });
